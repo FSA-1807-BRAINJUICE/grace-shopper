@@ -1,0 +1,92 @@
+SCHEMA DESIGN
+
+SERVER:
+
+- db
+  - models:
+    - users
+      - (id)
+      - email
+      - password
+      - address
+      - admin (t/f)
+      - payment details
+      - session / cookie detail
+      // userId - name? etc... cookieId
+    - products
+      - (id)
+      - name
+      - price
+      - imgUrl
+      - description
+    - orders
+      - // orderId - userId
+      - (id)
+      - checkout date
+      - price total
+      - receipt
+    - orderItems
+      // orderItemId - orderId - productId
+      - quantity
+      - paid price
+    - carts
+      // cardId - userId
+      // cartId - cookieId
+      - customerId // when 'add to cart' is invoked, cart is generated based on userId (if exists) or cookieId
+    - cartItems
+      // cartItemId - cartId
+      - quantity
+    -- associations:
+      // hasOne - adds source foreign key to target;
+      // belongsTo - adds target foreign key to source
+      - user.hasOne(cart);
+      - order.belongsTo(user);
+      - orderItem.belongsTo(product) //foreign key (orderItemId) added to product table
+      - // user.hasMany(order)
+      - orderItems.belongsTo(order)
+      - order.hasMany(orderItem)
+      - cart.hasMany(cartItems)
+      - cartItem.belongsTo(cart)
+- api
+  - products
+    - get one product ('/:id')
+    - get all products ('/')
+  - users
+    - get one user ('/:id')
+    - get all users (admin)
+    - post new user ('/')
+    - put user ('/')
+  - carts
+    - get one cart
+    - post to cart (add item)
+    - put to cart (remove item)
+  - orders
+    - get one order (complete order?)
+    - get all orders
+    - post to order?
+
+ - sessions
+      (cookieId/sessionId)
+      (userId)
+
+
+CLIENT
+
+- components
+  - sign in / sign up page
+  - cart
+  - product list
+  - product item
+  - order list
+  - order
+
+
+// guest purchase protocol --
+  - each guest
+
+
+  //user reducer
+    initialState = {
+      user: {},
+      cookieId: ''
+    }
