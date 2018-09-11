@@ -26,6 +26,18 @@ const User = db.define('user', {
   },
   googleId: {
     type: Sequelize.STRING
+  },
+  address: {
+    type: Sequelize.STRING
+  },
+  admin: {
+    type: Sequelize.BOOLEAN
+  },
+  payment: {
+    type: Sequelize.INTEGER
+  },
+  guest: {
+    type: Sequelize.BOOLEAN
   }
 })
 
