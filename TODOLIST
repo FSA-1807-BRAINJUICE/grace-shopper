@@ -47,23 +47,24 @@ SERVER:
       - order.hasMany(orderItem)
       - cart.hasMany(cartItems)
       - cartItem.belongsTo(cart)
+
 - api
-  - products
+  - products(/products/)
     - get one product ('/:id')
     - get all products ('/')
-  - users
+
+  - users(/users/)
     - get one user ('/:id')
-    - get all users (admin)
+    - get all users (available only for admin)
     - post new user ('/')
-    - put user ('/')
-  - carts
-    - get one cart
-    - post to cart (add item)
-    - put to cart (remove item)
-  - orders
-    - get one order (complete order?)
-    - get all orders
-    - post to order?
+    - put user ('/:id')
+    - get orders of this user(/:userId/orders?status=[pending/complete]);
+
+  - orders(/orders)
+    - get one order (/:orderId)
+    - post to order (body of items)
+    - update (/:id, body of updated items)
+    - get all orders (,optional)
 
  - sessions
       (cookieId/sessionId)
