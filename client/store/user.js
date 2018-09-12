@@ -10,13 +10,20 @@ const REMOVE_USER = 'REMOVE_USER'
 /**
  * INITIAL STATE
  */
-const defaultUser = {}
+const initialUserState = {
+  user: {}
+}
 
 /**
  * ACTION CREATORS
  */
-const getUser = user => ({type: GET_USER, user})
-const removeUser = () => ({type: REMOVE_USER})
+const getUser = user => ({
+  type:
+  GET_USER, user
+})
+const removeUser = () => ({
+  type: REMOVE_USER
+})
 
 /**
  * THUNK CREATORS
