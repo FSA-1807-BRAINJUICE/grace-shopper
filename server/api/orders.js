@@ -28,8 +28,7 @@ router.put('/:orderId', async (req, res, next) => {
   try {
     const targetOrder = await Order.update(req.body, {
       where: { id: requestedOrder },
-      returning: true,
-      plain: true
+      returning: true
     })
     if (!targetOrder) {
       res.sendStatus(404);
