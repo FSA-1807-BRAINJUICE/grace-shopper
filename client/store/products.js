@@ -26,7 +26,7 @@ const getAllProducts = products => ({
  */
 export const getAllProductsThunk = () => async dispatch => {
   try {
-    console.log("HIHIHHIH")
+    console.log("HIHIHHIH") //CG: Please do not commit console.logs!!
     const response = await axios.get('/api/products');
     const parsedAllProducts = response.data;
     console.log(parsedAllProducts)

@@ -4,9 +4,12 @@ const OrderItem = require('./orderItem')
 const Product = require('./product')
 
 Order.belongsTo(User)
-OrderItem.belongsTo(Order)
-OrderItem.belongsTo(Product)
+// OrderItem.belongsTo(Order)
+// OrderItem.belongsTo(Product)
 
+Order.belongsTo(Product, {through: OrderItem});
+Product.belongsTo(Order, {through: OrderItem});
+//CG: Order.getProducts()
 
 /**
  * If we had any associations to make, this would be a great place to put them!

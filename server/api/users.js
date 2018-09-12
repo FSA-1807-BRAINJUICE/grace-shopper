@@ -2,6 +2,7 @@ const router = require('express').Router()
 const {User, Order} = require('../db/models')
 module.exports = router
 
+//CG: Security on route. 
 router.get('/', async (req, res, next) => {
   try {
     const users = await User.findAll()
@@ -21,7 +22,7 @@ router.get('/:userId', async(req, res, next) => {
   }
 });
 
-// create a new user
+// create a new user -- CG: DELETE
 router.post('/', async (req, res, next) => {
   try {
     if(!req.user.admin){ // req.user coming from PASSPORT SESSION
@@ -39,8 +40,7 @@ router.put('/:userId', async (req, res, next) => {
   try {
     if(!req.user.admin){
       res.sendStatus(403)
-    }
-
+    } //CG: Make an else for the rest or you're going to get the error. 
     const user = await User.update(req.body, {
       where: {
         id: req.params.userId
@@ -58,6 +58,7 @@ router.put('/:userId', async (req, res, next) => {
 //get orders of this user(/api/users/:userId/orders?status=[pending|complete|transaction-failed]);
 router.get('/:userId/orders', async (req, res, next) => {
   try {
+    //CG: Security maybe? But relaly good job 
     const queryCondition = {
       userId: req.params.userId
     }
@@ -67,7 +68,6 @@ router.get('/:userId/orders', async (req, res, next) => {
     const orders = await Order.findAll({
       where: queryCondition
     })
-
     res.json(orders)
   } catch (error) {
     next(error)
