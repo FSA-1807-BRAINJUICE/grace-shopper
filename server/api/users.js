@@ -15,3 +15,23 @@ router.get('/', async (req, res, next) => {
     next(err)
   }
 })
+
+// get a user by the given id
+router.get('/:userId', async(req, res, next) => {
+
+});
+
+// create a new user
+router.post('/', async (req, res, next) => {
+
+});
+
+// update
+router.put('/:userId', async (req, res, next) => {
+
+});
+
+//get orders of this user(/:userId/orders?status=[pending/complete]);
+router.put('/:userId/orders', async (req, res, next) => {
+
+})
