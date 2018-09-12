@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const {User} = require('../db/models')
+const {User, Order} = require('../db/models')
 module.exports = router
 
 router.get('/', async (req, res, next) => {
@@ -55,7 +55,21 @@ router.put('/:userId', async (req, res, next) => {
   }
 });
 
-//get orders of this user(/:userId/orders?status=[pending/complete]);
-// router.put('/:userId/orders', async (req, res, next) => {
+//get orders of this user(/api/users/:userId/orders?status=[pending|complete|transaction-failed]);
+router.get('/:userId/orders', async (req, res, next) => {
+  try {
+    const queryCondition = {
+      userId: req.params.userId
+    }
+    if (req.query.status){
+      queryCondition.orderStatus = req.query.status
+    }
+    const orders = await Order.findAll({
+      where: queryCondition
+    })
 
-// })
+    res.json(orders)
+  } catch (error) {
+    next(error)
+  }
+})
