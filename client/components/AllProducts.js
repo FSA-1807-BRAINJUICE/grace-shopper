@@ -4,6 +4,17 @@ import {Link} from 'react-router-dom'
 import {getAllProductsThunk} from '../store/products'
 import ProductCard from './ProductCard'
 
+
+const styles = {
+  gallery: {
+    display: "grid",
+    justifyContent: "center",
+    gridTemplateColumns: "1fr 1fr 1fr",
+    gridGap: "30px 20px",
+    marginTop: "15px"
+  }
+}
+
 class AllProducts extends Component {
   componentDidMount () {
     this.props.getAllProducts();
@@ -11,7 +22,7 @@ class AllProducts extends Component {
   render () {
     const products = this.props.products;
     return (
-      <div className='allProductsDiv'>
+      <div className='allProductsDiv' style = {styles.gallery}>
         {
           products.map(product => {
             return <ProductCard product={product} key={product.id} />
