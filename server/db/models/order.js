@@ -7,7 +7,7 @@ const Order = db.define('order', {
     allowNull: false
   },
   orderStatus: {
-    type: Sequelize.ENUM("pending", "complete")
+    type: Sequelize.ENUM("pending", "complete", "transaction-failed")
   }
 })
 
