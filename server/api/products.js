@@ -48,7 +48,7 @@ router.put('/:id', async (req, res, next) => {
       plain: true
     });
     if (!product) return res.sendStatus(404)
-    res.send(product[1]);
+    res.send(product);
   } catch (err) {
     next(err)
   }
