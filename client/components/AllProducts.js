@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {getAllProductsThunk} from '../store/products'
+import ProductCard from './ProductCard'
 
 class AllProducts extends Component {
   componentDidMount () {
