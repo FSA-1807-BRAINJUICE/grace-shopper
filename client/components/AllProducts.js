@@ -9,8 +9,8 @@ const styles = {
   gallery: {
     display: "grid",
     justifyContent: "center",
-    gridTemplateColumns: "1fr 1fr 1fr",
-    gridGap: "30px 20px",
+    gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+    gridGap: "30px 30px",
     marginTop: "15px"
   }
 }
