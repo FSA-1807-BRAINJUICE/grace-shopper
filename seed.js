@@ -35,38 +35,38 @@ const products = [
   {
     name: 'lemon',
     price: 44,
-    imgUrl: 'img.png',
-    description: 'lemon pills'
+    imgUrl: 'https://thumbs.dreamstime.com/z/lemon-pill-9010031.jpg',
+    description: 'lemon pills, more energy than apple pills but less energy than yams pills'
   },
   {
     name: 'apple',
     price: 3,
-    imgUrl: 'img.png',
-    description: 'apple pills'
+    imgUrl: 'https://thumbs.dreamstime.com/b/apple-pills-22923115.jpg',
+    description: 'apple pills, not as good as yams pills'
   },
   {
     name: 'yams',
     price: 55,
-    imgUrl: 'img.png',
-    description: 'yams pills'
+    imgUrl: 'https://images.media-allrecipes.com/images/77515.jpg?width=420&height=237',
+    description: 'yams are king of crops, and by extention yams pills are king of pills'
   },
   {
     name: 'potato',
     price: 76,
-    imgUrl: 'img.png',
-    description: 'potato pills'
+    imgUrl: 'https://images-na.ssl-images-amazon.com/images/I/81TJK4QAa2L._SY355_.jpg',
+    description: 'potato pills, similar to yams pills but contain more water'
   },
   {
     name: 'orange',
     price: 32,
-    imgUrl: 'img.png',
-    description: 'orange pills'
+    imgUrl: 'https://previews.123rf.com/images/dacky/dacky0803/dacky080300010/2851230-orange-pills.jpg',
+    description: 'orange pills, a follow on the success of lemon pills but with less juice'
   },
   {
-    name: 'dog food',
+    name: 'dog pills',
     price: 56,
-    imgUrl: 'img.png',
-    description: 'dog food'
+    imgUrl: 'https://cf.ltkcdn.net/dogs/images/std/183989-425x279-giving-dog-pill.jpg',
+    description: 'with the success of pills for humans, we now recommend you give the same pills to your pet dog'
   }
 ]
 
