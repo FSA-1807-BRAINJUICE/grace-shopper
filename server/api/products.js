@@ -7,7 +7,7 @@ router.get('/:id', async (req, res, next) => {
 
     const product = await Product.findById(req.params.id);
     if (!product) return res.sendStatus(404);
-    res.send(product);
+    res.json(product);
   } catch (err) {
     next(err)
   }
@@ -15,7 +15,7 @@ router.get('/:id', async (req, res, next) => {
 router.get('/', async (req, res, next) => {
   try {
     const products = await Product.findAll();
-    res.send(products);
+    res.json(products);
   } catch (err) {
     next(err)
   }
@@ -28,7 +28,7 @@ router.post('/', async (req, res, next) => {
     }
 
     const product = await Product.create(req.body);
-    res.send(product);
+    res.json(product);
   } catch (err) {
     next(err)
   }
@@ -48,7 +48,7 @@ router.put('/:id', async (req, res, next) => {
       plain: true
     });
     if (!product) return res.sendStatus(404)
-    res.send(product);
+    res.json(product);
   } catch (err) {
     next(err)
   }
