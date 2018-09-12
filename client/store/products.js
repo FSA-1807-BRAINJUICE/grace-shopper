@@ -26,8 +26,10 @@ const getAllProducts = products => ({
  */
 export const getAllProductsThunk = () => async dispatch => {
   try {
+    console.log("HIHIHHIH")
     const response = await axios.get('/api/products');
     const parsedAllProducts = response.data;
+    console.log(parsedAllProducts)
     const action = getAllProducts(parsedAllProducts);
     dispatch(action);
   } catch (err) {
