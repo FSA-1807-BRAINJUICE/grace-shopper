@@ -7,8 +7,7 @@ const Order = db.define('order', {
     allowNull: false
   },
   orderStatus: {
-    //CG: Pending may not be the best naming convention here. Also may want default value to be cart.
-    type: Sequelize.ENUM("pending", "complete", "transaction-failed")
+    type: Sequelize.ENUM("cart", "complete", "transaction-failed")
   }
 })
 

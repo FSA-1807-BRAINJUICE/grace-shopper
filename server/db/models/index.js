@@ -1,14 +1,14 @@
-const User = require('./user')
-const Order = require('./order')
-const OrderItem = require('./orderItem')
-const Product = require('./product')
+const User = require('./User')
+const Order = require('./Order')
+const OrderItem = require('./OrderItem')
+const Product = require('./Product')
 
 Order.belongsTo(User)
 // OrderItem.belongsTo(Order)
 // OrderItem.belongsTo(Product)
 
-Order.belongsTo(Product, {through: OrderItem});
-Product.belongsTo(Order, {through: OrderItem});
+Order.belongsToMany(Product, {through: OrderItem});
+// Product.belongsTo(Order, {through: OrderItem});
 //CG: Order.getProducts()
 
 /**

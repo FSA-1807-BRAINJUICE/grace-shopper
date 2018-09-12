@@ -6,9 +6,8 @@ const OrderItem = db.define('orderItem', {
     type: Sequelize.INTEGER,
     allowNull: false
   },
-  unit_price: {
-    //CG: Also change to integer.
-    type: Sequelize.FLOAT // THIS NUMBER IS FIXED AFTER YOUR ORDER
+  paidUnitPrice: {
+    type: Sequelize.INTEGER // THIS NUMBER IS FIXED AFTER YOUR ORDER
   }
 })
 
