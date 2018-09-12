@@ -35,9 +35,6 @@ const User = db.define('user', {
   },
   payment: {
     type: Sequelize.INTEGER
-  },
-  guest: {
-    type: Sequelize.BOOLEAN
   }
 })
 

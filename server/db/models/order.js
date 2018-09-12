@@ -8,6 +8,10 @@ const Order = db.define('order', {
   },
   orderStatus: {
     type: Sequelize.ENUM("pending", "complete", "transaction-failed")
+  },
+  sessionId: {
+    type: Sequelize.STRING,
+    allowNull: true
   }
 })
 
