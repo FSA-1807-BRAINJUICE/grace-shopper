@@ -19,3 +19,11 @@ form div {
   margin: 1em;
   display: inline-block;
 }
+
+.gallery{
+  display: grid;
+  justify-content: "center";
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-gap: 30px 30px;
+  margin-top: 15px;
+}
