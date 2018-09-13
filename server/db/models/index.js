@@ -1,7 +1,7 @@
-const User = require('./User.js')
-const Order = require('./Order.js')
-const OrderItem = require('./OrderItem.js')
-const Product = require('./Product.js')
+const User = require('./User')
+const Order = require('./Order')
+const OrderItem = require('./OrderItem')
+const Product = require('./Product')
 
 Order.belongsTo(User)
 Order.belongsToMany(Product, {through: OrderItem});
