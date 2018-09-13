@@ -119,6 +119,7 @@ router.delete('/:orderId/item/:itemId', async (req, res, next) => {
     if (!order) {
       res.status(404).send();
     }
+
     const item = await OrderItem.findById(requestedItem);
     if (!item) {
       res.status(404).send('item not found in orderitem table; item: ' + { requestedItem })
@@ -144,8 +145,6 @@ router.delete('/:orderId/item/:itemId', async (req, res, next) => {
     res.status(201).send()
   } catch (err) { next(err) }
 })
-
-
 
 
 module.exports = router;
