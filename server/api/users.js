@@ -4,8 +4,8 @@ const {User, Order} = require('../db/models')
 // /api/users
 router.get('/', async (req, res, next) => {
   try {
-    if(!req.user.admin){
-      res.status(403).send('ineligible to view all users.');
+    if(!req.user || !req.user.admin){
+      res.status(403).send("Forbidden");
     }
 
     const users = await User.findAll();
@@ -18,7 +18,8 @@ router.get('/', async (req, res, next) => {
 // get a user by the given id
 router.get('/:userId', async(req, res, next) => {
   try {
-    if(!req.user.admin || req.user.id !== req.params.userId){
+
+    if(!req.user || !req.user.admin || req.user.id !== req.params.userId){
       res.status(403).send('Forbidden');
     }
 
@@ -68,7 +69,7 @@ router.post('/', async (req, res, next) => {
 // update
 router.put('/:userId', async (req, res, next) => {
   try {
-    if(!req.user.admin){
+    if(!req.user || !req.user.admin){
       res.status(403).send('forbidden to update a user info');
     }
 
@@ -95,7 +96,7 @@ router.put('/:userId', async (req, res, next) => {
 //get orders of this user(/api/users/:userId/orders?status=[pending|complete|transaction-failed]);
 router.get('/:userId/orders', async (req, res, next) => {
   try{
-    if(!req.user.admin && req.user.id !== req.params.userId){
+    if(!req.user || !req.user.admin && req.user.id !== req.params.userId){
       res.status(403).send('forbidden to see orders of this user');
     }
 
