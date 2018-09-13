@@ -1,12 +1,11 @@
 const router = require('express').Router()
 const {Product} = require('../db/models')
-module.exports = router
 
 router.get('/:id', async (req, res, next) => {
   try {
-
     const product = await Product.findById(req.params.id);
-    if (!product) return res.sendStatus(404);
+
+    if (!product) return res.status(404).send('No product found - ' + req.params.id);
     res.json(product);
   } catch (err) {
     next(err)
@@ -25,10 +24,17 @@ router.get('/', async (req, res, next) => {
 router.post('/', async (req, res, next) => {
   try {
     if(!req.user.admin){
-      res.sendStatus(403)
+      res.status(403).send('ineligible to create a new product');
     }
 
-    const product = await Product.create(req.body);
+    const productBody = {
+      name: req.body.name,
+      price: req.body.price,
+      imgUrl: req.body.imgUrl,
+      description: req.body.description
+    };
+
+    const product = await Product.create(productBody);
     res.json(product);
   } catch (err) {
     next(err)
@@ -38,20 +44,32 @@ router.post('/', async (req, res, next) => {
 router.put('/:id', async (req, res, next) => {
   try {
     if(!req.user.admin){
-      res.sendStatus(403) //CG: Same thing here.
+      res.status(403).send('ineligible to update a product');
     }
 
-    const product = await Product.update(req.body, {
+    const productBody = {
+      name: req.body.name,
+      price: req.body.price,
+      imgUrl: req.body.imgUrl,
+      description: req.body.description
+    };
+
+    const product = await Product.update(productBody, {
       where: {
         id: req.params.id
       },
       returning: true,
       plain: true
     });
-    if (!product) return res.sendStatus(404)
-    res.json(product);
+
+    if (!product) {
+      res.status(404).send('No product found - ' + req.params.id);
+    } else{
+      res.json(product);
+    }
   } catch (err) {
     next(err)
   }
 })
 
+module.exports = router
