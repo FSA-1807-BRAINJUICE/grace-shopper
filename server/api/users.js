@@ -1,11 +1,14 @@
 const router = require('express').Router()
 const {User, Order} = require('../db/models')
-module.exports = router
 
-//CG: Security on route. 
+// /api/users
 router.get('/', async (req, res, next) => {
   try {
-    const users = await User.findAll()
+    if(!req.user.admin){
+      res.status(403).send('ineligible to view all users.');
+    }
+
+    const users = await User.findAll();
     res.json(users)
   } catch (err) {
     next(err)
@@ -15,21 +18,48 @@ router.get('/', async (req, res, next) => {
 // get a user by the given id
 router.get('/:userId', async(req, res, next) => {
   try {
-    const oneUser = await User.findById(req.params.userId)
-    res.json(oneUser)
+    if(!req.user.admin || req.user.id !== req.params.userId){
+      res.status(403).send('Forbidden');
+    }
+
+    const user = await User.findById(req.params.userId)
+    res.json(user)
   } catch (err) {
     next(err)
   }
 });
 
-// create a new user -- CG: DELETE
+// create a new user
 router.post('/', async (req, res, next) => {
   try {
-    if(!req.user.admin){ // req.user coming from PASSPORT SESSION
-      res.sendStatus(403)
+    // avoid duplicate email
+    const email = req.body.email;
+    const emailCheckUser = await User.find({
+      where: {
+        email: email
+      }
+    });
+
+    if(emailCheckUser){
+      res.status(403).send('Duplicate account exists');
     }
-    const user = await User.create(req.body)
-    res.send(user)
+
+    let admin = false;
+    if(req.user.admin){
+      admin = req.body.admin;
+    }
+
+   const userBody = {
+      email: email,
+      password: req.body.password, // TODO: Need to hash the password.
+      googleId: req.body.googleId,
+      address: req.body.address,
+      admin: admin,
+      payment: req.body.payment
+    };
+
+    const user = await User.create(userBody);
+    res.send(user);
   } catch (error) {
     next(error)
   }
@@ -39,17 +69,24 @@ router.post('/', async (req, res, next) => {
 router.put('/:userId', async (req, res, next) => {
   try {
     if(!req.user.admin){
-      res.sendStatus(403)
-    } //CG: Make an else for the rest or you're going to get the error. 
-    const user = await User.update(req.body, {
-      where: {
-        id: req.params.userId
-      },
-      returning: true,
-      plain: true
-    });
-    if (!user) return res.sendStatus(404)
-    res.send(user);
+      res.status(403).send('forbidden to update a user info');
+    }
+
+    // only either admin or the account holder is allowed to update the user account.
+    if(req.user.admin || req.user.id === req.params.userId){
+      const user = await User.update(req.body, {
+        where: {
+          id: req.params.userId
+        },
+        returning: true
+      });
+
+      if (!user) {
+        res.status(404).send('user not found', req.params.userId);
+      } else{
+        res.send(user);
+      }
+    }
   } catch (err) {
     next(err)
   }
@@ -57,19 +94,28 @@ router.put('/:userId', async (req, res, next) => {
 
 //get orders of this user(/api/users/:userId/orders?status=[pending|complete|transaction-failed]);
 router.get('/:userId/orders', async (req, res, next) => {
-  try {
-    //CG: Security maybe? But relaly good job 
+  try{
+    if(!req.user.admin && req.user.id !== req.params.userId){
+      res.status(403).send('forbidden to see orders of this user');
+    }
+
     const queryCondition = {
-      userId: req.params.userId
+      userId: req.params.userId,
     }
-    if (req.query.status){
-      queryCondition.orderStatus = req.query.status
+
+    if(req.query.status){
+      queryCondition.orderStatus= req.query.status;
     }
+
     const orders = await Order.findAll({
-      where: queryCondition
+      where: queryCondition,
     })
-    res.json(orders)
-  } catch (error) {
-    next(error)
+
+    res.send(orders);
+  }catch(err){
+    next(err);
   }
-})
+});
+
+
+module.exports = router
