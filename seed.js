@@ -138,6 +138,10 @@ const orderItems = [
   }
 ]
 
+// 1. setUser / setProduct / setOrder
+// 2. createOrder = Order.bulkCreate ({ returning: true })
+// in case we later need to incorporate categories
+
 const seed = () =>
   Promise.all(users.map(user =>
     User.create(user)
