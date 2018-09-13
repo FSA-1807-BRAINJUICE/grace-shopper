@@ -4,8 +4,8 @@ const {User, Order} = require('../db/models')
 // /api/users
 router.get('/', async (req, res, next) => {
   try {
-    if(!req.user.admin){
-      res.status(403).send('ineligible to view all users.');
+    if(!req.user || !req.user.admin){
+      res.status(403).send("Forbidden");
     }
 
     const users = await User.findAll();
@@ -18,7 +18,7 @@ router.get('/', async (req, res, next) => {
 // get a user by the given id
 router.get('/:userId', async(req, res, next) => {
   try {
-    if(!req.user.admin || req.user.id !== req.params.userId){
+    if(!req.user || !req.user.admin || req.user.id !== req.params.userId){
       res.status(403).send('Forbidden');
     }
 
@@ -45,13 +45,13 @@ router.post('/', async (req, res, next) => {
     }
 
     let admin = false;
-    if(req.user.admin){
+    if(req.user && req.user.admin){
       admin = req.body.admin;
     }
 
    const userBody = {
       email: email,
-      password: req.body.password, // TODO: Need to hash the password.
+      password: req.body.password,
       googleId: req.body.googleId,
       address: req.body.address,
       admin: admin,
@@ -59,7 +59,7 @@ router.post('/', async (req, res, next) => {
     };
 
     const user = await User.create(userBody);
-    res.send(user);
+    res.json(user);
   } catch (error) {
     next(error)
   }
@@ -68,7 +68,7 @@ router.post('/', async (req, res, next) => {
 // update
 router.put('/:userId', async (req, res, next) => {
   try {
-    if(!req.user.admin){
+    if(!req.user || !req.user.admin){
       res.status(403).send('forbidden to update a user info');
     }
 
@@ -84,7 +84,7 @@ router.put('/:userId', async (req, res, next) => {
       if (!user) {
         res.status(404).send('user not found', req.params.userId);
       } else{
-        res.send(user);
+        res.json(user);
       }
     }
   } catch (err) {
@@ -95,7 +95,7 @@ router.put('/:userId', async (req, res, next) => {
 //get orders of this user(/api/users/:userId/orders?status=[pending|complete|transaction-failed]);
 router.get('/:userId/orders', async (req, res, next) => {
   try{
-    if(!req.user.admin && req.user.id !== req.params.userId){
+    if(!req.user || !req.user.admin && req.user.id !== req.params.userId){
       res.status(403).send('forbidden to see orders of this user');
     }
 
@@ -111,7 +111,7 @@ router.get('/:userId/orders', async (req, res, next) => {
       where: queryCondition,
     })
 
-    res.send(orders);
+    res.json(orders);
   }catch(err){
     next(err);
   }
