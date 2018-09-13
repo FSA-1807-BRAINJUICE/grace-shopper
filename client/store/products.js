@@ -40,7 +40,7 @@ export const getAllProductsThunk = () => async dispatch => {
 /**
  * REDUCER
  */
-const productsReducer = (state = initialProductState, action) => {
+const products = (state = initialProductState, action) => {
   switch (action.type) {
     case GET_ALL_PRODUCTS:
       return {...state, allProducts: action.products}
@@ -49,4 +49,4 @@ const productsReducer = (state = initialProductState, action) => {
   }
 }
 
-export default productsReducer;
+export default products;

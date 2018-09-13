@@ -1,8 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {Provider} from 'react-redux'
-import {HashRouter} from 'react-router-dom'
-//import history from './history'
+import {Router} from 'react-router-dom'
+import history from './history'
 import store from './store'
 import App from './app'
 
@@ -11,9 +11,9 @@ import './socket'
 
 ReactDOM.render(
   <Provider store={store}>
-    <HashRouter >
+    <Router history={history} >
       <App />
-    </HashRouter>
+    </Router>
   </Provider>,
   document.getElementById('app')
 )

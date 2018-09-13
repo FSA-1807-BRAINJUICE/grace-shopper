@@ -4,7 +4,7 @@ import {Link} from 'react-router-dom'
 import {getAllProductsThunk} from '../store/products'
 import ProductCard from './ProductCard'
 
-//Unless you're really into the concept of styled components I'd veer away from this. 
+//Unless you're really into the concept of styled components I'd veer away from this.
 const styles = {
   gallery: {
     display: "grid",
@@ -26,7 +26,7 @@ class AllProducts extends Component {
   render () {
     const products = this.props.products;
     return (
-      //All Divs should be classified or identified. All CSS / HTML must be KEBAB cased. all-products 
+      //All Divs should be classified or identified. All CSS / HTML must be KEBAB cased. all-products
       <div className='allProductsDiv' style = {styles.gallery}>
         {
           products.map(product => {
@@ -40,7 +40,7 @@ class AllProducts extends Component {
 
 const mapStateToProps = state => {
   return {
-    products: state.productsReducer.allProducts
+    products: state.products.allProducts
   }
 }
 
