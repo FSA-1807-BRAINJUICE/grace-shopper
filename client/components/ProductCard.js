@@ -12,10 +12,15 @@ import Typography from '@material-ui/core/Typography';
 const styles = {
   card: {
     maxWidth: 345,
+    justifySelf: 'center',
+    width:'100%'
   },
   media: {
     height: 140,
   },
+  fullWidth:{
+    width:'100%'
+  }
 };
 
 const ProductCard = (props) => {
@@ -23,7 +28,7 @@ const ProductCard = (props) => {
   const {imgUrl, name, description} = props.product;
   return (
     <Card className={classes.card}>
-      <CardActionArea>
+      <CardActionArea className={classes.fullWidth}>
         <CardMedia
           className={classes.media}
           image={imgUrl}
