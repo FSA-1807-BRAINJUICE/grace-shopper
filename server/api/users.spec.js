@@ -20,13 +20,34 @@ describe('User routes', () => {
       })
     })
 
-    it('GET /api/users', async () => {
-      const res = await request(app)
+    xit('GET /api/users', async () => {
+      await request(app)
         .get('/api/users')
-        .expect(200)
+        .expect(403)
 
-      expect(res.body).to.be.an('array')
-      expect(res.body[0].email).to.be.equal(codysEmail)
+      //expect(res.body).to.be.an('array')
+      //expect(res.body[0].email).to.be.equal(codysEmail)
     })
+
+    xit('POST /api/users - avoiding a duplicate account creation', async () => {
+      await request(app)
+      .post('/api/users')
+      .send({
+        email: codysEmail
+      })
+      .expect(403);
+
+    });
+
+    it('POST /api/users', async () => {
+      const res = await request(app)
+      .post('/api/users')
+      .send({
+        email: "cody2@puppybook.com",
+        password: 'pwd123',
+      })
+
+      expect(res.body.email).to.be.equal('cody2@puppybook.com');
+    });
   }) // end describe('/api/users')
 }) // end describe('User routes')
