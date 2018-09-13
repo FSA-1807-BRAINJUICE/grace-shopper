@@ -7,7 +7,8 @@ const Order = db.define('order', {
     allowNull: false
   },
   orderStatus: {
-    type: Sequelize.ENUM("pending", "complete", "transaction-failed")
+    type: Sequelize.ENUM("pending", "complete", "transaction-failed"),
+    defaultValue: "pending"
   },
   sessionId: {
     type: Sequelize.STRING,
