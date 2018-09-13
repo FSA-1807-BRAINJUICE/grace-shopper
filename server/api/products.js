@@ -12,6 +12,7 @@ router.get('/:id', async (req, res, next) => {
     next(err)
   }
 })
+
 router.get('/', async (req, res, next) => {
   try {
     const products = await Product.findAll();
@@ -37,7 +38,7 @@ router.post('/', async (req, res, next) => {
 router.put('/:id', async (req, res, next) => {
   try {
     if(!req.user.admin){
-      res.sendStatus(403)
+      res.sendStatus(403) //CG: Same thing here.
     }
 
     const product = await Product.update(req.body, {

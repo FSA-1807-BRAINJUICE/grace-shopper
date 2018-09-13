@@ -35,37 +35,31 @@ const products = [
   {
     name: 'lemon',
     price: 44,
-    imgUrl: 'img.png',
     description: 'lemon pills'
   },
   {
     name: 'apple',
     price: 3,
-    imgUrl: 'img.png',
     description: 'apple pills'
   },
   {
     name: 'yams',
     price: 55,
-    imgUrl: 'img.png',
     description: 'yams pills'
   },
   {
     name: 'potato',
     price: 76,
-    imgUrl: 'img.png',
     description: 'potato pills'
   },
   {
     name: 'orange',
     price: 32,
-    imgUrl: 'img.png',
     description: 'orange pills'
   },
   {
     name: 'dog food',
     price: 56,
-    imgUrl: 'img.png',
     description: 'dog food'
   }
 ]
@@ -73,7 +67,7 @@ const products = [
 const orders = [
   {
     orderNumber: 'ewyr9482734',
-    orderStatus: 'pending',
+    orderStatus: 'complete',
     userId: 1
   },
   {
@@ -83,7 +77,7 @@ const orders = [
   },
   {
     orderNumber: 'asdf34123',
-    orderStatus: 'pending',
+    orderStatus: 'complete',
     userId: 3
   },
   {
@@ -96,49 +90,49 @@ const orders = [
 const orderItems = [
   {
     quantity: 1,
-    unit_price: 47,
+    paidUnitPrice: 47,
     orderId: 2,
     productId: 1
   },
   {
     quantity: 2,
-    unit_price: 6,
+    paidUnitPrice: 6,
     orderId: 2,
     productId: 2
   },
   {
     quantity: 1,
-    unit_price: 58,
+    paidUnitPrice: 58,
     orderId: 2,
     productId: 3
   },
   {
     quantity: 1,
-    unit_price: 42,
+    paidUnitPrice: 44,
     orderId: 1,
     productId: 1
   },
   {
     quantity: 1,
-    unit_price: 55,
+    paidUnitPrice: 55,
     orderId: 1,
     productId: 3
   },
   {
     quantity: 2,
-    unit_price: 76,
+    paidUnitPrice: 76,
     orderId: 1,
     productId: 4
   },
   {
     quantity: 3,
-    unit_price: 32,
+    paidUnitPrice: 32,
     orderId: 4,
     productId: 5
   },
   {
     quantity: 1,
-    unit_price: 56,
+    paidUnitPrice: 56,
     orderId: 4,
     productId: 6
   }
@@ -147,13 +141,16 @@ const orderItems = [
 const seed = () =>
   Promise.all(users.map(user =>
     User.create(user)
-  )).then(() =>
-  Promise.all(products.map(product =>
-    Product.create(product))
-  )).then(() =>
+  ))
+  .then(() =>
   Promise.all(orders.map(order =>
     Order.create(order))
-  )).then(() =>
+    ))
+  .then(() =>
+  Promise.all(products.map(product =>
+    Product.create(product))
+  ))
+  .then(() =>
   Promise.all(orderItems.map(item =>
     OrderItem.create(item))
   ))
