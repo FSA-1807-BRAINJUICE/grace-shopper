@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import { fetchSingleProduct } from '../store/products'
+import Button from '@material-ui/core/Button'
 
 class SingleProduct extends Component {
   componentDidMount(){
@@ -8,10 +9,18 @@ class SingleProduct extends Component {
     this.props.fetchSingleProduct(productId);
   }
   render(){
-    const { name } = this.props.product;
+    const { name, imgUrl, price, description } = this.props.product;
     return (
       <div className='single-product'>
-        {name}
+        <div className='single-product-image'>
+          <img src={'/'+imgUrl} />
+        </div>
+        <div className='single-product-info'>
+          <h2>{name}</h2>
+          <h4>${price}</h4>
+          <p>{description}</p>
+          <Button size='small' color='primary' variant='contained'>Add to Cart</Button>
+        </div>
       </div>
     )
   }
