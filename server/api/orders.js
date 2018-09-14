@@ -36,10 +36,27 @@ router.get('/:orderId', async (req, res, next) => {
 // Note that if there is a body coming in with an item to add, create a cart with the item in.
 router.post('/', async (req, res, next) => {
   // purely create a new Order instance.
+  const orderToCreate = {}
+    if (req.user) {
+      // an order of a logged-in user
+      orderToCreate.userId = req.user.id;
+    } else {
+      // an order of a logged-out user
+      orderToCreate.sessionId = req.session.id;
+    }
 
+    const order = await Order.create(orderToCreate);
+
+     // set up an order cookie
+     res.cookie("o_id", order.id, {
+      maxAge: 3600 * 24 * 365000, // a year
+      httpOnly: true
+    });
+
+    res.status(201).json(order);
 });
 
-router.post('/', async (req, res, next) => {
+router.post('/testing', async (req, res, next) => {
   try {
     const orderToCreate = {}
     if (req.user) {
