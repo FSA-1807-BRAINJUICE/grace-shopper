@@ -18,8 +18,8 @@ const initialUserState = {
  * ACTION CREATORS
  */
 const getUser = user => ({
-  type:
-  GET_USER, user
+  type: GET_USER,
+  user
 })
 const removeUser = () => ({
   type: REMOVE_USER
@@ -40,6 +40,7 @@ export const me = () => async dispatch => {
 export const auth = (email, password, method) => async dispatch => {
   let res
   try {
+    console.log('auth');
     res = await axios.post(`/auth/${method}`, {email, password})
   } catch (authError) {
     return dispatch(getUser({error: authError}))
@@ -55,6 +56,7 @@ export const auth = (email, password, method) => async dispatch => {
 
 export const logout = () => async dispatch => {
   try {
+    console.log('logout');
     await axios.post('/auth/logout')
     dispatch(removeUser())
     history.push('/login')
@@ -69,7 +71,10 @@ export const logout = () => async dispatch => {
 export default function(state = initialUserState, action) {
   switch (action.type) {
     case GET_USER:
-      return action.user
+      return {
+        ...state,
+        user: action.user
+      }
     case REMOVE_USER:
       return initialUserState
     default:
