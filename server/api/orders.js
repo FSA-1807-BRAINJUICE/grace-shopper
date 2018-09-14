@@ -35,6 +35,11 @@ router.get('/:orderId', async (req, res, next) => {
 // POST /api/orders
 // Note that if there is a body coming in with an item to add, create a cart with the item in.
 router.post('/', async (req, res, next) => {
+  // purely create a new Order instance.
+
+});
+
+router.post('/', async (req, res, next) => {
   try {
     const orderToCreate = {}
     if (req.user) {
