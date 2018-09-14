@@ -1,16 +1,17 @@
 import axios from 'axios'
-import history from '../history'
+
 
 /**
  * ACTION TYPES
  */
-const GET_ALL_PRODUCTS = 'GET_ALL_PRODUCTS'
-
+const GET_ALL_PRODUCTS = 'GET_ALL_PRODUCTS';
+const GET_SINGLE_PRODUCT = 'GET_SINGLE_PRODUCT';
 /**
  * INITIAL STATE
  */
 const initialProductState = {
-  allProducts: []
+  allProducts: [],
+  selected: {}
 }
 
 /**
@@ -21,15 +22,18 @@ const getAllProducts = products => ({
   products
 })
 
+const getSingleProduct = product => ({
+  type: GET_SINGLE_PRODUCT,
+  product
+})
+
 /**
  * THUNK CREATORS
  */
 export const getAllProductsThunk = () => async dispatch => {
   try {
-    console.log("HIHIHHIH") //CG: Please do not commit console.logs!!
     const response = await axios.get('/api/products');
     const parsedAllProducts = response.data;
-    console.log(parsedAllProducts)
     const action = getAllProducts(parsedAllProducts);
     dispatch(action);
   } catch (err) {
@@ -37,16 +41,30 @@ export const getAllProductsThunk = () => async dispatch => {
   }
 }
 
+export const fetchSingleProduct = (id) => async dispatch => {
+  try {
+    const { data: singleProduct } = await axios.get(`/api/products/${id}`);
+    dispatch(getSingleProduct(singleProduct));
+  } catch (error) {
+    console.error(error)
+  }
+}
+
 /**
  * REDUCER
  */
-const productsReducer = (state = initialProductState, action) => {
+const products = (state = initialProductState, action) => {
   switch (action.type) {
     case GET_ALL_PRODUCTS:
       return {...state, allProducts: action.products}
+    case GET_SINGLE_PRODUCT:
+      return {
+        ...state,
+        selected: action.product
+      }
     default:
       return state
   }
 }
 
-export default productsReducer;
+export default products;
