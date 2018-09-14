@@ -1,6 +1,6 @@
 import React from 'react'
 
-import {Navbar, Login, Signup} from './components'
+import {Navbar, Login, Signup, UserHome} from './components'
 import AllProducts from './components/AllProducts'
 import Routes from './routes'
 import { Route, Switch } from 'react-router-dom'
@@ -16,6 +16,7 @@ const App = () => {
       <Switch>
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
+        <Route path="/home" component={UserHome} />
         <Route path = '/products/:productId' component = {SingleProduct}/>
         <Route exact path = '/products' component = {AllProducts}/>
       </Switch>
