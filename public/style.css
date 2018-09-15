@@ -27,3 +27,10 @@ form div {
   grid-gap: 30px 30px;
   margin-top: 15px;
 }
+
+.cart-item-img > img {
+  max-width: 200px;
+  max-height: 125px;
+}
+
+
