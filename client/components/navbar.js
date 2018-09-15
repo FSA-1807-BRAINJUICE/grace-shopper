@@ -3,19 +3,22 @@ import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {logout} from '../store'
+import UserHome from './user-home'
 
 const Navbar = ({handleClick, isLoggedIn}) => (
   <div>
     <h1>BOILERMAKER</h1>
     <nav>
-      {isLoggedIn ? (
-        <div>
-          {/* The navbar will show these links after you log in */}
-          <Link to="/home">Home</Link>
-          <a href="#" onClick={handleClick}>
-            Logout
-          </a>
-        </div>
+      {isLoggedIn ? ( <UserHome />
+        // <div>
+        //   {/* The navbar will show these links after you log in */}
+        //   <h1>HIHIHIHHIHI</h1>
+        //   {/* <Route path="/home" component={UserHome} /> */}
+        //   {/* <Link to="/home">Home</Link>
+        //   <a href="#" onClick={handleClick}>
+        //     Logout
+        //   </a> */}
+        // </div>
       ) : (
         <div>
           {/* The navbar will show these links before you log in */}
@@ -32,8 +35,9 @@ const Navbar = ({handleClick, isLoggedIn}) => (
  * CONTAINER
  */
 const mapState = state => {
+  console.log("USER", state.user.user)
   return {
-    isLoggedIn: false // !!state.user.id
+    isLoggedIn: state.user.user && state.user.user.id
   }
 }
 

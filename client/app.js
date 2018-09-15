@@ -19,16 +19,17 @@ const App = () => {
         <Route path='/checkout-form' component={CheckoutForm} />
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
-        <Route path="/home" component={UserHome} />
+        {/* <Route path="/home" component={UserHome} /> */}
         <Route path = '/products/:productId' component = {SingleProduct}/>
         <Route exact path = '/products' component = {AllProducts}/>
+        <Route exact path = '/' component = {AllProducts}/>
       </Switch>
-      <Button
+      {/* <Button
       component={Link}
       to="/checkout-prompt"
       >
         Checkout
-      </Button>
+      </Button> */}
       <Route path = '/checkout-prompt' component ={CheckoutPrompt} />
     </div>
   )

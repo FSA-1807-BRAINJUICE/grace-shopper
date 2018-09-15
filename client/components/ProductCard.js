@@ -8,6 +8,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import { Link } from 'react-router-dom'
 
 const styles = {
   card: {
@@ -25,24 +26,26 @@ const styles = {
 
 const ProductCard = (props) => {
   const { classes } = props;
-  const {imgUrl, name, description} = props.product;
+  const {id, imgUrl, name, description} = props.product;
   return (
     <Card className={classes.card}>
-      <CardActionArea className={classes.fullWidth}>
-        <CardMedia
-          className={classes.media}
-          image={imgUrl}
-          title={name}
-        />
-        <CardContent>
-          <Typography gutterBottom variant="headline" component="h2">
-            {name}
-          </Typography>
-          <Typography component="p">
-            {description}
-          </Typography>
-        </CardContent>
-      </CardActionArea>
+      <Link to={`/products/${id}`}>
+        <CardActionArea className={classes.fullWidth}>
+          <CardMedia
+            className={classes.media}
+            image={imgUrl}
+            title={name}
+          />
+          <CardContent>
+            <Typography gutterBottom variant="headline" component="h2">
+              {name}
+            </Typography>
+            <Typography component="p">
+              {description}
+            </Typography>
+          </CardContent>
+        </CardActionArea>
+      </Link>
       <CardActions>
         <Button size="small" color="primary">
           Add to Cart
