@@ -1,8 +1,9 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
-import {me} from '../store/user'
-
+import {me, logout} from '../store/user'
+import { Button } from '@material-ui/core';
+import { Redirect } from 'react-router-dom'
 /**
  * COMPONENT
  */
@@ -12,10 +13,22 @@ class UserHome extends Component {
     this.props.getMe()
   }
   render(){
-    const {email} = this.props
+    const {id, email} = this.props.user
+    if (!id){
+      return <Redirect to = "/products" />
+    }
     return (
       <div>
         <h3>Welcome, {email}</h3>
+        <div>
+        <Button
+          variant = 'outlined'
+          color='primary'
+          size = 'small'
+          onClick={this.props.handleClick}>
+            Logout
+        </Button>
+        </div>
       </div>
     )
   }
@@ -25,15 +38,15 @@ class UserHome extends Component {
  * CONTAINER
  */
 const mapState = state => {
-  console.log(state.user)
   return {
-    email: state.user.user.email
+    user: state.user.user
   }
 }
 
 const mapDispatch = dispatch => {
   return {
-    getMe: () => dispatch(me())
+    getMe: () => dispatch(me()),
+    handleClick: () => dispatch(logout())
   }
 }
 
