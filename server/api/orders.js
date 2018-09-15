@@ -47,52 +47,8 @@ router.post('/', async (req, res, next) => {
 
     const order = await Order.create(orderToCreate);
 
-     // set up an order cookie
-     res.cookie("o_id", order.id, {
-      maxAge: 3600 * 24 * 365000, // a year
-      httpOnly: true
-    });
-
     res.status(201).json(order);
 });
-
-router.post('/testing', async (req, res, next) => {
-  try {
-    const orderToCreate = {}
-    if (req.user) {
-      // an order of a logged-in user
-      orderToCreate.userId = req.user.id;
-    } else {
-      // an order of a logged-out user
-      orderToCreate.sessionId = req.session.id;
-    }
-
-    const order = await Order.create(orderToCreate);
-
-    if(req.body.item){
-      const item = req.body.item;
-      const itemToAdd = {
-        quantity: item.quantity,
-        orderId: order.id,
-        productId: item.productId,
-      };
-      await OrderItem.create(itemToAdd);
-    }
-
-    // set up an order cookie
-    res.cookie("o_id", order.id, {
-      maxAge: 3600 * 24 * 365000, // a year
-      httpOnly: true
-    });
-
-    // get the order just created with items
-    const orderWithItems = await Order.findById(order.id, {include: OrderItem});
-    res.status(201).json(orderWithItems);
-  } catch (err) {
-    //console.error(err);
-    next(err)
-  }
-})
 
 // PUT /api/orders/:orderId
 router.put('/:orderId', async (req, res, next) => {
@@ -121,11 +77,6 @@ router.put('/:orderId', async (req, res, next) => {
       where: { id: orderId },
       returning: true
     })
-
-    res.cookie("o_id", order.id, {
-      maxAge: 3600 * 24 * 365000, // a year
-      httpOnly: true
-    });
 
     res.status(202).json(updatedOrder);
   } catch (err) { next(err) }
@@ -164,13 +115,6 @@ router.post('/:orderId/item', async (req, res, next) => {
     };
 
     const itemAdded = await OrderItem.create(newItemToAdd, orderId);
-
-    // create or update the cart cookie
-    res.cookie("o_id", order.id, {
-      maxAge: 3600 * 24 * 365000, // a year
-      httpOnly: true
-    });
-
     res.status(201).json(itemAdded)
   }
   catch (err) { next(err) }
@@ -205,5 +149,39 @@ router.delete('/:orderId/item/:itemId', async (req, res, next) => {
     res.status(201).send();
   } catch (err) { next(err) }
 })
+
+
+router.post('/testing', async (req, res, next) => {
+  try {
+    const orderToCreate = {}
+    if (req.user) {
+      // an order of a logged-in user
+      orderToCreate.userId = req.user.id;
+    } else {
+      // an order of a logged-out user
+      orderToCreate.sessionId = req.session.id;
+    }
+
+    const order = await Order.create(orderToCreate);
+
+    if(req.body.item){
+      const item = req.body.item;
+      const itemToAdd = {
+        quantity: item.quantity,
+        orderId: order.id,
+        productId: item.productId,
+      };
+      await OrderItem.create(itemToAdd);
+    }
+
+    // get the order just created with items
+    const orderWithItems = await Order.findById(order.id, {include: OrderItem});
+    res.status(201).json(orderWithItems);
+  } catch (err) {
+    //console.error(err);
+    next(err)
+  }
+})
+
 
 module.exports = router;
