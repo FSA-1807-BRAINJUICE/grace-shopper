@@ -8,6 +8,7 @@ import { Route, Switch, Link } from 'react-router-dom'
 import SingleProduct from './components/SingleProduct'
 import { Button } from '@material-ui/core';
 import CheckoutPrompt from './components/CheckoutPrompt';
+import Cart from './components/Cart'
 
 
 const App = () => {
@@ -19,6 +20,7 @@ const App = () => {
         <Route path='/checkout-form' component={CheckoutForm} />
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
+        <Route path="/cart" component={Cart} />
         {/* <Route path="/home" component={UserHome} /> */}
         <Route path = '/products/:productId' component = {SingleProduct}/>
         <Route exact path = '/products' component = {AllProducts}/>
