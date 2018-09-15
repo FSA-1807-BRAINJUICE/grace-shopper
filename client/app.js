@@ -9,6 +9,7 @@ import SingleProduct from './components/SingleProduct'
 import { Button } from '@material-ui/core';
 import CheckoutPrompt from './components/CheckoutPrompt';
 import Cart from './components/Cart'
+import Orders from './components/Orders'
 
 
 const App = () => {
@@ -21,6 +22,7 @@ const App = () => {
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
         <Route path="/cart" component={Cart} />
+        <Route path="/orders" component={Orders} />
         {/* <Route path="/home" component={UserHome} /> */}
         <Route path = '/products/:productId' component = {SingleProduct}/>
         <Route exact path = '/products' component = {AllProducts}/>
