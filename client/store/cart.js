@@ -10,8 +10,8 @@ const ADD_ITEM_TO_CART = "ADD_ITEM_TO_CART"
 /**
  * INITIAL STATE
  */
-const initialOrderState = {
-  cart: []
+const initialCartState = {
+  cartItems: []
 }
 
 /**
@@ -33,7 +33,7 @@ export const addItemToCart = item => ({
  */
 export const getCartThunk = () => async dispatch => {
   try {
-    const response = await axios.get(`/api/products`);
+    const response = await axios.get(`/api/products`); //which route?
     const parsedCart = response.data;
     const action = getCart(parsedCart);
     dispatch(action);
@@ -45,15 +45,15 @@ export const getCartThunk = () => async dispatch => {
 /**
  * REDUCER
  */
-const orders = (state = initialOrderState, action) => {
+const cart = (state = initialCartState, action) => {
   switch (action.type) {
     case ADD_ITEM_TO_CART:
-      return {...state, cart: [...state.cart, action.item]}
+      return {...state, cartItems: [...state.cartItems, action.item]}
     case GET_CART:
-      return {...state, cart: action.cart}
+      return {...state, cartItems: action.cart}
     default:
       return state
   }
 }
 
-export default orders;
+export default cart;

@@ -1,6 +1,10 @@
 import React, { Component } from "react";
 import {connect} from 'react-redux'
-import {addItemToCart} from '../store/orders'
+import {addItemToCart} from '../store/cart'
+import {Link} from 'react-router-dom'
+
+import TableCell from '@material-ui/core/TableCell';
+import TableRow from '@material-ui/core/TableRow';
 
 class CartItem extends Component {
   constructor(props) {
@@ -19,11 +23,11 @@ class CartItem extends Component {
   render() {
     const { name, price, imgUrl, description } = this.props.cartItem;
     return (
-      <div className='cart-item'>
-        <p>{name}</p>
-        <p>{price}</p>
-        <img src={imgUrl} />
-        <p>{description}</p>
+        <TableRow className='cart-item'>
+        <TableCell className='cart-item-img'><img src={imgUrl}/></TableCell>
+        <TableCell className='cart-item-element'>{name}</TableCell>
+        <TableCell className='cart-item-element'>{price}</TableCell>
+        <TableCell className='cart-item-element'>{description}</TableCell>
         {/* <form id='orderItemQuantity' onSubmit={this.handleSubmit}>
         <select
         className='orderItemSelect'
@@ -36,7 +40,7 @@ class CartItem extends Component {
         </select>
         <button className='orderItemSelectButton' type='submit'>Select Quantity</button>
         </form> */}
-      </div>
+      </TableRow>
     )
   }
 }
