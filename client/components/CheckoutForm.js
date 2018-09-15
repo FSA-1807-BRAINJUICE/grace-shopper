@@ -34,6 +34,7 @@ class CheckoutForm extends Component {
       postal: '',
       phone: '',
     }
+    this.handleSubmit = this.handleSubmit.bind(this)
   }
   handleChange = nameAttr => event => {
     this.setState({
@@ -50,6 +51,7 @@ class CheckoutForm extends Component {
     const { classes } = this.props;
     return (
       <form
+        onSubmit={this.handleSubmit}
         className = {classes.container}
         noValidate
         autoComplete='off'>
@@ -102,12 +104,12 @@ class CheckoutForm extends Component {
               margin="normal"
             />
           <Button
-            onSubmit={this.handleSubmit}
             variant='contained'
             size='small'
             color='primary'
+            type = 'submit'
           >
-            Checkout
+            Continue
           </Button>
       </form>
     )
@@ -128,4 +130,4 @@ const mapDispatch = (dispatch, ownProps) => ({
   }
 })
 
-export default withStyles(styles)(CheckoutForm)
+export default withStyles(styles)(connect(null, mapDispatch)(CheckoutForm))
