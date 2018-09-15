@@ -9,9 +9,9 @@ import { Redirect } from 'react-router-dom'
  */
 
 class UserHome extends Component {
-  componentDidMount(){
-    this.props.getMe()
-  }
+  // componentDidMount(){
+  //   this.props.getMe()
+  // }
   render(){
     const {id, email} = this.props.user
     if (!id){
@@ -45,7 +45,7 @@ const mapState = state => {
 
 const mapDispatch = dispatch => {
   return {
-    getMe: () => dispatch(me()),
+    // getMe: () => dispatch(me()),
     handleClick: () => dispatch(logout())
   }
 }
