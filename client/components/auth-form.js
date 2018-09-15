@@ -1,38 +1,84 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
-import {auth, logout} from '../store'
+import {auth} from '../store'
+import TextField from '@material-ui/core/TextField';
+import { withStyles } from '@material-ui/core/styles';
+import { Button } from '@material-ui/core';
+
+const styles = theme => ({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
+  },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 200,
+  },
+  menu: {
+    width: 200,
+  },
+});
+
+
 
 /**
  * COMPONENT
  */
 const AuthForm = props => {
-  const {name, displayName, handleSubmit, error, handleClick} = props
+  const {
+    name,
+    displayName,
+    handleSubmit,
+    error,
+    handleClick,
+    classes
+  } = props
 
   return (
     <div>
-      <form onSubmit={handleSubmit} name={name}>
+      <form
+      className = {classes.container}
+      onSubmit={handleSubmit}
+      name={name}
+      noValidate
+      autoComplete = 'off'>
         <div>
-          <label htmlFor="email">
-            <small>Email</small>
-          </label>
-          <input name="email" type="text" />
+        <TextField
+          id="email"
+          label="Email"
+          className={classes.textField}
+          margin="normal" />
         </div>
         <div>
-          <label htmlFor="password">
-            <small>Password</small>
-          </label>
-          <input name="password" type="password" />
+        <TextField
+          id="password"
+          label="Password"
+          className={classes.textField}
+          margin="normal"
+          type='password'
+          />
         </div>
         <div>
-          <button type="submit">{displayName}</button>
-        </div>
-        <div>
-          <button onClick={handleClick}>Logout</button>
+          <Button
+            variant = 'outlined'
+            color='primary'
+            size = 'small'
+            type="submit">
+          {displayName}
+          </Button>
         </div>
         {error && error.response && <div> {error.response.data} </div>}
       </form>
-      <a href="/auth/google">{displayName} with Google</a>
+      <div className = {classes.container}>
+        <a href="/auth/google">
+          <Button >
+            {displayName} with Google
+          </Button>
+        </a>
+      </div>
     </div>
   )
 }
@@ -68,15 +114,12 @@ const mapDispatch = dispatch => {
       const email = evt.target.email.value
       const password = evt.target.password.value
       dispatch(auth(email, password, formName))
-    },
-    handleClick() {
-      dispatch(logout())
     }
   }
 }
 
-export const Login = connect(mapLogin, mapDispatch)(AuthForm)
-export const Signup = connect(mapSignup, mapDispatch)(AuthForm)
+export const Login = withStyles(styles)(connect(mapLogin, mapDispatch)(AuthForm))
+export const Signup = withStyles(styles)(connect(mapSignup, mapDispatch)(AuthForm))
 
 /**
  * PROP TYPES
@@ -85,5 +128,6 @@ AuthForm.propTypes = {
   name: PropTypes.string.isRequired,
   displayName: PropTypes.string.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  error: PropTypes.object
+  error: PropTypes.object,
+  classes: PropTypes.object.isRequired
 }
