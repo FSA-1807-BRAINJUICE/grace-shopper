@@ -61,7 +61,6 @@ export const addProductToCart = (productId, quantity=1) => async dispatch => {
         // check any duplicates and add the selected item to the list.
         let itemFound = false;
         let items = JSON.parse(orderItems);
-        console.log(items)
         for(let item of items){
           if(item.productId === productId){
             item.quantity = quantity;
@@ -95,8 +94,6 @@ export const addProductToCart = (productId, quantity=1) => async dispatch => {
 
       // check if there is a duplicate
       let foundDuplicate = false;
-      console.log("pending-orderitems", pendingOrder.orderItems)
-
       if(pendingOrder.orderItems){
         for(let item of pendingOrder.orderItems){
           if(item.productId === productId){
