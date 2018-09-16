@@ -133,7 +133,7 @@ export const updateItem = (itemId, productId, quantity, orderId) => async dispat
 
     let orderItems;
     if(!user){
-      // simply update items in the local storage.
+      // simply update item quantity in the local storage.
       orderItems = localStorage.getItem('order-items');
       if(orderItems){
         for(let item of orderItems){
@@ -142,18 +142,24 @@ export const updateItem = (itemId, productId, quantity, orderId) => async dispat
             break;
           }
         }
-      }
 
-      localStorage.setItem('order-items', JSON.stringify(orderItems));
+        localStorage.setItem('order-items', JSON.stringify(orderItems));
+      }
     }else{
-      // update quantity in db.
+      /**
+       *  update quantity in db.
+       */
+
+       // retrieve the item from db by itemId.
       const updatedItem = await axios.get(`/api/orders/${orderId}/items/${itemId}`);
 
       // update the quantity
       updatedItem.quantity = quantity;
+
+      // invoke put method to update
       await axios.put(`/api/orders/${orderId}/items/${itemId}`, updatedItem);
 
-      // get the items in the order.
+      // get the all items of the order.
       const {data} = await axios.get(`/api/orders/${orderId}`);
       orderItems = data.orderItems;
     }
@@ -181,6 +187,7 @@ export const deleteItem = (itemId, productId, orderId) => async dispatch => {
           }
         }
 
+        // remove the item from the orderItems list.
         orderItems = orderItems.splice(i, 1);
         localStorage.setItem('order-items', JSON.stringify  (orderItems));
       }
