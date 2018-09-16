@@ -18,7 +18,7 @@ router.get('/', async (req, res, next) => {
 // get a user by the given id
 router.get('/:userId', async(req, res, next) => {
   try {
-    if(!req.user || !req.user.admin || req.user.id !== req.params.userId){
+    if(!req.user || !req.user.admin || req.user.id !== Number(req.params.userId)){
       res.status(403).send('Forbidden');
     }
 
@@ -73,7 +73,7 @@ router.put('/:userId', async (req, res, next) => {
     }
 
     // only either admin or the account holder is allowed to update the user account.
-    if(req.user.admin || req.user.id === req.params.userId){
+    if(req.user.admin || req.user.id === Number(req.params.userId)){
       const user = await User.update(req.body, {
         where: {
           id: req.params.userId
