@@ -77,6 +77,26 @@ router.put('/:orderId', async (req, res, next) => {
   } catch (err) { next(err) }
 })
 
+router.get('/:orderId/items/:itemId', async (req, res, next) => {
+  const orderId = req.params.orderId;
+  const itemId = req.params.itemId;
+  try{
+    const order = await Order.findById(orderId);
+    if (!order) {
+      res.status(404).send('No order found - ' + orderId);
+    }
+
+    if (req.user && (!req.user.admin && req.user.id !== order.userId)) { //known user
+      //not an admin and a known user requested some other user's order
+        res.status(403).send('Forbidden to retrieve this order item');
+    }
+
+    const item = await OrderItem.findById(itemId);
+    res.status(201).json(item);
+  }catch(err){
+    next(err);
+  }
+});
 // POST /api/orders/:orderId/item
 router.post('/:orderId/items', async (req, res, next) => {
   const orderId = req.params.orderId;
