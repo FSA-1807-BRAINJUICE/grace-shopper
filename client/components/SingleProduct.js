@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
-import { fetchSingleProduct, addProductToCart } from '../store/products'
+import { fetchSingleProduct } from '../store/products'
+import { addProductToCart } from '../store/cart'
 import Button from '@material-ui/core/Button'
 
 class SingleProduct extends Component {

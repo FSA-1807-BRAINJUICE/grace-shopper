@@ -83,7 +83,7 @@ router.put('/:orderId', async (req, res, next) => {
 })
 
 // POST /api/orders/:orderId/item
-router.post('/:orderId/item', async (req, res, next) => {
+router.post('/:orderId/items', async (req, res, next) => {
   const orderId = req.params.orderId;
   const productId = req.body.productId;
 
@@ -118,6 +118,44 @@ router.post('/:orderId/item', async (req, res, next) => {
     res.status(201).json(itemAdded)
   }
   catch (err) { next(err) }
+})
+
+router.put('/:orderId/items/:itemId', async (req, res, next) => {
+  const orderId = req.params.orderId;
+  const itemId = req.params.itemId;
+  try{
+    // check if there is an order with the given orderId
+    const order = await Order.findById(orderId);
+    const orderItem = await OrderItem.findById(itemId);
+    const product = await Product.findById(orderItem.productId);
+    if (!product || !order || !orderItem) {
+      res.status(404).send('No product, order item, or order found');
+    }
+
+    if (req.user) { //known user
+      if (!req.user.admin && req.user.id !== order.userId) { //not an admin and a known user requested some other user's order
+        res.status(403).send('Forbidden');
+      }
+    } else if (req.session.id !== order.sessionId) {
+      res.status(403).send('Forbidden');
+    }
+
+    const orderItemDetail = {
+      quantity: req.body.quantity,
+      paidUnitPrice: product.price,
+      orderId: order.id,
+      productId: product.id
+    }
+
+    await OrderItem.update(orderItemDetail, {
+      where: { id: itemId },
+      returning: true
+    })
+
+    res.status(204).send();
+  }catch(err){
+    next(err);
+  }
 })
 
 router.delete('/:orderId/item/:itemId', async (req, res, next) => {
