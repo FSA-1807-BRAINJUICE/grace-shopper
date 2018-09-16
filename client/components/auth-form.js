@@ -74,7 +74,12 @@ const AuthForm = props => {
       </form>
       <div className = {classes.container}>
         <a href="/auth/google">
-          <Button >
+          <Button
+            variant = 'outlined'
+            color='primary'
+            size = 'small'
+            type="submit"
+          >
             {displayName} with Google
           </Button>
         </a>

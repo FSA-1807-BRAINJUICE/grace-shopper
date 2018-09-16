@@ -33,4 +33,12 @@ form div {
   max-height: 125px;
 }
 
+#checkout-prompt{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
+#checkout-prompt > a{
+  margin-top: 30px;
+}

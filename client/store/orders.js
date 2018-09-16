@@ -21,36 +21,36 @@ export const getOrders = orders => ({
 
 export const updateOrdersDone = addressInfo => async dispatch => {
   try{
-    //case 1: guest checkout
-      //create new order in order table for the guest
-      //create new orderitems in orderitems table with items taken from
-        //localStorage and set orderId
     const { data: user } = await axios.get('/auth/me');
     if(!user){
-      // user logged-out
+      // guest checkout
       let { data: newOrder } = await axios.post('/api/orders');
       let orderItems = JSON.parse(localStorage.getItem('order-items'));
-      let newOrderItems =
-        orderItems.map(async item => {
-          let res = await axios.post(`/api/orders/${newOrder.id}/items`, {
-            quantity: item.quantity,
-            productId: item.productId
-          })
-          return res.data;
+
+      //create orderItems
+      orderItems.forEach(async item => {
+        await axios.post(`/api/orders/${newOrder.id}/items`, {
+          quantity: item.quantity,
+          productId: item.productId
         })
+      })
+
       const {data: completedOrder } =
         await axios.put(`/api/orders/${newOrder.id}`, {
           orderStatus: "complete",
         });
+
       localStorage.clear();
       dispatch(setOrderDone(completedOrder));
     } else {
-      //case 2: logged-in user checkout
-      let cart = await axios.get(`/api/users/${user.id}/orders?status=pending`);
-      const completedOrder = await axios.put(`/api/orders/${cart.id}`, {
+      //logged-in user checkout
+      let { data: orders } = await axios.get(`/api/users/${user.id}/orders?status=pending`);
+      let cart = orders[0];
+
+      const {data: completedOrder } = await axios.put(`/api/orders/${cart.id}`, {
         orderStatus: "complete"
       });
-      //TODO: add fields for address, but route needs to be updated
+
       dispatch(setOrderDone(completedOrder));
     }
   } catch(err){
