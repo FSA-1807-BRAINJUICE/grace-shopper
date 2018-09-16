@@ -12,8 +12,7 @@ const GET_SINGLE_PRODUCT = 'GET_SINGLE_PRODUCT';
  */
 const initialProductState = {
   allProducts: [],
-  selected: {},
-  orderItems: [],
+  selected: {}
 }
 
 /**

@@ -188,38 +188,4 @@ router.delete('/:orderId/item/:itemId', async (req, res, next) => {
   } catch (err) { next(err) }
 })
 
-
-router.post('/testing', async (req, res, next) => {
-  try {
-    const orderToCreate = {}
-    if (req.user) {
-      // an order of a logged-in user
-      orderToCreate.userId = req.user.id;
-    } else {
-      // an order of a logged-out user
-      orderToCreate.sessionId = req.session.id;
-    }
-
-    const order = await Order.create(orderToCreate);
-
-    if(req.body.item){
-      const item = req.body.item;
-      const itemToAdd = {
-        quantity: item.quantity,
-        orderId: order.id,
-        productId: item.productId,
-      };
-      await OrderItem.create(itemToAdd);
-    }
-
-    // get the order just created with items
-    const orderWithItems = await Order.findById(order.id, {include: OrderItem});
-    res.status(201).json(orderWithItems);
-  } catch (err) {
-    //console.error(err);
-    next(err)
-  }
-})
-
-
 module.exports = router;
