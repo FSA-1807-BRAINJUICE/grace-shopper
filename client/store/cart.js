@@ -110,9 +110,9 @@ export const addProductToCart = (productId, quantity=1) => async dispatch => {
 
         await axios.post(`/api/orders${pendingOrder.id}/items`, orderItem);
       }
-      let {orderItems} = await axios.get(`/api/orders/${pendingOrder.id}`);
+      let {data} = await axios.get(`/api/orders/${pendingOrder.id}`);
 
-      dispatch(getCartItems(orderItems));
+      dispatch(getCartItems(data.orderItems));
     }
   }catch(error){
     console.error(error);
