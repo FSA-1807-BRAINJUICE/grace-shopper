@@ -17,16 +17,11 @@ router.get('/:orderId', async (req, res, next) => {
   }
 
   // check user privilege
-  if (!req.user) {
-    // a case of a logged-out user -
-    // if req.sessionId is different from a sessionId of the order,
-    // then the logged-out user is not allowed to get this order.
-    if (req.session.id !== order.sessionId) {
-      res.status(403).send("Forbidden to see this order");
-    }
-  } else if (!req.user.isAdmin && req.user.id !== order.userId) {
+  if(!req.user){
+    res.status(403).send('No orders saved in DB for logged-out user!');
+  }else if (!req.user.isAdmin && req.user.id !== order.userId) {
     // a case of a logged-in user
-    res.status(403).end();
+    res.status(403).send("Forbidden");
   }
 
   res.status(200).json(order)
@@ -65,12 +60,12 @@ router.put('/:orderId', async (req, res, next) => {
       if (!req.user.admin && req.user.id !== order.userId) { //not an admin and a known user requested some other user's order
         res.status(403).send('Forbidden');
       }
-    } else if (req.session.id !== order.sessionId) {
-      res.status(403).send('Forbidden');
+    } else{
+      res.status(403).send("No orders is saved in DB for logged-out users");
     }
 
-    // Note that order has 4 properties - orderNumber, orderStatus, sessionId, and userId.
-    // orderNumber, sessionId, and userId shouldn't be updated.
+    // Note that order has 4 properties - orderNumber, orderStatus, and userId.
+    // orderNumber, and userId shouldn't be updated.
     order.orderStatus = req.body.orderStatus;
 
     const updatedOrder = await Order.update(order, {
@@ -82,6 +77,26 @@ router.put('/:orderId', async (req, res, next) => {
   } catch (err) { next(err) }
 })
 
+router.get('/:orderId/items/:itemId', async (req, res, next) => {
+  const orderId = req.params.orderId;
+  const itemId = req.params.itemId;
+  try{
+    const order = await Order.findById(orderId);
+    if (!order) {
+      res.status(404).send('No order found - ' + orderId);
+    }
+
+    if (req.user && (!req.user.admin && req.user.id !== order.userId)) { //known user
+      //not an admin and a known user requested some other user's order
+        res.status(403).send('Forbidden to retrieve this order item');
+    }
+
+    const item = await OrderItem.findById(itemId);
+    res.status(201).json(item);
+  }catch(err){
+    next(err);
+  }
+});
 // POST /api/orders/:orderId/item
 router.post('/:orderId/items', async (req, res, next) => {
   const orderId = req.params.orderId;
@@ -102,9 +117,6 @@ router.post('/:orderId/items', async (req, res, next) => {
     if (req.user && (!req.user.admin && req.user.id !== order.userId)) { //known user
       //not an admin and a known user requested some other user's order
         res.status(403).send('update forbidden');
-    }
-    if (req.session.id !== order.sessionId) {
-      res.status(403).end('update forbidden');
     }
 
     const newItemToAdd = {
@@ -136,8 +148,8 @@ router.put('/:orderId/items/:itemId', async (req, res, next) => {
       if (!req.user.admin && req.user.id !== order.userId) { //not an admin and a known user requested some other user's order
         res.status(403).send('Forbidden');
       }
-    } else if (req.session.id !== order.sessionId) {
-      res.status(403).send('Forbidden');
+    } else {
+      res.status(403).send('No order is saved in DB for logged-out users.');
     }
 
     const orderItemDetail = {
@@ -176,8 +188,8 @@ router.delete('/:orderId/items/:itemId', async (req, res, next) => {
       if (!req.user.admin && req.user.id !== order.userId) { //not an admin and a known user requested some other user's order
         res.status(403).send('update forbidden');
       }
-    } else if (req.session.id !== order.sessionId) {
-      res.status(403).send('update forbidden');
+    }else{
+      res.status(403).send("No orders is saved in DB for logged-out users");
     }
 
     await OrderItem.destroy({
