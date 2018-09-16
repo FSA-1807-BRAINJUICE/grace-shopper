@@ -50,7 +50,8 @@ export const addProductToCart = (productId, quantity=1) => async dispatch => {
     const res = await axios.get('/auth/me')
     const user = res.data;
 
-    if(!user){
+    console.log("ususeer", user);
+    if(!user.id){
       // user logged-out
       let orderItems = localStorage.getItem('order-items');
       let selectedItem = {productId, quantity};
@@ -164,11 +165,11 @@ export const addProductToCart = (productId, quantity=1) => async dispatch => {
           await axios.post(`/api/orders${pendingOrder.id}/items`, orderItem);
         }
       }
+
+      const {orderItems} = await axios.get(`/api/orders/${pendingOrder.id}`);
+
+      dispatch(getCartItems(orderItems));
     }
-
-    const {orderItems} = await axios.get(`/api/orders/${pendingOrder.id}`);
-
-    dispatch(getCartItems(orderItems));
   }catch(error){
     console.error(error);
   }
