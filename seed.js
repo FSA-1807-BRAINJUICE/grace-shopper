@@ -200,4 +200,4 @@ const main = () => {
 
 main();
 
-
+module.exports = seed;

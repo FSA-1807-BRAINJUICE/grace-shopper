@@ -50,8 +50,7 @@ export const addProductToCart = (productId, quantity=1) => async dispatch => {
     const res = await axios.get('/auth/me')
     const user = res.data;
 
-    console.log("ususeer", user);
-    if(!user.id){
+    if(!user){
       // user logged-out
       let orderItems = localStorage.getItem('order-items');
       let selectedItem = {productId, quantity};
