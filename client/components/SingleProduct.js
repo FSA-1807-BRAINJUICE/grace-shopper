@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import { fetchSingleProduct } from '../store/products'
+import { addProductToCart } from '../store/cart'
 import Button from '@material-ui/core/Button'
 
 class SingleProduct extends Component {
@@ -10,6 +11,7 @@ class SingleProduct extends Component {
   }
   render(){
     const { name, imgUrl, price, description } = this.props.product;
+    const productId = Number(this.props.match.params.productId)
     return (
       <div className='single-product'>
         <div className='single-product-image'>
@@ -19,7 +21,7 @@ class SingleProduct extends Component {
           <h2>{name}</h2>
           <h4>${price}</h4>
           <p>{description}</p>
-          <Button size='small' color='primary' variant='contained'>Add to Cart</Button>
+          <Button size='small' color='primary' variant='contained' onClick={() => {this.props.addToCart(productId)}}>Add to Cart</Button>
         </div>
       </div>
     )
@@ -33,6 +35,9 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   fetchSingleProduct(id){
     dispatch(fetchSingleProduct(id))
+  },
+  addToCart(productId){
+    dispatch(addProductToCart(productId));
   }
 })
 

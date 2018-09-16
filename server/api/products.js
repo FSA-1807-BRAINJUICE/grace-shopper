@@ -58,8 +58,7 @@ router.put('/:id', async (req, res, next) => {
       where: {
         id: req.params.id
       },
-      returning: true,
-      plain: true
+      returning: true
     });
 
     if (!product) {
