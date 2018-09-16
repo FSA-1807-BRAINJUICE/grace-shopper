@@ -53,8 +53,8 @@ export const addProductToCart = (productId, quantity=1) => async dispatch => {
     if(!user){
       // user logged-out
       let orderItems = localStorage.getItem('order-items');
-      let selectedItem = {productId, quantity};
 
+      let selectedItem = {productId, quantity};
       if(!orderItems){
         localStorage.setItem('order-items', JSON.stringify([selectedItem]));
       }else{
@@ -73,102 +73,49 @@ export const addProductToCart = (productId, quantity=1) => async dispatch => {
         localStorage.setItem('order-items', JSON.stringify(items));
       }
 
-      orderItems = localStorage.getItem('order-items');
-      dispatch(getCartItems(JSON.parse(orderItems)));
+      dispatch(getCartItems(JSON.parse(localStorage.getItem('order-items'))));
     }else{
       // user logged-in
-      let pendingOrder = await axios.get(`/api/users/${user.id}/orders?status=pending`);
 
-      let createdNewOrder = false;
+      // find the pending order of this current logged-in user
+      let pendingOrder;
+
+      let pendingOrders = await axios.get(`/api/users/${user.id}/orders?status=pending`);
       // if there is no pending order for the current logged-in user, create a new Order.
-      if(!pendingOrder){
+      if(!pendingOrders || pendingOrders.length === 0){
+        // if there is no pending order, then create one.
         const {data} = await axios.post('/api/orders');
         pendingOrder = data;
-        createdNewOrder = true;
-      }
-
-      let orderItemsFromDB = [];
-      if(!createdNewOrder) {
-        // get cart items from db
-        const {data} = await axios.get(`/api/orders/${pendingOrder.id}/items`);
-        orderItemsFromDB = data;
-      }
-
-      // check if there is a temporary cart in the local storage
-      let orderItemsFromLS = JSON.parse(localStorage.getItem('order-items'));
-      if(orderItemsFromLS){
-        /*
-         * merge items in DB and items in LS
-         */
-
-        // find items to create in db i.e., remove any duplicates
-        let foundSelectedProduct = false;
-        for(let itemLS in orderItemsFromLS){
-          let found = false;
-          for(let itemDB in orderItemsFromDB){
-            if(itemLS.proudctId === itemDB.productId){
-              // update the itemDB
-              itemDB.quantity += itemLS.quantity;
-              await axios.put(`/api/orders/${pendingOrder.id}/items/${itemDB.id}`, itemDB);
-
-              found = true;
-
-              if(itemDB.productId === productId){
-                foundSelectedProduct = true;
-              }
-            }
-          }
-
-          if(!found){
-            //create itemLS in DB
-            const itemToCreate = {
-              quantity,
-              productId
-            };
-            await axios.post(`/api/orders/${pendingOrder.id}/items`, itemToCreate);
-          }
-        }
-
-        if(!foundSelectedProduct){
-          // create a new order item of the selected product to DB, as needed!
-          const itemToCreate = {
-            quantity,
-            productId
-          };
-          await axios.post(`/api/orders/${pendingOrder.id}/items`, itemToCreate);
-        }
-
-        // delete the localStorage
-        localStorage.removeItem('order-items');
       }else{
-        // add item to the pending cart
+        pendingOrder = pendingOrders[0];
+      }
 
-        // check if there is a duplicate
-        let foundDuplicate = false;
-        for(let item of pendingOrder.orderItems){
-          if(item.productId === productId){
-            item.quantity = item.quantity + quantity;
-            await axios.put(`/api/orders/${pendingOrder.id}/items/${item.id}`, item);
-            foundDuplicate = true;
-            break;
-          }
-        }
-
-        if(!foundDuplicate){
-          // create an item with the pending order id
-          const orderItem = {
-            quantity,
-            productId,
-          }
-
-          await axios.post(`/api/orders${pendingOrder.id}/items`, orderItem);
+      // check if there is a duplicate
+      let foundDuplicate = false;
+      for(let item of pendingOrder.orderItems){
+        if(item.productId === productId){
+          item.quantity = item.quantity + quantity;
+          await axios.put(`/api/orders/${pendingOrder.id}/items/${item.id}`, item);
+          foundDuplicate = true;
+          break;
         }
       }
 
-      const {orderItems} = await axios.get(`/api/orders/${pendingOrder.id}`);
+      if(!foundDuplicate){
+        // create an item with the pending order id
+        const orderItem = {
+          quantity,
+          productId,
+        }
 
-      dispatch(getCartItems(orderItems));
+        await axios.post(`/api/orders${pendingOrder.id}/items`, orderItem);
+      }
     }
+
+    let {orderItems} = await axios.get(`/api/orders/${pendingOrder.id}`);
+
+    dispatch(getCartItems(orderItems));
+
   }catch(error){
     console.error(error);
   }
