@@ -121,13 +121,13 @@ router.post('/:orderId/items', async (req, res, next) => {
 
     const newItemToAdd = {
       quantity: req.body.quantity,
-      paidUnitPrice: product.price,
+      // paidUnitPrice: product.price,
       orderId: order.id,
       productId: product.id
     };
 
     const itemAdded = await OrderItem.create(newItemToAdd);
-    console.log(itemAdded)
+    // console.log(itemAdded)
     res.status(201).json(itemAdded)
   }
   catch (err) { next(err) }
