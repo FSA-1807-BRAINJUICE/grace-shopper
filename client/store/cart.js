@@ -121,7 +121,6 @@ export const addProductToCart = (productId, quantity=1) => async dispatch => {
         }
       }
       let {data} = await axios.get(`/api/orders/${pendingOrder.id}`);
-      // console.log("DATA", )
       dispatch(getCartItems(data.orderItems));
     }
   }catch(error){

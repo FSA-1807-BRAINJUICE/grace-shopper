@@ -121,7 +121,7 @@ router.post('/:orderId/items', async (req, res, next) => {
 
     const newItemToAdd = {
       quantity: req.body.quantity,
-      paidUnitPrice: product.price,
+      // paidUnitPrice: product.price,
       orderId: order.id,
       productId: product.id
     };
