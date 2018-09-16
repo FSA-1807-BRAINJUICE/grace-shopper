@@ -115,7 +115,7 @@ export const addProductToCart = (productId, quantity=1) => async dispatch => {
           productId,
         }
 
-        await axios.post(`/api/orders${pendingOrder.id}/items`, orderItem);
+        await axios.post(`/api/orders/${pendingOrder.id}/items`, orderItem);
       }
       let {orderItems} = await axios.get(`/api/orders/${pendingOrder.id}`);
 

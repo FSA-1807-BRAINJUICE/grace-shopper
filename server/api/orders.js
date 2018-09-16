@@ -30,9 +30,9 @@ router.get('/:orderId', async (req, res, next) => {
 // POST /api/orders
 // Note that if there is a body coming in with an item to add, create a cart with the item in.
 router.post('/', async (req, res, next) => {
-  if(!req.user){
-    res.status(403).send('an order gets created only for a logged-in user');
-  }
+  // if(!req.user){
+  //   res.status(403).send('an order gets created only for a logged-in user');
+  // }
   // purely create a new Order instance.
   const orderToCreate = {}
     if (req.user) {
@@ -56,22 +56,26 @@ router.put('/:orderId', async (req, res, next) => {
       res.status(404).send("Order not found - " + orderId);
     }
 
-    if (req.user) { //known user
-      if (!req.user.admin && req.user.id !== order.userId) { //not an admin and a known user requested some other user's order
-        res.status(403).send('Forbidden');
-      }
-    } else{
-      res.status(403).send("No orders is saved in DB for logged-out users");
-    }
+    // if (req.user) { //known user
+    //   if (!req.user.admin && req.user.id !== order.userId) { //not an admin and a known user requested some other user's order
+    //     res.status(403).send('Forbidden');
+    //   }
+    // } else{
+    //   res.status(403).send("No orders is saved in DB for logged-out users");
+    // }
 
     // Note that order has 4 properties - orderNumber, orderStatus, and userId.
     // orderNumber, and userId shouldn't be updated.
-    order.orderStatus = req.body.orderStatus;
 
-    const updatedOrder = await Order.update(order, {
+
+
+    const updatedOrder = await Order.update({orderStatus: req.body.orderStatus}, {
       where: { id: orderId },
-      returning: true
+      returning: true,
+      plain: true
     })
+
+    console.log("2", updatedOrder);
 
     res.status(202).json(updatedOrder);
   } catch (err) { next(err) }
@@ -86,10 +90,10 @@ router.get('/:orderId/items/:itemId', async (req, res, next) => {
       res.status(404).send('No order found - ' + orderId);
     }
 
-    if (req.user && (!req.user.admin && req.user.id !== order.userId)) { //known user
-      //not an admin and a known user requested some other user's order
-        res.status(403).send('Forbidden to retrieve this order item');
-    }
+    // if (req.user && (!req.user.admin && req.user.id !== order.userId)) { //known user
+    //   //not an admin and a known user requested some other user's order
+    //     res.status(403).send('Forbidden to retrieve this order item');
+    // }
 
     const item = await OrderItem.findById(itemId);
     res.status(201).json(item);
