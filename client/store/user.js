@@ -30,8 +30,9 @@ const removeUser = () => ({
  */
 export const me = () => async dispatch => {
   try {
-    const res = await axios.get('/auth/me')
-    dispatch(getUser(res.data || initialUserState))
+    const {data} = await axios.get('/auth/me')
+    mergePendingOrders(data);
+    dispatch(getUser(data || initialUserState))
   } catch (err) {
     console.error(err)
   }
@@ -46,6 +47,7 @@ export const auth = (email, password, method) => async dispatch => {
   }
 
   try {
+    mergePendingOrders(res.data);
     dispatch(getUser(res.data))
     history.push('/products')
   } catch (dispatchOrHistoryErr) {
@@ -60,6 +62,79 @@ export const logout = () => async dispatch => {
     history.push('/products')
   } catch (err) {
     console.error(err)
+  }
+}
+
+// a function merge all the pending orders in db and local storage into one in db.
+async function mergePendingOrders(user){
+  try{
+    if(!user){
+      console.log("INFO: user is logged-out, only local storage is available to keep track of this user's order.");
+      return;
+    }
+
+    let pendingOrder;
+    let pendingOrders = await axios.get(`/api/users/${user.id}/orders?status=pending`);
+    // Note that user should keep only one pending order in db.
+    if(pendingOrders){
+      pendingOrder = pendingOrders[0];
+
+      // TODO:  in case, a user has multiple pending orders, merge all the orders into one. Once an order is merged into the pendingOrder, delete the order.
+      for(let order in pendingOrders){
+        if(order.id !== pendingOrder.id){
+          // merge all the order items into the pendingOrder
+          for(let item in order.orderItems){
+            let found = false;
+            for(let item2 in pendingOrder.orderItems){
+              if(item.productId === item2.productId){
+                found = true;
+                item2.quantity += item.quantity;
+
+                // update item2 in db
+                await axios.put(`/api/orders/${pendingOrder.id}/items/${item2.id}`, item2);
+                // delete item from db
+                await axios.delete(`/api/orders/${item.orderId}/items/${item.id}`);
+              }
+            }
+
+            if(!found){
+              // change item.orderId to the pendingOrder.id
+              await axios.put(`/api/orders/${item.orderId}/items/${item.id}`,
+              {...item, orderId: pendingOrder.id});
+            }
+          }
+        }
+      }
+    }
+
+    // At this point, the pendingOder is the one that contains all the items selected by the user.
+    // if there is any items added in the localStorage, add them to the pendingOrder as well.
+    let orderItemsFromLS = JSON.parse(localStorage.getItem('order-items'));
+    if(orderItemsFromLS){
+      for(let itemLS in orderItemsFromLS){
+        let found = false;
+        for(let itemDB in orderItemsFromDB){
+          if(itemLS.proudctId === itemDB.productId){
+            // update the itemDB
+            itemDB.quantity += itemLS.quantity;
+            await axios.put(`/api/orders/${pendingOrder.id}/items/${itemDB.id}`, itemDB);
+            found = true;
+          }
+        }
+
+        if(!found){
+          //create itemLS in DB
+          await axios.post(`/api/orders/${pendingOrder.id}/items`, {quantity,productId});
+        }
+      }
+
+      // delete the localStorage
+      localStorage.removeItem('order-items');
+    }
+
+    return;
+  }catch(err){
+    console.log(err);
   }
 }
 

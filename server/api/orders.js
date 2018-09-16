@@ -158,7 +158,7 @@ router.put('/:orderId/items/:itemId', async (req, res, next) => {
   }
 })
 
-router.delete('/:orderId/item/:itemId', async (req, res, next) => {
+router.delete('/:orderId/items/:itemId', async (req, res, next) => {
   const requestedItem = req.params.itemId;
   const requestedOrder = req.params.orderId;
   try {
