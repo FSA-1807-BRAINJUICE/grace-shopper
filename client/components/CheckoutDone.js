@@ -5,7 +5,7 @@ class CheckoutDone extends Component {
 
   render(){
 
-    const { orderNumber } = this.props.orders
+    // const { orderNumber } = this.props.orders
     return (
       <div id ='checkout-done'>
         <h1>Thank you for your order</h1>
@@ -15,10 +15,11 @@ class CheckoutDone extends Component {
   }
 }
 
-const mapState = state => ({
-  orders: state.orders.orderNumber
-})
+// const mapState = state => ({
+//   orders: state.orders.orderNumber
+// })
 // const mapDispatch = dispatch => ({
 
 // })
 
+export default CheckoutDone
