@@ -87,24 +87,28 @@ export const addProductToCart = (productId, quantity=1) => async dispatch => {
       // find the pending order of this current logged-in user
       let pendingOrder;
 
-      let pendingOrders = await axios.get(`/api/users/${user.id}/orders?status=pending`);
+      let res = await axios.get(`/api/users/${user.id}/orders?status=pending`);
+      let pendingOrders = res.data;
+
       // if there is no pending order for the current logged-in user, create a new Order.
       if(!pendingOrders || pendingOrders.length === 0){
         // if there is no pending order, then create one.
-        const {data} = await axios.post('/api/orders');
-        pendingOrder = data;
+        let res = await axios.post('/api/orders');
+        pendingOrder = res.data;
       }else{
         pendingOrder = pendingOrders[0];
       }
 
       // check if there is a duplicate
       let foundDuplicate = false;
-      for(let item of pendingOrder.orderItems){
-        if(item.productId === productId){
-          item.quantity = item.quantity + quantity;
-          await axios.put(`/api/orders/${pendingOrder.id}/items/${item.id}`, item);
-          foundDuplicate = true;
-          break;
+      if(pendingOrder.orderItems){
+        for(let item of pendingOrder.orderItems){
+          if(item.productId === productId){
+            item.quantity = item.quantity + quantity;
+            await axios.put(`/api/orders/${pendingOrder.id}/items/${item.id}`, item);
+            foundDuplicate = true;
+            break;
+          }
         }
       }
 
@@ -114,11 +118,13 @@ export const addProductToCart = (productId, quantity=1) => async dispatch => {
           quantity,
           productId,
         }
-
-        await axios.post(`/api/orders/${pendingOrder.id}/items`, orderItem);
+        try{
+          await axios.post(`/api/orders/${pendingOrder.id}/items`, orderItem);
+        }catch(err){
+          console.log("failed to add a product - " + productId);
+        }
       }
       let {data} = await axios.get(`/api/orders/${pendingOrder.id}`);
-
       dispatch(getCartItems(data.orderItems));
     }
   }catch(error){
