@@ -79,19 +79,18 @@ async function mergePendingOrders(user){
      * Once an order is merged into the pendingOrder, delete the order.
      */
     let pendingOrder;
-    let pendingOrders = await axios.get(`/api/users/${user.id}/orders?status=pending`);
+    let res = await axios.get(`/api/users/${user.id}/orders?status=pending`);
+    let pendingOrders = res.data;
     if(pendingOrders){
       pendingOrder = pendingOrders[0];
-
-      for(let order in pendingOrders){
-
+      for(let order of pendingOrders){
         if(order.id !== pendingOrder.id){
 
           // merge all the order items into the pendingOrder
-          for(let item in order.orderItems){
+          for(let item of order.orderItems){
 
             let foundAndMerged = false;
-            for(let item2 in pendingOrder.orderItems){
+            for(let item2 of pendingOrder.orderItems){
 
               if(item.productId === item2.productId){
                 // combine quantity numbers of two OrderItems of the same product.
@@ -114,9 +113,7 @@ async function mergePendingOrders(user){
               {...item, orderId: pendingOrder.id});
             }
           }
-
         }
-
       }
     }
 
@@ -124,7 +121,6 @@ async function mergePendingOrders(user){
     // If there is any items added in the localStorage, add them to the pendingOrder as well.
     let orderItemsFromLS = JSON.parse(localStorage.getItem('order-items'));
     if(orderItemsFromLS){
-
       // if no pendingOrder, then create one to save all the local storage items into.
       if(!pendingOrder){
         pendingOrder = await axios.post('/api/orders', {
@@ -132,22 +128,37 @@ async function mergePendingOrders(user){
         });
       }
 
-      for(let itemLS in orderItemsFromLS){
-
+      for(let itemLS of orderItemsFromLS){
         let foundOrderItem = false;
 
-        for(let itemDB in pendingOrder.orderItems){
-          if(itemLS.proudctId === itemDB.productId){
-            // update the itemDB
-            itemDB.quantity += itemLS.quantity;
-            await axios.put(`/api/orders/${pendingOrder.id}/items/${itemDB.id}`, itemDB);
-            foundOrderItem = true;
+        if(pendingOrder.orderItems){
+          for(let itemDB of pendingOrder.orderItems){
+            if(itemLS.proudctId === itemDB.productId){
+              // update the itemDB
+              console.log("quantities: ", itemDB.quantity, itemLS.quantity);
+              itemDB.quantity += itemLS.quantity;
+              try{
+                await axios.put(`/api/orders/${pendingOrder.id}/items/${itemDB.id}`, itemDB);
+              }catch(err){
+                console.log("failed to update an order - " + itemDB.id);
+              }
+              foundOrderItem = true;
+            }
           }
         }
 
         if(!foundOrderItem){
           //create itemLS in DB
-          await axios.post(`/api/orders/${pendingOrder.id}/items`, {quantity,productId});
+          const itemToCreate = {
+            quantity: itemLS.quantity,
+            productId: itemLS.productId
+          }
+          try{
+            await axios.post(`/api/orders/${pendingOrder.id}/items`, itemToCreate);
+          }catch(err){
+            // if there are any duplicates, api will throw an exception.
+            console.log(err);
+          }
         }
       }
 

@@ -95,7 +95,7 @@ router.put('/:userId', async (req, res, next) => {
 //get orders of this user(/api/users/:userId/orders?status=[pending|complete|transaction-failed]);
 router.get('/:userId/orders', async (req, res, next) => {
   try{
-    if(!req.user || !req.user.admin && req.user.id !== req.params.userId){
+    if(!req.user || !req.user.admin && req.user.id !== Number(req.params.userId)){
       res.status(403).send('forbidden to see orders of this user');
     }
 
