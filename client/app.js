@@ -9,6 +9,8 @@ import SingleProduct from './components/SingleProduct'
 import { Button } from '@material-ui/core';
 import CheckoutPrompt from './components/CheckoutPrompt';
 import Cart from './components/Cart'
+import Orders from './components/Orders'
+import CheckoutDone from './components/CheckoutDone';
 
 
 const App = () => {
@@ -18,9 +20,11 @@ const App = () => {
       {/* <Routes /> */}
       <Switch>
         <Route path='/checkout-form' component={CheckoutForm} />
+        <Route path='/checkout-done' component={CheckoutDone} />
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
         <Route path="/cart" component={Cart} />
+        <Route path="/orders" component={Orders} />
         {/* <Route path="/home" component={UserHome} /> */}
         <Route path = '/products/:productId' component = {SingleProduct}/>
         <Route exact path = '/products' component = {AllProducts}/>

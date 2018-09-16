@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux'
 import { Button } from '@material-ui/core';
+import history from '../history'
+import { updateOrdersDone } from '../store/orders';
 
 const styles = theme => ({
   container: {
@@ -121,12 +123,12 @@ CheckoutForm.propTypes = {
 };
 
 // const mapState = state => ({
-
+//   user: state.user.user
 // })
 const mapDispatch = (dispatch, ownProps) => ({
-  checkOut(addressInfo){
-    //TODO: await dispatch checkoutOrders thunkcreator, passing in addressInfo
-    ownProps.history.push('/checkout-done')
+  async checkOut(addressInfo){
+    await dispatch(updateOrdersDone(addressInfo));
+    history.push('/checkout-done')
   }
 })
 

@@ -110,7 +110,6 @@ router.get('/:userId/orders', async (req, res, next) => {
     const orders = await Order.findAll({
       where: queryCondition,
     })
-
     res.json(orders);
   }catch(err){
     next(err);
