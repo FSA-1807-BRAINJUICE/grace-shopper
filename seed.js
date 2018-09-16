@@ -77,25 +77,21 @@ const products = [
 const orders = [
   {
     id: 1,
-    orderNumber: 'ewyr9482734',
     orderStatus: 'complete',
     userId: 1
   },
   {
     id: 2,
-    orderNumber: 'qwer6726736',
     orderStatus: 'complete',
     userId: 2
   },
   {
     id: 3,
-    orderNumber: 'asdf34123',
     orderStatus: 'complete',
     userId: 3
   },
   {
     id: 4,
-    orderNumber: 'zxcv96553',
     orderStatus: 'pending',
     userId: 1
   }

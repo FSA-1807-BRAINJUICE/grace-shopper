@@ -61,6 +61,7 @@ export const addProductToCart = (productId, quantity=1) => async dispatch => {
         // check any duplicates and add the selected item to the list.
         let itemFound = false;
         let items = JSON.parse(orderItems);
+        console.log(items)
         for(let item of items){
           if(item.productId === productId){
             item.quantity = quantity;
@@ -80,24 +81,30 @@ export const addProductToCart = (productId, quantity=1) => async dispatch => {
       // find the pending order of this current logged-in user
       let pendingOrder;
 
-      let pendingOrders = await axios.get(`/api/users/${user.id}/orders?status=pending`);
+      let res = await axios.get(`/api/users/${user.id}/orders?status=pending`);
+      let pendingOrders = res.data;
+
       // if there is no pending order for the current logged-in user, create a new Order.
       if(!pendingOrders || pendingOrders.length === 0){
         // if there is no pending order, then create one.
-        const {data} = await axios.post('/api/orders');
-        pendingOrder = data;
+        let res = await axios.post('/api/orders');
+        pendingOrder = res.data;
       }else{
         pendingOrder = pendingOrders[0];
       }
 
       // check if there is a duplicate
       let foundDuplicate = false;
-      for(let item of pendingOrder.orderItems){
-        if(item.productId === productId){
-          item.quantity = item.quantity + quantity;
-          await axios.put(`/api/orders/${pendingOrder.id}/items/${item.id}`, item);
-          foundDuplicate = true;
-          break;
+      console.log("pending-orderitems", pendingOrder.orderItems)
+
+      if(pendingOrder.orderItems){
+        for(let item of pendingOrder.orderItems){
+          if(item.productId === productId){
+            item.quantity = item.quantity + quantity;
+            await axios.put(`/api/orders/${pendingOrder.id}/items/${item.id}`, item);
+            foundDuplicate = true;
+            break;
+          }
         }
       }
 
@@ -108,10 +115,10 @@ export const addProductToCart = (productId, quantity=1) => async dispatch => {
           productId,
         }
 
-        await axios.post(`/api/orders${pendingOrder.id}/items`, orderItem);
+        await axios.post(`/api/orders/${pendingOrder.id}/items`, orderItem);
       }
       let {data} = await axios.get(`/api/orders/${pendingOrder.id}`);
-
+      // console.log("DATA", )
       dispatch(getCartItems(data.orderItems));
     }
   }catch(error){
