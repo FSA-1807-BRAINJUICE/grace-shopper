@@ -6,8 +6,6 @@ import axios from 'axios'
 const GET_CART = 'GET_CART'
 const GET_CART_ITEMS = 'GET_CART_ITEMS'
 const ADD_ITEM_TO_CART = 'ADD_ITEM_TO_CART'
-const UPDATE_ITEM = 'UPDATE_ITEM' // For now, only quantity gets changed.
-const DELETE_ITEM = 'DELETE_ITEM'
 
 /**
  * INITIAL STATE
