@@ -6,6 +6,8 @@ import axios from 'axios'
 const GET_CART = 'GET_CART'
 const GET_CART_ITEMS = 'GET_CART_ITEMS'
 const ADD_ITEM_TO_CART = 'ADD_ITEM_TO_CART'
+const UPDATE_ITEM = 'UPDATE_ITEM' // For now, only quantity gets changed.
+const DELETE_ITEM = 'DELETE_ITEM'
 
 /**
  * INITIAL STATE
@@ -116,6 +118,90 @@ export const addProductToCart = (productId, quantity=1) => async dispatch => {
     }
   }catch(error){
     console.error(error);
+  }
+}
+
+export const updateItem = (itemId, productId, quantity, orderId) => async dispatch => {
+  try{
+    const res = await axios.get('/auth/me')
+    const user = res.data;
+
+    let orderItems;
+    if(!user){
+      // simply update items in the local storage.
+      orderItems = localStorage.getItem('order-items');
+      if(orderItems){
+        for(let item of orderItems){
+          if(item.productId === productId){
+            item.quantity = quantity;
+            break;
+          }
+        }
+      }
+
+      localStorage.setItem('order-items', JSON.stringify(orderItems));
+    }else{
+      // update quantity in db.
+      const updatedItem = await axios.get(`/api/orders/${orderId}/items/${itemId}`);
+
+      // update the quantity
+      updatedItem.quantity = quantity;
+      await axios.put(`/api/orders/${orderId}/items/${itemId}`, updatedItem);
+
+      // get the items in the order.
+      const {data} = await axios.get(`/api/orders/${orderId}`);
+      orderItems = data.orderItems;
+    }
+
+    dispatch(getCartItems(orderItems));
+  }catch(err){
+    console.log(err);
+  }
+}
+
+export const deleteItem = (itemId, productId, orderId) => async dispatch => {
+  try{
+    const res = await axios.get('/auth/me')
+    const user = res.data;
+
+    let orderItems;
+    if(!user){
+      // simply update items in the local storage.
+      orderItems = localStorage.getItem('order-items');
+      if(orderItems){
+        let i = 0;
+        for(; i < orderItems.length; i++){
+          if(orderItems[i].productId === productId){
+            break;
+          }
+        }
+
+        orderItems = orderItems.splice(i, 1);
+        localStorage.setItem('order-items', JSON.stringify  (orderItems));
+      }
+    }else{
+      let orderRes = await axios.get(`/api/orders/${orderId}`);
+      orderItems = orderRes.data.orderItems;
+
+      if(orderItems){
+        let i = 0;
+        for(; i < orderItems.length; i++){
+          if(orderItems[i].productId === productId){
+            // delete item from db.
+            await axios.delete(`/api/orders/${orderId}/items/${itemId}`);
+            break;
+          }
+        }
+      }
+
+      // retrieve the actual items of this order again from DB.
+      let updatedOrderRes = await axios.get(`/api/orders/${orderId}`);
+      orderItems = updatedOrderRes.data.orderItems;
+    }
+
+    dispatch(getCartItems(orderItems));
+  }catch(err){
+    console.log(err);
   }
 }
 
