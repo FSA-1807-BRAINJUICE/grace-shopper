@@ -126,9 +126,12 @@ router.post('/:orderId/items', async (req, res, next) => {
       productId: product.id
     };
 
-    const itemAdded = await OrderItem.create(newItemToAdd);
-    console.log(itemAdded)
-    res.status(201).json(itemAdded)
+    try{
+      const itemAdded = await OrderItem.create(newItemToAdd);
+      res.status(201).json(itemAdded)
+    }catch(err){
+      console.log("duplicate item found.");
+    }
   }
   catch (err) { next(err) }
 })
