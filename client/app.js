@@ -1,16 +1,16 @@
 import React from 'react'
 
-import {Navbar, Login, Signup, UserHome} from './components'
+import {Navbar, Login, Signup} from './components'
 import CheckoutForm from './components/CheckoutForm'
 import AllProducts from './components/AllProducts'
-import Routes from './routes'
-import {Route, Switch, Link} from 'react-router-dom'
+
+import {Route, Switch} from 'react-router-dom'
 import SingleProduct from './components/SingleProduct'
-import {Button} from '@material-ui/core'
+
 import CheckoutPrompt from './components/CheckoutPrompt'
 import Cart from './components/Cart'
 import Orders from './components/Orders'
-import CheckoutDone from './components/CheckoutDone'
+
 
 const App = () => {
   return (
@@ -19,7 +19,6 @@ const App = () => {
       {/* <Routes /> */}
       <Switch>
         <Route path="/checkout-form" component={CheckoutForm} />
-        <Route path="/checkout-done" component={CheckoutDone} />
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
         <Route path="/cart" component={Cart} />

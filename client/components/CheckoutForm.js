@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {Component, Fragment} from 'react'
 import TextField from '@material-ui/core/TextField'
 import PropTypes from 'prop-types'
 import {withStyles} from '@material-ui/core/styles'
@@ -32,7 +32,8 @@ class CheckoutForm extends Component {
       city: '',
       region: '',
       postal: '',
-      phone: ''
+      phone: '',
+      email:''
     }
     this.handleSubmit = this.handleSubmit.bind(this)
   }
@@ -48,7 +49,22 @@ class CheckoutForm extends Component {
     this.props.checkOut(addressInfo)
   }
   render() {
-    const {classes} = this.props
+    const {
+      classes,
+      completedOrder
+    } = this.props
+    const {
+      id,
+      orderNumber,
+      email
+    } = completedOrder;
+    if (completedOrder && id) return (
+      <Fragment>
+        <h1 className='success'>Thank you, your order has been placed.</h1>
+        <p>An email confirmation has been sent to you at {email}</p>
+        <p><strong>Order number: {orderNumber}</strong></p>
+      </Fragment>
+    )
     return (
       <form
         onSubmit={this.handleSubmit}
@@ -104,6 +120,14 @@ class CheckoutForm extends Component {
           onChange={this.handleChange('phone')}
           margin="normal"
         />
+        <TextField
+          id="email"
+          label="Email:"
+          className={classes.textField}
+          value={this.state.email}
+          onChange={this.handleChange('email')}
+          margin="normal"
+        />
         <Button variant="contained" size="small" color="primary" type="submit">
           Continue
         </Button>
@@ -116,14 +140,15 @@ CheckoutForm.propTypes = {
   classes: PropTypes.object.isRequired
 }
 
-// const mapState = state => ({
-//   user: state.user.user
-// })
+const mapState = state => ({
+  completedOrder: state.orders.completedOrder
+})
+
 const mapDispatch = (dispatch, ownProps) => ({
   async checkOut(addressInfo) {
     await dispatch(updateOrdersDone(addressInfo))
-    history.push('/checkout-done')
+    dispatch()
   }
 })
 
-export default withStyles(styles)(connect(null, mapDispatch)(CheckoutForm))
+export default withStyles(styles)(connect(mapState, mapDispatch)(CheckoutForm))

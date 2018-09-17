@@ -46,3 +46,7 @@ form div {
 .quantity-box {
   width: 20px;
 }
+
+.success{
+  color: rgb(6, 147, 6);
+}

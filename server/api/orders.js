@@ -79,7 +79,14 @@ router.put('/:orderId', async (req, res, next) => {
     // orderNumber, and userId shouldn't be updated.
     const updatedOrder = await Order.update(
       {
-        orderStatus: req.body.orderStatus
+        orderStatus: req.body.orderStatus,
+        name: req.body.name,
+        streetAddress: req.body.streetAddress,
+        city: req.body.city,
+        region: req.body.region,
+        postal: req.body.postal,
+        phone: req.body.phone,
+        email: req.body.email
       },
       {
         where: {id: orderId},

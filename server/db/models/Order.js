@@ -38,6 +38,14 @@ const Order = db.define('order', {
   phone: {
     type: Sequelize.STRING,
     allowNull: true
+  },
+  email: {
+    type: Sequelize.STRING,
+    allowNull: true,
+    validate:{
+      isEmail: true,
+      notEmpty:false
+    }
   }
   }
 )

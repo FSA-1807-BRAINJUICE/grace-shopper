@@ -22,8 +22,8 @@ export const getOrders = orders => ({
 export const updateOrdersDone = addressInfo => async dispatch => {
   try {
     const {data: user} = await axios.get('/auth/me')
+    // guest checkout
     if (!user) {
-      // guest checkout
       let {data: newOrder} = await axios.post('/api/orders')
       let orderItems = JSON.parse(localStorage.getItem('order-items'))
 
@@ -35,10 +35,12 @@ export const updateOrdersDone = addressInfo => async dispatch => {
         })
       })
 
+      //update order with address and complete status
       const {data: completedOrder} = await axios.put(
         `/api/orders/${newOrder.id}`,
         {
-          orderStatus: 'complete'
+          ...addressInfo,
+          orderStatus: 'complete',
         }
       )
 
@@ -51,7 +53,9 @@ export const updateOrdersDone = addressInfo => async dispatch => {
       )
       let cart = orders[0]
 
+      //update order with address and complete status
       const {data: completedOrder} = await axios.put(`/api/orders/${cart.id}`, {
+        ...addressInfo,
         orderStatus: 'complete'
       })
 

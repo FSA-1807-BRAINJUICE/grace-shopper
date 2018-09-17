@@ -80,16 +80,9 @@ const products = [
 ]
 
 const seed = () =>
-<<<<<<< HEAD
-  Promise.all(users.map(user => User.create(user)))
-    .then(() => Promise.all(orders.map(order => Order.create(order))))
-    .then(() => Promise.all(products.map(product => Product.create(product))))
-    .then(() => Promise.all(orderItems.map(item => OrderItem.create(item))))
-=======
   Promise.all(users.map(user => User.create(user))).then(() =>
     Promise.all(products.map(product => Product.create(product)))
   )
->>>>>>> ab69804ebfd1ff21e8e4be8e54ae54915c7d1956
 
 const main = () => {
   console.log('syncing db..')
@@ -99,24 +92,14 @@ const main = () => {
       console.log('seeding database')
       return seed()
     })
-<<<<<<< HEAD
-    .catch(err => {
-      console.log('error while seeding')
-      console.log(err.stack)
-    })
-=======
->>>>>>> ab69804ebfd1ff21e8e4be8e54ae54915c7d1956
     .then(() => {
       db.close()
       return null
     })
-<<<<<<< HEAD
-=======
     .catch(err => {
       console.log('error while seeding')
       console.log(err.stack)
     })
->>>>>>> ab69804ebfd1ff21e8e4be8e54ae54915c7d1956
 }
 
 main()
