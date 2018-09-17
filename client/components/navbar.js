@@ -5,6 +5,7 @@ import {Link} from 'react-router-dom'
 import {logout, me} from '../store'
 import UserHome from './user-home'
 import { SSL_OP_NO_SESSION_RESUMPTION_ON_RENEGOTIATION } from 'constants';
+import CartIcon from './CartIcon'
 
 class Navbar extends Component {
 
@@ -17,7 +18,9 @@ class Navbar extends Component {
     console.log(isLoggedIn)
     return(
       <div>
-        <h1>BOILERMAKER</h1>
+        <Link to="/products">
+          <h1>BRAINJUICE</h1>
+        </Link>
         <nav>
           {isLoggedIn ? ( <UserHome />
             // <div>
@@ -36,6 +39,8 @@ class Navbar extends Component {
               <Link to="/signup">Sign Up</Link>
             </div>
           )}
+          <CartIcon />
+
         </nav>
         <hr />
       </div>
