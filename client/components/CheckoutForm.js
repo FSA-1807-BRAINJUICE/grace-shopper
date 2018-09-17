@@ -33,7 +33,7 @@ class CheckoutForm extends Component {
       region: '',
       postal: '',
       phone: '',
-      email:''
+      email: ''
     }
     this.handleSubmit = this.handleSubmit.bind(this)
   }
@@ -49,22 +49,18 @@ class CheckoutForm extends Component {
     this.props.checkOut(addressInfo)
   }
   render() {
-    const {
-      classes,
-      completedOrder
-    } = this.props
-    const {
-      id,
-      orderNumber,
-      email
-    } = completedOrder;
-    if (completedOrder && id) return (
-      <Fragment>
-        <h1 className='success'>Thank you, your order has been placed.</h1>
-        <p>An email confirmation has been sent to you at {email}</p>
-        <p><strong>Order number: {orderNumber}</strong></p>
-      </Fragment>
-    )
+    const {classes, completedOrder} = this.props
+    const {id, orderNumber, email} = completedOrder
+    if (completedOrder && id)
+      return (
+        <Fragment>
+          <h1 className="success">Thank you, your order has been placed.</h1>
+          <p>An email confirmation has been sent to you at {email}</p>
+          <p>
+            <strong>Order number: {orderNumber}</strong>
+          </p>
+        </Fragment>
+      )
     return (
       <form
         onSubmit={this.handleSubmit}

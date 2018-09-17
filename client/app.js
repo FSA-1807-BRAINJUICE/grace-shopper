@@ -11,7 +11,6 @@ import CheckoutPrompt from './components/CheckoutPrompt'
 import Cart from './components/Cart'
 import Orders from './components/Orders'
 
-
 const App = () => {
   return (
     <div>

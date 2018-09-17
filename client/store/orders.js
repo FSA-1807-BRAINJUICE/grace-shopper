@@ -40,7 +40,7 @@ export const updateOrdersDone = addressInfo => async dispatch => {
         `/api/orders/${newOrder.id}`,
         {
           ...addressInfo,
-          orderStatus: 'complete',
+          orderStatus: 'complete'
         }
       )
 

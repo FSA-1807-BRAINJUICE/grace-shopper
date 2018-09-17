@@ -42,12 +42,11 @@ const Order = db.define('order', {
   email: {
     type: Sequelize.STRING,
     allowNull: true,
-    validate:{
+    validate: {
       isEmail: true,
-      notEmpty:false
+      notEmpty: false
     }
   }
-  }
-)
+})
 
 module.exports = Order
