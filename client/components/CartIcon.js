@@ -23,7 +23,8 @@ class CartIcon extends Component {
         component={ Link } to='/cart'
         variant='outlined'
         color='primary'>
-          Cart: { this.props.cartItems.length }
+          <img src ='shopping_cart.svg' />
+          { this.props.cartItems.length }
         </Button>
       </div>
       )
@@ -34,7 +35,8 @@ class CartIcon extends Component {
         component={ Link } to='/cart'
         variant='outlined'
         color='primary'>
-          Cart: { this.props.cartItems.length }
+          <img src ='shopping_cart.svg' />
+          { this.props.cartItems.length }
         </Button>
       </div>
       )
