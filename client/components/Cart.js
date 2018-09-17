@@ -33,7 +33,6 @@ class Cart extends Component {
   render() {
     const cartItems = this.props.cartItems;
     const parsedCartItems = Array.from(cartItems)
-    console.log('.product', parsedCartItems)
     cartItems.sort((a,b) => {
       return a.name > b.name
     })
