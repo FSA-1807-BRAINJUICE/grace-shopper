@@ -218,21 +218,16 @@ export const deleteItem = (orderItem) => async dispatch => {
     let orderItems;
     if(!user){
       // simply update items in the local storage.
-      let orderItemsLS = localStorage.getItem('order-items');
+      let orderItemsLS = JSON.parse(localStorage.getItem('order-items'));
       if(orderItemsLS){
-        let i = 0;
-        for(; i < orderItemsLS.length; i++){
-          if(orderItems[i].productId === productId){
-            break;
-          }
-        }
-        // remove the item from the LS orderItems list.
-        orderItemsLS = orderItemsLS.splice(i, 1);
+        orderItemsLS = orderItemsLS.filter( (item) => {
+          return item.productId !== productId;
+        })
       }
 
       // simply add a Product instance to each item.
       orderItems = [];
-      if(orderItemsLS){
+      if(orderItemsLS && orderItemsLS.length > 0){
         let i = 1;
         for(let item of orderItemsLS){
           // adding product info to the orderItems to return to the React component
@@ -242,9 +237,10 @@ export const deleteItem = (orderItem) => async dispatch => {
           orderItem.id = i++;
           orderItems.push(orderItem);
         }
+        localStorage.setItem('order-items', JSON.stringify(orderItemsLS));
+      }else{
+        localStorage.removeItem('order-items');
       }
-
-      localStorage.setItem('order-items', JSON.stringify(orderItemsLS));
     }else{
       let orderRes = await axios.get(`/api/orders/${orderId}`);
       orderItems = orderRes.data.orderItems;
