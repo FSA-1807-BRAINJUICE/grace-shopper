@@ -29,9 +29,9 @@ export const addItemToCart = item => ({
   item
 })
 
-export const getCartItems = cartItems => ({
+export const getCartItems = orderItems => ({
   type: GET_CART_ITEMS,
-  cartItems
+  orderItems
 })
 
 export const updateItemQuantity = (item, quantity) => ({
@@ -156,7 +156,7 @@ export const addProductToCart = (productId, quantity=1) => async dispatch => {
   }
 }
 
-export const updateItem = (productId, quantity, itemId, orderId) => async dispatch => {
+export const updateItem = (targetItem, quantity) => async dispatch => {
   try{
     const res = await axios.get('/auth/me')
     const user = res.data;
@@ -167,7 +167,7 @@ export const updateItem = (productId, quantity, itemId, orderId) => async dispat
       orderItems = localStorage.getItem('order-items');
       if(orderItems){
         for(let item of orderItems){
-          if(item.productId === productId){
+          if(item.productId === targetItem.productId){
             item.quantity = quantity;
             break;
           }
@@ -181,16 +181,16 @@ export const updateItem = (productId, quantity, itemId, orderId) => async dispat
        */
 
        // retrieve the item from db by itemId.
-      const updatedItem = await axios.get(`/api/orders/${orderId}/items/${itemId}`);
+      const updatedItem = await axios.get(`/api/orders/${targetItem.orderId}/items/${targetItem.id}`);
 
       // update the quantity
       updatedItem.quantity = quantity;
 
       // invoke put method to update
-      await axios.put(`/api/orders/${orderId}/items/${itemId}`, updatedItem);
+      await axios.put(`/api/orders/${targetItem.orderId}/items/${targetItem.id}`, updatedItem);
 
       // get the all items of the order.
-      const {data} = await axios.get(`/api/orders/${orderId}`);
+      const {data} = await axios.get(`/api/orders/${targetItem.orderId}`);
       orderItems = data.orderItems;
     }
 
@@ -257,19 +257,18 @@ const cart = (state = initialCartState, action) => {
     case GET_CART:
       return {...state, cartItems: action.cart.orderItems, cart: action.cart}
     case GET_CART_ITEMS:
-      return {...state, cartItems: action.cartItems}
-    case UPDATE_ITEM_QUANTITY:
-      const targetItem = state.cartItems.find(function(item) {
-        return item.id == action.item.id
-      });
+      return {...state, cartItems: action.orderItems}
+    // case UPDATE_ITEM_QUANTITY:
+    //   const targetItem = state.cartItems.find(function(item) {
+    //     return item.id == action.item.id
+    //   });
 
-      targetItem.quantity = action.quantity;
+    //   targetItem.quantity = action.quantity;
 
-      const newCartItems = state.cartItems.filter(function(item) {
-        return item.id !== targetItem.id;
-      })
-
-      return {...state, cartItems: [...newCartItems, targetItem]}
+    //   const newCartItems = state.cartItems.filter(function(item) {
+    //     return item.id !== targetItem.id;
+    //   })
+    //   return {...state, cartItems: [...newCartItems, targetItem]}
     default:
       return state
   }

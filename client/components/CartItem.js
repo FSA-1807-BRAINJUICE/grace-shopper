@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import {connect} from 'react-redux'
-import {addItemToCart, updateItemQuantity} from '../store/cart'
+import {addItemToCart, updateItem} from '../store/cart'
 import {Link} from 'react-router-dom'
 
 import TableCell from '@material-ui/core/TableCell';
@@ -18,11 +18,11 @@ class CartItem extends Component {
     evt.preventDefault();
     // const newCartItem = [this.props.name, this.props.price, this.props.imgUrl,this.props.description, this.state.quantity];
     // this.props.addItemToCart(newCartItem)
-    this.props.updateQuantity(this.props.cartItem, this.state.quantity)
+    this.props.updateQuantity(this.props.cartItem.product, this.state.quantity)
   }
 
   render() {
-    const { name, price, imgUrl, description } = this.props.cartItem;
+    const { name, price, imgUrl, description } = this.props.cartItem.product;
     return (
         <TableRow className='cart-item'>
         <TableCell className='cart-item-img'><img src={imgUrl}/></TableCell>
@@ -51,7 +51,7 @@ class CartItem extends Component {
 const mapDispatchToProps = dispatch => {
   return {
     addItemToCart: (item) => dispatch(addItemToCart(item)),
-    updateQuantity: (item, quantity) => dispatch(updateItemQuantity(item,quantity))
+    updateQuantity: (item, quantity) => dispatch(updateItem(item,quantity))
   }
 }
 
