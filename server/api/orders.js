@@ -121,7 +121,6 @@ router.post('/:orderId/items', async (req, res, next) => {
 
     const newItemToAdd = {
       quantity: req.body.quantity,
-      // paidUnitPrice: product.price,
       orderId: order.id,
       productId: product.id
     };
@@ -130,7 +129,7 @@ router.post('/:orderId/items', async (req, res, next) => {
       const itemAdded = await OrderItem.create(newItemToAdd);
       res.status(201).json(itemAdded)
     }catch(err){
-      console.log("duplicate item found.");
+      console.log("DEV-WARNING: duplicate item found.");
     }
   }
   catch (err) { next(err) }
@@ -158,7 +157,6 @@ router.put('/:orderId/items/:itemId', async (req, res, next) => {
 
     const orderItemDetail = {
       quantity: req.body.quantity,
-      paidUnitPrice: product.price,
       orderId: order.id,
       productId: product.id
     }
