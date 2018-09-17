@@ -42,3 +42,7 @@ form div {
 #checkout-prompt > a{
   margin-top: 30px;
 }
+
+.quantity-box {
+  width: 20px
+}
