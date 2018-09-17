@@ -18,7 +18,9 @@ class Navbar extends Component {
     console.log(isLoggedIn)
     return(
       <div>
-        <h1>BOILERMAKER</h1>
+        <Link to="/products">
+          <h1>BRAINJUICE</h1>
+        </Link>
         <nav>
           {isLoggedIn ? ( <UserHome />
             // <div>
