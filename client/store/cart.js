@@ -163,18 +163,23 @@ export const updateItem = (targetItem, quantity) => async dispatch => {
     let orderItems;
     if(!user){
       // simply update item quantity in the local storage.
-      orderItems = JSON.parse(localStorage.getItem('order-items'));
-      if(orderItems){
+      const orderItemsLS = JSON.parse(localStorage.getItem('order-items'));
+      orderItems = [];
+      if(orderItemsLS){
         let i = 1;
-        for(let item of orderItems){
+        for(let item of orderItemsLS){
           if(item.productId === targetItem.productId){
             item.quantity = quantity;
-            break;
           }
-          item.id = i++;
+
+          let orderItem = {...item};
+          let {data} = await axios.get(`/api/products/${item.productId}`);
+          orderItem.product = data;
+          orderItem.id = i++;
+          orderItems.push(orderItem);
         }
 
-        localStorage.setItem('order-items', JSON.stringify(orderItems));
+        localStorage.setItem('order-items', JSON.stringify(orderItemsLS));
       }
     }else{
       /**
@@ -195,6 +200,7 @@ export const updateItem = (targetItem, quantity) => async dispatch => {
       orderItems = data.orderItems;
     }
 
+    console.log("orderItems", orderItems);
     dispatch(getCartItems(orderItems));
   }catch(err){
     console.log(err);
