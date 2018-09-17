@@ -164,7 +164,7 @@ export const updateItem = (productId, quantity, itemId, orderId) => async dispat
     let orderItems;
     if(!user){
       // simply update item quantity in the local storage.
-      orderItems = localStorage.getItem('order-items');
+      orderItems = JSON.parse(localStorage.getItem('order-items'));
       if(orderItems){
         for(let item of orderItems){
           if(item.productId === productId){
