@@ -32,11 +32,13 @@ class Cart extends Component {
   }
   render() {
     const cartItems = this.props.cartItems;
-    console.log(cartItems)
     const parsedCartItems = Array.from(cartItems)
     parsedCartItems.sort((a,b) => {
       return a.product.name > b.product.name
     })
+    const cartTotalPrice = parsedCartItems.reduce((a,b) => {
+      return a + (b.product.price * b.quantity)
+    }, 0)
     const { classes } = this.props;
     return (
       <Paper className={classes.root}>
@@ -47,6 +49,7 @@ class Cart extends Component {
               <TableCell>Product Name</TableCell>
               <TableCell>Price</TableCell>
               <TableCell>Description</TableCell>
+              <TableCell><strong>Total Price: {cartTotalPrice} USD</strong></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
