@@ -44,7 +44,7 @@ class CartItem extends Component {
             }
 
             <input type="text" value={this.state.quantity} className="quantity-box" style={{}} onChange={ (evt) => this.setState({quantity: evt.target.value})} />
-            <button className='orderItemSelectButton' type='submit'>Select Quantity</button>
+            <button className='orderItemSelectButton' type='submit'>Change Qty.</button>
           </form>
         </TableCell>
       </TableRow>
