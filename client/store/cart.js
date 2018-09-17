@@ -208,7 +208,9 @@ export const updateItem = (targetItem, quantity) => async dispatch => {
   }
 }
 
-export const deleteItem = (itemId, productId, orderId) => async dispatch => {
+export const deleteItem = (orderItem) => async dispatch => {
+  const {id, productId, orderId} = orderItem;
+
   try{
     const res = await axios.get('/auth/me')
     const user = res.data;
@@ -216,18 +218,28 @@ export const deleteItem = (itemId, productId, orderId) => async dispatch => {
     let orderItems;
     if(!user){
       // simply update items in the local storage.
-      orderItems = localStorage.getItem('order-items');
-      if(orderItems){
-        let i = 0;
-        for(; i < orderItems.length; i++){
-          if(orderItems[i].productId === productId){
-            break;
-          }
-        }
+      let orderItemsLS = JSON.parse(localStorage.getItem('order-items'));
+      if(orderItemsLS){
+        orderItemsLS = orderItemsLS.filter( (item) => {
+          return item.productId !== productId;
+        })
+      }
 
-        // remove the item from the orderItems list.
-        orderItems = orderItems.splice(i, 1);
-        localStorage.setItem('order-items', JSON.stringify  (orderItems));
+      // simply add a Product instance to each item.
+      orderItems = [];
+      if(orderItemsLS && orderItemsLS.length > 0){
+        let i = 1;
+        for(let item of orderItemsLS){
+          // adding product info to the orderItems to return to the React component
+          let orderItem = {...item};
+          let {data} = await axios.get(`/api/products/${item.productId}`);
+          orderItem.product = data;
+          orderItem.id = i++;
+          orderItems.push(orderItem);
+        }
+        localStorage.setItem('order-items', JSON.stringify(orderItemsLS));
+      }else{
+        localStorage.removeItem('order-items');
       }
     }else{
       let orderRes = await axios.get(`/api/orders/${orderId}`);
@@ -238,7 +250,7 @@ export const deleteItem = (itemId, productId, orderId) => async dispatch => {
         for(; i < orderItems.length; i++){
           if(orderItems[i].productId === productId){
             // delete item from db.
-            await axios.delete(`/api/orders/${orderId}/items/${itemId}`);
+            await axios.delete(`/api/orders/${orderId}/items/${id}`);
             break;
           }
         }
