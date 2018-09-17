@@ -12,7 +12,8 @@ const UPDATE_ITEM_QUANTITY = 'UPDATE_ITEM_QUANTITY';
  * INITIAL STATE
  */
 const initialCartState = {
-  cartItems: []
+  cartItems: [],
+  cart: {}
 }
 
 /**
@@ -31,7 +32,8 @@ export const addItemToCart = item => ({
 export const getCartItems = cartItems => ({
   type: GET_CART_ITEMS,
   cartItems
-});
+})
+
 export const updateItemQuantity = (item, quantity) => ({
   type: UPDATE_ITEM_QUANTITY,
   item,
@@ -42,14 +44,34 @@ export const updateItemQuantity = (item, quantity) => ({
 /**
  * THUNK CREATORS
  */
-export const getCartThunk = (userId) => async dispatch => {
+export const getCartThunk = () => async dispatch => {
   try {
-    const {data} = await axios.get(`/api/users/${userId}/orders?status=pending`);
-    console.log("CART PENDING", data)
-    //which route? // route was broken so fixed this for CartIcon thunk
-    dispatch(getCart(data));
+    const res = await axios.get('/auth/me')
+    const user = res.data;
+
+    if(user){
+      const {data} = await axios.get(`/api/users/${user.id}/orders?status=pending`);
+      dispatch(getCart(data[0]));
+    }else{
+      let cartItems = localStorage.getItem('order-items'); //[{productId, quantity}]
+      let orderItems = [];
+
+      cartItems = JSON.parse(cartItems);
+      let id = 1;
+      for(let item of cartItems){
+        let productRes = await axios.get(`/api/products/${item.productId}`);
+        let product = productRes.data;
+        let orderItem = {product, quantity: item.quantity, productId: item.productId};
+        orderItem.id = id;
+        id++;
+        orderItems.push(orderItem);
+      }
+
+      const cart = {orderItems}
+      dispatch(getCart(cart));
+    }
   } catch (err) {
-    console.error(err)
+    console.log(err)
   }
 }
 
@@ -134,7 +156,7 @@ export const addProductToCart = (productId, quantity=1) => async dispatch => {
   }
 }
 
-export const updateItem = (itemId, productId, quantity, orderId) => async dispatch => {
+export const updateItem = (productId, quantity, itemId, orderId) => async dispatch => {
   try{
     const res = await axios.get('/auth/me')
     const user = res.data;
@@ -142,13 +164,16 @@ export const updateItem = (itemId, productId, quantity, orderId) => async dispat
     let orderItems;
     if(!user){
       // simply update item quantity in the local storage.
-      orderItems = localStorage.getItem('order-items');
+      orderItems = JSON.parse(localStorage.getItem('order-items'));
       if(orderItems){
+        let i = 1;
         for(let item of orderItems){
           if(item.productId === productId){
             item.quantity = quantity;
             break;
           }
+          item.id = i;
+          i++;
         }
 
         localStorage.setItem('order-items', JSON.stringify(orderItems));
@@ -233,17 +258,20 @@ const cart = (state = initialCartState, action) => {
     case ADD_ITEM_TO_CART:
       return {...state, cartItems: [...state.cartItems, action.item]}
     case GET_CART:
-      return {...state, cartItems: action.cart}
+      return {...state, cartItems: action.cart.orderItems, cart: action.cart}
     case GET_CART_ITEMS:
       return {...state, cartItems: action.cartItems}
     case UPDATE_ITEM_QUANTITY:
       const targetItem = state.cartItems.find(function(item) {
         return item.id == action.item.id
       });
+
       targetItem.quantity = action.quantity;
+
       const newCartItems = state.cartItems.filter(function(item) {
         return item.id !== targetItem.id;
       })
+
       return {...state, cartItems: [...newCartItems, targetItem]}
     default:
       return state
