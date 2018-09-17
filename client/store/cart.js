@@ -172,6 +172,7 @@ export const updateItem = (targetItem, quantity) => async dispatch => {
             item.quantity = quantity;
           }
 
+          // adding product info to the orderItems to return to the React component
           let orderItem = {...item};
           let {data} = await axios.get(`/api/products/${item.productId}`);
           orderItem.product = data;
