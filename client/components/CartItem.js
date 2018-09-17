@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import {connect} from 'react-redux'
-import {addItemToCart, updateItemQuantity} from '../store/cart'
-import {Link} from 'react-router-dom'
+import {addItemToCart, updateItem} from '../store/cart'
 
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
@@ -10,7 +9,7 @@ class CartItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      quantity: 0
+      quantity: this.props.cartItem.quantity
     }
     this.handleSubmit = this.handleSubmit.bind(this)
   }
@@ -22,7 +21,7 @@ class CartItem extends Component {
   }
 
   render() {
-    const { name, price, imgUrl, description } = this.props.cartItem;
+    const { name, price, imgUrl, description } = this.props.cartItem.product;
     return (
         <TableRow className='cart-item'>
         <TableCell className='cart-item-img'><img src={imgUrl}/></TableCell>
@@ -31,17 +30,9 @@ class CartItem extends Component {
         <TableCell className='cart-item-element'>{description}</TableCell>
         <TableCell className='cart-item-element'>
           <form id='orderItemQuantity' onSubmit={this.handleSubmit}>
-        <select
-        className='orderItemSelect'
-        onChange={ (evt) => this.setState({quantity: evt.target.value})}
-        >
-          <option value='0'>0</option>
-          <option value='1'>1</option>
-          <option value='2'>2</option>
-          <option value='3'>3</option>
-        </select>
-        <button className='orderItemSelectButton' type='submit'>Select Quantity</button>
-        </form>
+            <input type="text" value={this.state.quantity} className="quantity-box" style={{}} onChange={ (evt) => this.setState({quantity: evt.target.value})} />
+            <button className='orderItemSelectButton' type='submit'>Change Qty.</button>
+          </form>
         </TableCell>
       </TableRow>
     )
@@ -51,7 +42,7 @@ class CartItem extends Component {
 const mapDispatchToProps = dispatch => {
   return {
     addItemToCart: (item) => dispatch(addItemToCart(item)),
-    updateQuantity: (item, quantity) => dispatch(updateItemQuantity(item,quantity))
+    updateQuantity: (item, quantity) => dispatch(updateItem(item,quantity))
   }
 }
 

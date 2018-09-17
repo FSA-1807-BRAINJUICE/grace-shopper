@@ -32,8 +32,10 @@ class Cart extends Component {
   }
   render() {
     const cartItems = this.props.cartItems;
-    cartItems.sort((a,b) => {
-      return a.name > b.name
+    console.log(cartItems)
+    const parsedCartItems = Array.from(cartItems)
+    parsedCartItems.sort((a,b) => {
+      return a.product.name > b.product.name
     })
     const { classes } = this.props;
     return (
@@ -49,7 +51,7 @@ class Cart extends Component {
           </TableHead>
           <TableBody>
             {
-              cartItems.map(cartItem => {
+              parsedCartItems.map(cartItem => {
                 return <CartItem cartItem={cartItem} key={cartItem.id} />
               })
             }

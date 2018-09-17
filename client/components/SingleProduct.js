@@ -15,7 +15,7 @@ class SingleProduct extends Component {
     return (
       <div className='single-product'>
         <div className='single-product-image'>
-          <img src={'/'+imgUrl} />
+          <img src={imgUrl} />
         </div>
         <div className='single-product-info'>
           <h2>{name}</h2>
