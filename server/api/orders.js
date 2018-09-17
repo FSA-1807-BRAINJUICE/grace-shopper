@@ -71,11 +71,26 @@ router.put('/:orderId', async (req, res, next) => {
       orderStatus: req.body.orderStatus
       }, {
         where: { id: orderId },
+        include: [{model: OrderItem}],
         returning: true,
         plain: true
       })
 
-    // TODO: if orderStatus === complete, then update all the orderItems with the actual paid prices
+    // if orderStatus === complete, i.e., completed a checkout, then update all the orderItems with the actual paid prices
+    if(req.body.orderStatus === 'complete'){
+      const orderItems = await OrderItem.findAll({
+        where: {orderId: orderId},
+        include: [{model: Product}]
+      });
+
+
+      for(let item of orderItems){
+        // TODO: batch update later!??
+        item.update({paidUnitPrice: item.product.price}, {
+          where: {id: item.id}
+        })
+      }
+    }
 
     res.status(202).json(updatedOrder[1]);
   } catch (err) { next(err) }

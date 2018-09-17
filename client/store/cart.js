@@ -96,7 +96,7 @@ export const addProductToCart = (productId, quantity=1) => async dispatch => {
         let res = await axios.post('/api/orders');
         pendingOrder = res.data;
       }else{
-        pendingOrder = pendingOrders[0].orderItems;
+        pendingOrder = pendingOrders[0];
       }
 
       // check if there is a duplicate
