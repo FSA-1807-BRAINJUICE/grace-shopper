@@ -7,7 +7,7 @@ const initialOrdersState = {
 
 const GET_ORDERS = 'GET_ORDERS'
 
-const SET_ORDER_DONE = 'SET_ORDER_DONE';
+const SET_ORDER_DONE = 'SET_ORDER_DONE'
 
 export const setOrderDone = order => ({
   type: SET_ORDER_DONE,
@@ -20,12 +20,12 @@ export const getOrders = orders => ({
 })
 
 export const updateOrdersDone = addressInfo => async dispatch => {
-  try{
-    const { data: user } = await axios.get('/auth/me');
-    if(!user){
+  try {
+    const {data: user} = await axios.get('/auth/me')
+    if (!user) {
       // guest checkout
-      let { data: newOrder } = await axios.post('/api/orders');
-      let orderItems = JSON.parse(localStorage.getItem('order-items'));
+      let {data: newOrder} = await axios.post('/api/orders')
+      let orderItems = JSON.parse(localStorage.getItem('order-items'))
 
       //create orderItems
       orderItems.forEach(async item => {
@@ -35,35 +35,41 @@ export const updateOrdersDone = addressInfo => async dispatch => {
         })
       })
 
-      const {data: completedOrder } =
-        await axios.put(`/api/orders/${newOrder.id}`, {
-          orderStatus: "complete",
-        });
+      const {data: completedOrder} = await axios.put(
+        `/api/orders/${newOrder.id}`,
+        {
+          orderStatus: 'complete'
+        }
+      )
 
-      localStorage.clear();
-      dispatch(setOrderDone(completedOrder));
+      localStorage.clear()
+      dispatch(setOrderDone(completedOrder))
     } else {
       //logged-in user checkout
-      let { data: orders } = await axios.get(`/api/users/${user.id}/orders?status=pending`);
-      let cart = orders[0];
+      let {data: orders} = await axios.get(
+        `/api/users/${user.id}/orders?status=pending`
+      )
+      let cart = orders[0]
 
-      const {data: completedOrder } = await axios.put(`/api/orders/${cart.id}`, {
-        orderStatus: "complete"
-      });
+      const {data: completedOrder} = await axios.put(`/api/orders/${cart.id}`, {
+        orderStatus: 'complete'
+      })
 
-      dispatch(setOrderDone(completedOrder));
+      dispatch(setOrderDone(completedOrder))
     }
-  } catch(err){
+  } catch (err) {
     console.error(err)
   }
 }
 
 export const getOrdersThunk = userId => async dispatch => {
-  try{
-    const response = await axios.get(`/api/users/${userId}/orders?status=complete`);
-    const parsedOrders = response.data;
-    const action = getOrders(parsedOrders);
-    dispatch(action);
+  try {
+    const response = await axios.get(
+      `/api/users/${userId}/orders?status=complete`
+    )
+    const parsedOrders = response.data
+    const action = getOrders(parsedOrders)
+    dispatch(action)
   } catch (err) {
     console.error(err)
   }
@@ -86,4 +92,4 @@ const orders = (state = initialOrdersState, action) => {
   }
 }
 
-export default orders;
+export default orders

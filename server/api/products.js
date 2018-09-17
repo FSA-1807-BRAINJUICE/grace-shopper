@@ -3,10 +3,11 @@ const {Product} = require('../db/models')
 
 router.get('/:id', async (req, res, next) => {
   try {
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findById(req.params.id)
 
-    if (!product) return res.status(404).send('No product found - ' + req.params.id);
-    res.json(product);
+    if (!product)
+      return res.status(404).send('No product found - ' + req.params.id)
+    res.json(product)
   } catch (err) {
     next(err)
   }
@@ -14,8 +15,8 @@ router.get('/:id', async (req, res, next) => {
 
 router.get('/', async (req, res, next) => {
   try {
-    const products = await Product.findAll();
-    res.json(products);
+    const products = await Product.findAll()
+    res.json(products)
   } catch (err) {
     next(err)
   }
@@ -23,8 +24,8 @@ router.get('/', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   try {
-    if(!req.user.admin){
-      res.status(403).send('ineligible to create a new product');
+    if (!req.user.admin) {
+      res.status(403).send('ineligible to create a new product')
     }
 
     const productBody = {
@@ -32,10 +33,10 @@ router.post('/', async (req, res, next) => {
       price: req.body.price,
       imgUrl: req.body.imgUrl,
       description: req.body.description
-    };
+    }
 
-    const product = await Product.create(productBody);
-    res.json(product);
+    const product = await Product.create(productBody)
+    res.json(product)
   } catch (err) {
     next(err)
   }
@@ -43,8 +44,8 @@ router.post('/', async (req, res, next) => {
 
 router.put('/:id', async (req, res, next) => {
   try {
-    if(!req.user.admin){
-      res.status(403).send('ineligible to update a product');
+    if (!req.user.admin) {
+      res.status(403).send('ineligible to update a product')
     }
 
     const productBody = {
@@ -52,19 +53,19 @@ router.put('/:id', async (req, res, next) => {
       price: req.body.price,
       imgUrl: req.body.imgUrl,
       description: req.body.description
-    };
+    }
 
     const product = await Product.update(productBody, {
       where: {
         id: req.params.id
       },
       returning: true
-    });
+    })
 
     if (!product) {
-      res.status(404).send('No product found - ' + req.params.id);
-    } else{
-      res.json(product);
+      res.status(404).send('No product found - ' + req.params.id)
+    } else {
+      res.json(product)
     }
   } catch (err) {
     next(err)

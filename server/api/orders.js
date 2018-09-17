@@ -1,35 +1,38 @@
 const router = require('express').Router()
-const { Order, OrderItem, Product } = require('../db/models')
+const {Order, OrderItem, Product} = require('../db/models')
 
 // GET /api/orders/:orderId
 router.get('/:orderId', async (req, res, next) => {
-  const orderId = req.params.orderId;
+  const orderId = req.params.orderId
 
   // make sure there is an order with the given orderId.
-  let order;
+  let order
   try {
-    order = await Order.findById(orderId, {include: [
-      {
-        model: OrderItem,
-        include: [
+    order = await Order.findById(orderId, {
+      include: [
         {
-          model: Product
+          model: OrderItem,
+          include: [
+            {
+              model: Product
+            }
+          ]
         }
-      ]}
-    ]});
+      ]
+    })
     if (!order) {
-      res.status(404).send("Order not found - " + orderId);
+      res.status(404).send('Order not found - ' + orderId)
     }
   } catch (err) {
     next(err)
   }
 
   // check user privilege
-  if(!req.user){
-    res.status(403).send('No orders saved in DB for logged-out user!');
-  }else if (!req.user.isAdmin && req.user.id !== order.userId) {
+  if (!req.user) {
+    res.status(403).send('No orders saved in DB for logged-out user!')
+  } else if (!req.user.isAdmin && req.user.id !== order.userId) {
     // a case of a logged-in user
-    res.status(403).send("Forbidden");
+    res.status(403).send('Forbidden')
   }
 
   res.status(200).json(order)
@@ -44,148 +47,162 @@ router.post('/', async (req, res, next) => {
 
   // purely create a new Order instance.
   const orderToCreate = {}
-    if (req.user) {
-      // an order of a logged-in user
-      orderToCreate.userId = req.user.id;
-    }
+  if (req.user) {
+    // an order of a logged-in user
+    orderToCreate.userId = req.user.id
+  }
 
-    const order = await Order.create(orderToCreate);
+  const order = await Order.create(orderToCreate)
 
-    res.status(201).json(order);
-});
+  res.status(201).json(order)
+})
 
 // PUT /api/orders/:orderId
 router.put('/:orderId', async (req, res, next) => {
-  const orderId = req.params.orderId;
+  const orderId = req.params.orderId
   try {
-
     // check if there is an order with the given orderId
-    const order = await Order.findById(orderId);
+    const order = await Order.findById(orderId)
     if (!order) {
-      res.status(404).send("Order not found - " + orderId);
+      res.status(404).send('Order not found - ' + orderId)
     }
 
-    if (req.user) { //known user
-      if (!req.user.admin && req.user.id !== order.userId) { //not an admin and a known user requested some other user's order
-        res.status(403).send('Forbidden');
+    if (req.user) {
+      //known user
+      if (!req.user.admin && req.user.id !== order.userId) {
+        //not an admin and a known user requested some other user's order
+        res.status(403).send('Forbidden')
       }
     }
 
     // Note that order has 4 properties - orderNumber, orderStatus, and userId.
     // orderNumber, and userId shouldn't be updated.
-    const updatedOrder = await Order.update({
-      orderStatus: req.body.orderStatus
-      }, {
-        where: { id: orderId },
+    const updatedOrder = await Order.update(
+      {
+        orderStatus: req.body.orderStatus
+      },
+      {
+        where: {id: orderId},
         include: [
           {
             model: OrderItem,
             include: [
-            {
-              model: Product
-            }
-          ]}
+              {
+                model: Product
+              }
+            ]
+          }
         ],
         returning: true,
         plain: true
-      })
+      }
+    )
 
     // if orderStatus === complete, i.e., completed a checkout, then update all the orderItems with the actual paid prices
-    if(req.body.orderStatus === 'complete'){
+    if (req.body.orderStatus === 'complete') {
       const orderItems = await OrderItem.findAll({
         where: {orderId: orderId},
         include: [{model: Product}]
-      });
+      })
 
-
-      for(let item of orderItems){
+      for (let item of orderItems) {
         // TODO: batch update later!??
-        item.update({paidUnitPrice: item.product.price}, {
-          where: {id: item.id}
-        })
+        item.update(
+          {paidUnitPrice: item.product.price},
+          {
+            where: {id: item.id}
+          }
+        )
       }
     }
 
-    res.status(202).json(updatedOrder[1]);
-  } catch (err) { next(err) }
+    res.status(202).json(updatedOrder[1])
+  } catch (err) {
+    next(err)
+  }
 })
 
 router.get('/:orderId/items/:itemId', async (req, res, next) => {
-  const orderId = req.params.orderId;
-  const itemId = req.params.itemId;
-  try{
-    const order = await Order.findById(orderId);
+  const orderId = req.params.orderId
+  const itemId = req.params.itemId
+  try {
+    const order = await Order.findById(orderId)
     if (!order) {
-      res.status(404).send('No order found - ' + orderId);
+      res.status(404).send('No order found - ' + orderId)
     }
 
-    if (req.user && (!req.user.admin && req.user.id !== order.userId)) { //known user
+    if (req.user && (!req.user.admin && req.user.id !== order.userId)) {
+      //known user
       //not an admin and a known user requested some other user's order
-        res.status(403).send('Forbidden to retrieve this order item');
+      res.status(403).send('Forbidden to retrieve this order item')
     }
 
-    const item = await OrderItem.findById(itemId);
-    res.status(201).json(item);
-  }catch(err){
-    next(err);
+    const item = await OrderItem.findById(itemId)
+    res.status(201).json(item)
+  } catch (err) {
+    next(err)
   }
-});
+})
 // POST /api/orders/:orderId/item
 router.post('/:orderId/items', async (req, res, next) => {
-  const orderId = req.params.orderId;
-  const productId = req.body.productId;
+  const orderId = req.params.orderId
+  const productId = req.body.productId
 
   try {
     // check if product and order exist, before creation.
-    const product = await Product.findById(productId);
+    const product = await Product.findById(productId)
     if (!product) {
-      res.status(404).send('No product found - ' + productId);
+      res.status(404).send('No product found - ' + productId)
     }
-    const order = await Order.findById(orderId);
+    const order = await Order.findById(orderId)
     if (!order) {
-      res.status(404).send('No order found - ' + orderId);
+      res.status(404).send('No order found - ' + orderId)
     }
 
     // make sure the current user is allowed to create an item to this order.
-    if (req.user && (!req.user.admin && req.user.id !== order.userId)) { //known user
+    if (req.user && (!req.user.admin && req.user.id !== order.userId)) {
+      //known user
       //not an admin and a known user requested some other user's order
-        res.status(403).send('update forbidden');
+      res.status(403).send('update forbidden')
     }
 
     const newItemToAdd = {
       quantity: req.body.quantity,
       orderId: order.id,
       productId: product.id
-    };
-
-    try{
-      const itemAdded = await OrderItem.create(newItemToAdd);
-      res.status(201).json(itemAdded)
-    }catch(err){
-      console.log("DEV-WARNING: duplicate item found.");
     }
+
+    try {
+      const itemAdded = await OrderItem.create(newItemToAdd)
+      res.status(201).json(itemAdded)
+    } catch (err) {
+      console.log('DEV-WARNING: duplicate item found.')
+    }
+  } catch (err) {
+    next(err)
   }
-  catch (err) { next(err) }
 })
 
 router.put('/:orderId/items/:itemId', async (req, res, next) => {
-  const orderId = req.params.orderId;
-  const itemId = req.params.itemId;
-  try{
+  const orderId = req.params.orderId
+  const itemId = req.params.itemId
+  try {
     // check if there is an order with the given orderId
-    const order = await Order.findById(orderId);
-    const orderItem = await OrderItem.findById(itemId);
-    const product = await Product.findById(orderItem.productId);
+    const order = await Order.findById(orderId)
+    const orderItem = await OrderItem.findById(itemId)
+    const product = await Product.findById(orderItem.productId)
     if (!product || !order || !orderItem) {
-      res.status(404).send('No product, order item, or order found');
+      res.status(404).send('No product, order item, or order found')
     }
 
-    if (req.user) { //known user
-      if (!req.user.admin && req.user.id !== order.userId) { //not an admin and a known user requested some other user's order
-        res.status(403).send('Forbidden');
+    if (req.user) {
+      //known user
+      if (!req.user.admin && req.user.id !== order.userId) {
+        //not an admin and a known user requested some other user's order
+        res.status(403).send('Forbidden')
       }
     } else {
-      res.status(403).send('No order is saved in DB for logged-out users.');
+      res.status(403).send('No order is saved in DB for logged-out users.')
     }
 
     const orderItemDetail = {
@@ -195,44 +212,50 @@ router.put('/:orderId/items/:itemId', async (req, res, next) => {
     }
 
     await OrderItem.update(orderItemDetail, {
-      where: { id: itemId },
+      where: {id: itemId},
       returning: true
     })
 
-    res.status(204).send();
-  }catch(err){
-    next(err);
+    res.status(204).send()
+  } catch (err) {
+    next(err)
   }
 })
 
 router.delete('/:orderId/items/:itemId', async (req, res, next) => {
-  const requestedItem = req.params.itemId;
-  const requestedOrder = req.params.orderId;
+  const requestedItem = req.params.itemId
+  const requestedOrder = req.params.orderId
   try {
-    const order = await Order.findById(requestedOrder);
+    const order = await Order.findById(requestedOrder)
     if (!order) {
-      res.status(404).send();
+      res.status(404).send()
     }
 
-    const item = await OrderItem.findById(requestedItem);
+    const item = await OrderItem.findById(requestedItem)
     if (!item) {
-      res.status(404).send('item not found in orderitem table; item: ' + { requestedItem })
+      res
+        .status(404)
+        .send('item not found in orderitem table; item: ' + {requestedItem})
     }
 
-    if (req.user) { //known user
-      if (!req.user.admin && req.user.id !== order.userId) { //not an admin and a known user requested some other user's order
-        res.status(403).send('update forbidden');
+    if (req.user) {
+      //known user
+      if (!req.user.admin && req.user.id !== order.userId) {
+        //not an admin and a known user requested some other user's order
+        res.status(403).send('update forbidden')
       }
-    }else{
-      res.status(403).send("No orders is saved in DB for logged-out users");
+    } else {
+      res.status(403).send('No orders is saved in DB for logged-out users')
     }
 
     await OrderItem.destroy({
-      where: { id: requestedItem }
-    });
+      where: {id: requestedItem}
+    })
 
-    res.status(201).send();
-  } catch (err) { next(err) }
+    res.status(201).send()
+  } catch (err) {
+    next(err)
+  }
 })
 
-module.exports = router;
+module.exports = router
