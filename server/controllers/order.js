@@ -1,3 +1,1 @@
-async function getOrder(orderId){
-
-}
+async function getOrder(orderId) {}

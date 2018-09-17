@@ -2,8 +2,8 @@ import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {me, logout} from '../store/user'
-import { Button } from '@material-ui/core';
-import { Redirect, Link } from 'react-router-dom'
+import {Button} from '@material-ui/core'
+import {Redirect, Link} from 'react-router-dom'
 /**
  * COMPONENT
  */
@@ -12,32 +12,35 @@ class UserHome extends Component {
   // componentDidMount(){
   //   this.props.getMe()
   // }
-  render(){
+  render() {
     const {id, email} = this.props.user
-    if (!id){
-      return <Redirect to = "/products" />
+    if (!id) {
+      return <Redirect to="/products" />
     }
     return (
       <div>
         <h3>Welcome, {email}</h3>
         <div>
-        <Button
-          variant = 'outlined'
-          color='primary'
-          size = 'small'
-          onClick={this.props.handleClick}>
+          <Button
+            variant="outlined"
+            color="primary"
+            size="small"
+            onClick={this.props.handleClick}
+          >
             Logout
-        </Button>
+          </Button>
         </div>
         <div>
-        <Button
-          variant = 'outlined'
-          color='primary'
-          size = 'small'
-          component = { Link } to="/orders">
-          {/* the link needs to go to the Order History Component */}
+          <Button
+            variant="outlined"
+            color="primary"
+            size="small"
+            component={Link}
+            to="/orders"
+          >
+            {/* the link needs to go to the Order History Component */}
             Order History
-        </Button>
+          </Button>
         </div>
       </div>
     )

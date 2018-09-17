@@ -4,18 +4,16 @@ import {getAllProductsThunk} from '../store/products'
 import ProductCard from './ProductCard'
 
 class AllProducts extends Component {
-  componentDidMount () {
-    this.props.getAllProducts();
+  componentDidMount() {
+    this.props.getAllProducts()
   }
-  render () {
-    const products = this.props.products;
+  render() {
+    const products = this.props.products
     return (
-      <div className='all-products gallery'>
-        {
-          products.map(product => {
-            return <ProductCard product={product} key={product.id} />
-          })
-        }
+      <div className="all-products gallery">
+        {products.map(product => {
+          return <ProductCard product={product} key={product.id} />
+        })}
       </div>
     )
   }

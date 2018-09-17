@@ -12,7 +12,8 @@ const OrderItem = db.define('orderItem', {
     allowNull: false
   },
   paidUnitPrice: {
-    type: Sequelize.INTEGER // THIS NUMBER IS FIXED AFTER YOUR ORDER
+    type: Sequelize.INTEGER, // THIS NUMBER IS FIXED AFTER YOUR ORDER
+    defaultValue: null
   }
 })
 
