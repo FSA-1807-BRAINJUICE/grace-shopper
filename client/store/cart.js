@@ -62,8 +62,7 @@ export const getCartThunk = () => async dispatch => {
         let productRes = await axios.get(`/api/products/${item.productId}`);
         let product = productRes.data;
         let orderItem = {product, quantity: item.quantity, productId: item.productId};
-        orderItem.id = id;
-        id++;
+        orderItem.id = id++;
         orderItems.push(orderItem);
       }
 
@@ -172,8 +171,7 @@ export const updateItem = (targetItem, quantity) => async dispatch => {
             item.quantity = quantity;
             break;
           }
-          item.id = i;
-          i++;
+          item.id = i++;
         }
 
         localStorage.setItem('order-items', JSON.stringify(orderItems));
