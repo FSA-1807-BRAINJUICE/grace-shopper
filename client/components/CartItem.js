@@ -22,6 +22,7 @@ class CartItem extends Component {
   }
 
   render() {
+    console.log('cartItem',this.props.cartItem)
     const { name, price, imgUrl, description } = this.props.cartItem.product;
     return (
         <TableRow className='cart-item'>
