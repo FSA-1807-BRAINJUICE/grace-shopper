@@ -52,21 +52,25 @@ export const getCartThunk = () => async dispatch => {
       const {data} = await axios.get(`/api/users/${user.id}/orders?status=pending`);
       dispatch(getCart(data[0]));
     }else{
-      let orderItems = localStorage.getItem('order-items');
+      let cartItems = localStorage.getItem('order-items'); //[{productId, quantity}]
+      let orderItems = [];
 
-      let cartItems = [];
-      //{productId, quantity}
-      for(let item of orderItems){
+      cartItems = JSON.parse(cartItems);
+      let id = 1;
+      for(let item of cartItems){
         let productRes = await axios.get(`/api/products/${item.productId}`);
         let product = productRes.data;
-        cartItems.push(product);
+        let orderItem = {product, quantity: item.quantity, productId: item.productId};
+        orderItem.id = id;
+        id++;
+        orderItems.push(orderItem);
       }
 
-
-      dispatch(getCart(cartItems));
+      const cart = {orderItems}
+      dispatch(getCart(cart));
     }
   } catch (err) {
-    console.error(err)
+    console.log(err)
   }
 }
 
@@ -250,8 +254,7 @@ const cart = (state = initialCartState, action) => {
     case ADD_ITEM_TO_CART:
       return {...state, cartItems: [...state.cartItems, action.item]}
     case GET_CART:
-      console.log("here", action.cart.orderItems);
-      return {...state, cartItems: [...action.cart.orderItems], cart: action.cart}
+      return {...state, cartItems: action.cart.orderItems, cart: action.cart}
     case GET_CART_ITEMS:
       return {...state, cartItems: action.cartItems}
     case UPDATE_ITEM_QUANTITY:
