@@ -32,7 +32,8 @@ export const addItemToCart = item => ({
 export const getCartItems = cartItems => ({
   type: GET_CART_ITEMS,
   cartItems
-});
+})
+
 export const updateItemQuantity = (item, quantity) => ({
   type: UPDATE_ITEM_QUANTITY,
   item,
@@ -261,10 +262,13 @@ const cart = (state = initialCartState, action) => {
       const targetItem = state.cartItems.find(function(item) {
         return item.id == action.item.id
       });
+
       targetItem.quantity = action.quantity;
+
       const newCartItems = state.cartItems.filter(function(item) {
         return item.id !== targetItem.id;
       })
+
       return {...state, cartItems: [...newCartItems, targetItem]}
     default:
       return state
