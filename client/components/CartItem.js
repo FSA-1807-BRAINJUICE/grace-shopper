@@ -10,7 +10,7 @@ class CartItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      quantity: 0
+      quantity: this.props.cartItem.quantity
     }
     this.handleSubmit = this.handleSubmit.bind(this)
   }
@@ -34,6 +34,7 @@ class CartItem extends Component {
         <select
         className='orderItemSelect'
         onChange={ (evt) => this.setState({quantity: evt.target.value})}
+        defaultValue={this.state.quantity}
         >
           <option value='0'>0</option>
           <option value='1'>1</option>
