@@ -4,8 +4,9 @@ const {User, Order, OrderItem, Product} = require('../db/models')
 // /api/users
 router.get('/', async (req, res, next) => {
   try {
-    if (!req.user || !req.user.admin) {
-      res.status(403).send('Forbidden')
+    if(!req.user || !req.user.admin){
+      res.status(403).send("Forbidden");
+      return;
     }
 
     const users = await User.findAll()
@@ -18,12 +19,9 @@ router.get('/', async (req, res, next) => {
 // get a user by the given id
 router.get('/:userId', async (req, res, next) => {
   try {
-    if (
-      !req.user ||
-      !req.user.admin ||
-      req.user.id !== Number(req.params.userId)
-    ) {
-      res.status(403).send('Forbidden')
+    if(!req.user || !req.user.admin || req.user.id !== Number(req.params.userId)){
+      res.status(403).send('Forbidden');
+      return;
     }
 
     const user = await User.findById(req.params.userId)
@@ -44,8 +42,9 @@ router.post('/', async (req, res, next) => {
       }
     })
 
-    if (emailCheckUser) {
-      res.status(403).send('Duplicate account exists')
+    if(emailCheckUser){
+      res.status(403).send('Duplicate account exists');
+      return;
     }
 
     let admin = false
@@ -72,8 +71,9 @@ router.post('/', async (req, res, next) => {
 // update
 router.put('/:userId', async (req, res, next) => {
   try {
-    if (!req.user || !req.user.admin) {
-      res.status(403).send('forbidden to update a user info')
+    if(!req.user || !req.user.admin){
+      res.status(403).send('forbidden to update a user info');
+      return;
     }
 
     // only either admin or the account holder is allowed to update the user account.
@@ -86,10 +86,11 @@ router.put('/:userId', async (req, res, next) => {
       })
 
       if (!user) {
-        res.status(404).send('user not found', req.params.userId)
-      } else {
-        res.json(user)
+        res.status(404).send('user not found');
+        return;
       }
+
+      res.json(user);
     }
   } catch (err) {
     next(err)
@@ -98,12 +99,10 @@ router.put('/:userId', async (req, res, next) => {
 
 //get orders of this user(/api/users/:userId/orders?status=[pending|complete|transaction-failed]);
 router.get('/:userId/orders', async (req, res, next) => {
-  try {
-    if (
-      !req.user ||
-      (!req.user.admin && req.user.id !== Number(req.params.userId))
-    ) {
-      res.status(403).send('forbidden to see orders of this user')
+  try{
+    if(!req.user || !req.user.admin && req.user.id !== Number(req.params.userId)){
+      res.status(403).send('forbidden to see orders of this user');
+      return;
     }
 
     const queryCondition = {
