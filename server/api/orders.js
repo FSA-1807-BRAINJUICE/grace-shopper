@@ -62,12 +62,11 @@ router.put('/:orderId', async (req, res, next) => {
         res.status(403).send('Forbidden');
       }
     } else{
-      // res.status(403).send("No orders is saved in DB for logged-out users");
+      res.status(403).send("No orders is saved in DB for logged-out users");
     }
 
     // Note that order has 4 properties - orderNumber, orderStatus, and userId.
     // orderNumber, and userId shouldn't be updated.
-
     const updatedOrder = await Order.update({
       orderStatus: req.body.orderStatus
       }, {
@@ -75,6 +74,8 @@ router.put('/:orderId', async (req, res, next) => {
         returning: true,
         plain: true
       })
+
+    // TODO: if orderStatus === complete, then update all the orderItems with the actual paid prices
 
     res.status(202).json(updatedOrder[1]);
   } catch (err) { next(err) }
