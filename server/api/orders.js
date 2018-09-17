@@ -61,8 +61,6 @@ router.put('/:orderId', async (req, res, next) => {
       if (!req.user.admin && req.user.id !== order.userId) { //not an admin and a known user requested some other user's order
         res.status(403).send('Forbidden');
       }
-    } else{
-      res.status(403).send("No orders is saved in DB for logged-out users");
     }
 
     // Note that order has 4 properties - orderNumber, orderStatus, and userId.
