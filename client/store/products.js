@@ -1,11 +1,10 @@
 import axios from 'axios'
 
-
 /**
  * ACTION TYPES
  */
-const GET_ALL_PRODUCTS = 'GET_ALL_PRODUCTS';
-const GET_SINGLE_PRODUCT = 'GET_SINGLE_PRODUCT';
+const GET_ALL_PRODUCTS = 'GET_ALL_PRODUCTS'
+const GET_SINGLE_PRODUCT = 'GET_SINGLE_PRODUCT'
 
 /**
  * INITIAL STATE
@@ -33,19 +32,19 @@ const getSingleProduct = product => ({
  */
 export const getAllProductsThunk = () => async dispatch => {
   try {
-    const response = await axios.get('/api/products');
-    const parsedAllProducts = response.data;
-    const action = getAllProducts(parsedAllProducts);
-    dispatch(action);
+    const response = await axios.get('/api/products')
+    const parsedAllProducts = response.data
+    const action = getAllProducts(parsedAllProducts)
+    dispatch(action)
   } catch (err) {
     console.error(err)
   }
 }
 
-export const fetchSingleProduct = (id) => async dispatch => {
+export const fetchSingleProduct = id => async dispatch => {
   try {
-    const { data: singleProduct } = await axios.get(`/api/products/${id}`);
-    dispatch(getSingleProduct(singleProduct));
+    const {data: singleProduct} = await axios.get(`/api/products/${id}`)
+    dispatch(getSingleProduct(singleProduct))
   } catch (error) {
     console.error(error)
   }
@@ -68,4 +67,4 @@ const products = (state = initialProductState, action) => {
   }
 }
 
-export default products;
+export default products

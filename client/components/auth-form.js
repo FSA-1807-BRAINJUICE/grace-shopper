@@ -2,9 +2,9 @@ import React from 'react'
 import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
 import {auth} from '../store'
-import TextField from '@material-ui/core/TextField';
-import { withStyles } from '@material-ui/core/styles';
-import { Button } from '@material-ui/core';
+import TextField from '@material-ui/core/TextField'
+import {withStyles} from '@material-ui/core/styles'
+import {Button} from '@material-ui/core'
 
 const styles = theme => ({
   container: {
@@ -15,71 +15,55 @@ const styles = theme => ({
   textField: {
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
-    width: 200,
+    width: 200
   },
   menu: {
-    width: 200,
-  },
-});
-
-
+    width: 200
+  }
+})
 
 /**
  * COMPONENT
  */
 const AuthForm = props => {
-  const {
-    name,
-    displayName,
-    handleSubmit,
-    error,
-    handleClick,
-    classes
-  } = props
+  const {name, displayName, handleSubmit, error, handleClick, classes} = props
 
   return (
     <div>
       <form
-      className = {classes.container}
-      onSubmit={handleSubmit}
-      name={name}
-      noValidate
-      autoComplete = 'off'>
+        className={classes.container}
+        onSubmit={handleSubmit}
+        name={name}
+        noValidate
+        autoComplete="off"
+      >
         <div>
-        <TextField
-          id="email"
-          label="Email"
-          className={classes.textField}
-          margin="normal" />
-        </div>
-        <div>
-        <TextField
-          id="password"
-          label="Password"
-          className={classes.textField}
-          margin="normal"
-          type='password'
+          <TextField
+            id="email"
+            label="Email"
+            className={classes.textField}
+            margin="normal"
           />
         </div>
         <div>
-          <Button
-            variant = 'outlined'
-            color='primary'
-            size = 'small'
-            type="submit">
-          {displayName}
+          <TextField
+            id="password"
+            label="Password"
+            className={classes.textField}
+            margin="normal"
+            type="password"
+          />
+        </div>
+        <div>
+          <Button variant="outlined" color="primary" size="small" type="submit">
+            {displayName}
           </Button>
         </div>
         {error && error.response && <div> {error.response.data} </div>}
       </form>
-      <div className = {classes.container}>
+      <div className={classes.container}>
         <a href="/auth/google">
-          <Button
-            variant = 'outlined'
-            color='primary'
-            size = 'small'
-            type="submit"
-          >
+          <Button variant="outlined" color="primary" size="small" type="submit">
             {displayName} with Google
           </Button>
         </a>
@@ -98,7 +82,7 @@ const AuthForm = props => {
 const mapLogin = state => {
   return {
     name: 'login',
-    displayName: 'Login',
+    displayName: 'Login'
     // error:  // state.user.error
   }
 }
@@ -106,7 +90,7 @@ const mapLogin = state => {
 const mapSignup = state => {
   return {
     name: 'signup',
-    displayName: 'Sign Up',
+    displayName: 'Sign Up'
     // error: state.user.error
   }
 }
@@ -123,8 +107,12 @@ const mapDispatch = dispatch => {
   }
 }
 
-export const Login = withStyles(styles)(connect(mapLogin, mapDispatch)(AuthForm))
-export const Signup = withStyles(styles)(connect(mapSignup, mapDispatch)(AuthForm))
+export const Login = withStyles(styles)(
+  connect(mapLogin, mapDispatch)(AuthForm)
+)
+export const Signup = withStyles(styles)(
+  connect(mapSignup, mapDispatch)(AuthForm)
+)
 
 /**
  * PROP TYPES

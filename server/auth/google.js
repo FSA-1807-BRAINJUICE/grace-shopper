@@ -47,7 +47,8 @@ if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
 
   router.get('/', passport.authenticate('google', {scope: 'email'}))
 
-  router.get('/callback',
+  router.get(
+    '/callback',
     passport.authenticate('google', {failureRedirect: '/login'}),
     (req, res) => {
       res.redirect(`/products`)
