@@ -58,17 +58,19 @@ export const getCartThunk = () => async dispatch => {
       let orderItems = []
 
       cartItems = JSON.parse(cartItems)
-      let id = 1
-      for (let item of cartItems) {
-        let productRes = await axios.get(`/api/products/${item.productId}`)
-        let product = productRes.data
-        let orderItem = {
-          product,
-          quantity: item.quantity,
-          productId: item.productId
+        if(cartItems){
+        let id = 1
+        for (let item of cartItems) {
+          let productRes = await axios.get(`/api/products/${item.productId}`)
+          let product = productRes.data
+          let orderItem = {
+            product,
+            quantity: item.quantity,
+            productId: item.productId
+          }
+          orderItem.id = id++
+          orderItems.push(orderItem)
         }
-        orderItem.id = id++
-        orderItems.push(orderItem)
       }
 
       const cart = {orderItems}
