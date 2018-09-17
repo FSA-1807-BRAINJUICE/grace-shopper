@@ -12,7 +12,8 @@ const UPDATE_ITEM_QUANTITY = 'UPDATE_ITEM_QUANTITY';
  * INITIAL STATE
  */
 const initialCartState = {
-  cartItems: []
+  cartItems: [],
+  cart: {}
 }
 
 /**
@@ -42,10 +43,28 @@ export const updateItemQuantity = (item, quantity) => ({
 /**
  * THUNK CREATORS
  */
-export const getCartThunk = (cartId) => async dispatch => {
+export const getCartThunk = () => async dispatch => {
   try {
-    const {data} = await axios.get(`/api/orders/${cartId}`); //which route?
-    dispatch(getCart(data));
+    const res = await axios.get('/auth/me')
+    const user = res.data;
+
+    if(user){
+      const {data} = await axios.get(`/api/users/${user.id}/orders?status=pending`);
+      dispatch(getCart(data[0]));
+    }else{
+      let orderItems = localStorage.getItem('order-items');
+
+      let cartItems = [];
+      //{productId, quantity}
+      for(let item of orderItems){
+        let productRes = await axios.get(`/api/products/${item.productId}`);
+        let product = productRes.data;
+        cartItems.push(product);
+      }
+
+
+      dispatch(getCart(cartItems));
+    }
   } catch (err) {
     console.error(err)
   }
@@ -231,7 +250,8 @@ const cart = (state = initialCartState, action) => {
     case ADD_ITEM_TO_CART:
       return {...state, cartItems: [...state.cartItems, action.item]}
     case GET_CART:
-      return {...state, cartItems: action.cart}
+      console.log("here", action.cart.orderItems);
+      return {...state, cartItems: [...action.cart.orderItems], cart: action.cart}
     case GET_CART_ITEMS:
       return {...state, cartItems: action.cartItems}
     case UPDATE_ITEM_QUANTITY:
