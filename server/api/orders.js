@@ -8,7 +8,15 @@ router.get('/:orderId', async (req, res, next) => {
   // make sure there is an order with the given orderId.
   let order;
   try {
-    order = await Order.findById(orderId, {include: OrderItem});
+    order = await Order.findById(orderId, {include: [
+      {
+        model: OrderItem,
+        include: [
+        {
+          model: Product
+        }
+      ]}
+    ]});
     if (!order) {
       res.status(404).send("Order not found - " + orderId);
     }
@@ -69,7 +77,15 @@ router.put('/:orderId', async (req, res, next) => {
       orderStatus: req.body.orderStatus
       }, {
         where: { id: orderId },
-        include: [{model: OrderItem}],
+        include: [
+          {
+            model: OrderItem,
+            include: [
+            {
+              model: Product
+            }
+          ]}
+        ],
         returning: true,
         plain: true
       })
