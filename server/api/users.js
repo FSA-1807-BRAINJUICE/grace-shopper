@@ -6,6 +6,7 @@ router.get('/', async (req, res, next) => {
   try {
     if(!req.user || !req.user.admin){
       res.status(403).send("Forbidden");
+      return;
     }
 
     const users = await User.findAll();
@@ -20,6 +21,7 @@ router.get('/:userId', async(req, res, next) => {
   try {
     if(!req.user || !req.user.admin || req.user.id !== Number(req.params.userId)){
       res.status(403).send('Forbidden');
+      return;
     }
 
     const user = await User.findById(req.params.userId)
@@ -42,6 +44,7 @@ router.post('/', async (req, res, next) => {
 
     if(emailCheckUser){
       res.status(403).send('Duplicate account exists');
+      return;
     }
 
     let admin = false;
@@ -70,6 +73,7 @@ router.put('/:userId', async (req, res, next) => {
   try {
     if(!req.user || !req.user.admin){
       res.status(403).send('forbidden to update a user info');
+      return;
     }
 
     // only either admin or the account holder is allowed to update the user account.
@@ -82,7 +86,8 @@ router.put('/:userId', async (req, res, next) => {
       });
 
       if (!user) {
-        res.status(404).send('user not found', req.params.userId);
+        res.status(404).send('user not found');
+        return;
       } else{
         res.json(user);
       }
@@ -97,6 +102,7 @@ router.get('/:userId/orders', async (req, res, next) => {
   try{
     if(!req.user || !req.user.admin && req.user.id !== Number(req.params.userId)){
       res.status(403).send('forbidden to see orders of this user');
+      return;
     }
 
     const queryCondition = {

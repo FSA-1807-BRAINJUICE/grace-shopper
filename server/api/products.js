@@ -5,7 +5,10 @@ router.get('/:id', async (req, res, next) => {
   try {
     const product = await Product.findById(req.params.id);
 
-    if (!product) return res.status(404).send('No product found - ' + req.params.id);
+    if (!product) {
+      res.status(404).send('No product found - ' + req.params.id);
+      return;
+    }
     res.json(product);
   } catch (err) {
     next(err)
@@ -25,6 +28,7 @@ router.post('/', async (req, res, next) => {
   try {
     if(!req.user.admin){
       res.status(403).send('ineligible to create a new product');
+      return;
     }
 
     const productBody = {
@@ -45,6 +49,7 @@ router.put('/:id', async (req, res, next) => {
   try {
     if(!req.user.admin){
       res.status(403).send('ineligible to update a product');
+      return;
     }
 
     const productBody = {
@@ -63,6 +68,7 @@ router.put('/:id', async (req, res, next) => {
 
     if (!product) {
       res.status(404).send('No product found - ' + req.params.id);
+      return;
     } else{
       res.json(product);
     }
