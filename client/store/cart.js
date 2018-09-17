@@ -155,7 +155,7 @@ export const addProductToCart = (productId, quantity=1) => async dispatch => {
   }
 }
 
-export const updateItem = (itemId, productId, quantity, orderId) => async dispatch => {
+export const updateItem = (productId, quantity, itemId, orderId) => async dispatch => {
   try{
     const res = await axios.get('/auth/me')
     const user = res.data;
