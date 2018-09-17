@@ -3,10 +3,10 @@ import axios from 'axios'
 /**
  * ACTION TYPES
  */
-const GET_CART = 'GET_CART';
-const GET_CART_ITEMS = 'GET_CART_ITEMS';
-const ADD_ITEM_TO_CART = 'ADD_ITEM_TO_CART';
-const UPDATE_ITEM_QUANTITY = 'UPDATE_ITEM_QUANTITY';
+const GET_CART = 'GET_CART'
+const GET_CART_ITEMS = 'GET_CART_ITEMS'
+const ADD_ITEM_TO_CART = 'ADD_ITEM_TO_CART'
+const UPDATE_ITEM_QUANTITY = 'UPDATE_ITEM_QUANTITY'
 
 /**
  * INITIAL STATE
@@ -40,230 +40,243 @@ export const updateItemQuantity = (item, quantity) => ({
   quantity
 })
 
-
 /**
  * THUNK CREATORS
  */
 export const getCartThunk = () => async dispatch => {
   try {
     const res = await axios.get('/auth/me')
-    const user = res.data;
+    const user = res.data
 
-    if(user){
-      const {data} = await axios.get(`/api/users/${user.id}/orders?status=pending`);
-      dispatch(getCart(data[0]));
-    }else{
-      let cartItems = localStorage.getItem('order-items'); //[{productId, quantity}]
-      let orderItems = [];
+    if (user) {
+      const {data} = await axios.get(
+        `/api/users/${user.id}/orders?status=pending`
+      )
+      dispatch(getCart(data[0]))
+    } else {
+      let cartItems = localStorage.getItem('order-items') //[{productId, quantity}]
+      let orderItems = []
 
-      cartItems = JSON.parse(cartItems);
-      let id = 1;
-      for(let item of cartItems){
-        let productRes = await axios.get(`/api/products/${item.productId}`);
-        let product = productRes.data;
-        let orderItem = {product, quantity: item.quantity, productId: item.productId};
-        orderItem.id = id++;
-        orderItems.push(orderItem);
+      cartItems = JSON.parse(cartItems)
+      let id = 1
+      for (let item of cartItems) {
+        let productRes = await axios.get(`/api/products/${item.productId}`)
+        let product = productRes.data
+        let orderItem = {
+          product,
+          quantity: item.quantity,
+          productId: item.productId
+        }
+        orderItem.id = id++
+        orderItems.push(orderItem)
       }
 
       const cart = {orderItems}
-      dispatch(getCart(cart));
+      dispatch(getCart(cart))
     }
   } catch (err) {
     console.log(err)
   }
 }
 
-export const addProductToCart = (productId, quantity=1) => async dispatch => {
-  try{
+export const addProductToCart = (productId, quantity = 1) => async dispatch => {
+  try {
     // check if user is logged-in or not.
     const res = await axios.get('/auth/me')
-    const user = res.data;
+    const user = res.data
 
-    if(!user){
+    if (!user) {
       // user logged-out
-      let orderItems = localStorage.getItem('order-items');
+      let orderItems = localStorage.getItem('order-items')
 
-      let selectedItem = {productId, quantity};
-      if(!orderItems){
-        localStorage.setItem('order-items', JSON.stringify([selectedItem]));
-      }else{
+      let selectedItem = {productId, quantity}
+      if (!orderItems) {
+        localStorage.setItem('order-items', JSON.stringify([selectedItem]))
+      } else {
         // check any duplicates and add the selected item to the list.
-        let itemFound = false;
-        let items = JSON.parse(orderItems);
-        for(let item of items){
-          if(item.productId === productId){
-            item.quantity = quantity;
-            itemFound = true;
+        let itemFound = false
+        let items = JSON.parse(orderItems)
+        for (let item of items) {
+          if (item.productId === productId) {
+            item.quantity = quantity
+            itemFound = true
           }
         }
 
         // add the selected product to the list.
-        if(!itemFound) items = [...items, selectedItem];
-        localStorage.setItem('order-items', JSON.stringify(items));
+        if (!itemFound) items = [...items, selectedItem]
+        localStorage.setItem('order-items', JSON.stringify(items))
       }
 
-      dispatch(getCartItems(JSON.parse(localStorage.getItem('order-items'))));
-    }else{
+      dispatch(getCartItems(JSON.parse(localStorage.getItem('order-items'))))
+    } else {
       // user logged-in
 
       // find the pending order of this current logged-in user
-      let pendingOrder;
+      let pendingOrder
 
-      let res = await axios.get(`/api/users/${user.id}/orders?status=pending`);
-      let pendingOrders = res.data;
+      let res = await axios.get(`/api/users/${user.id}/orders?status=pending`)
+      let pendingOrders = res.data
 
       // if there is no pending order for the current logged-in user, create a new Order.
-      if(!pendingOrders || pendingOrders.length === 0){
+      if (!pendingOrders || pendingOrders.length === 0) {
         // if there is no pending order, then create one.
-        let res = await axios.post('/api/orders');
-        pendingOrder = res.data;
-      }else{
-        pendingOrder = pendingOrders[0];
+        let res = await axios.post('/api/orders')
+        pendingOrder = res.data
+      } else {
+        pendingOrder = pendingOrders[0]
       }
 
       // check if there is a duplicate
-      let foundDuplicate = false;
-      if(pendingOrder.orderItems){
-        for(let item of pendingOrder.orderItems){
-          if(item.productId === productId){
-            item.quantity = item.quantity + quantity;
-            await axios.put(`/api/orders/${pendingOrder.id}/items/${item.id}`, item);
-            foundDuplicate = true;
-            break;
+      let foundDuplicate = false
+      if (pendingOrder.orderItems) {
+        for (let item of pendingOrder.orderItems) {
+          if (item.productId === productId) {
+            item.quantity = item.quantity + quantity
+            await axios.put(
+              `/api/orders/${pendingOrder.id}/items/${item.id}`,
+              item
+            )
+            foundDuplicate = true
+            break
           }
         }
       }
 
-      if(!foundDuplicate){
+      if (!foundDuplicate) {
         // create an item with the pending order id
         const orderItem = {
           quantity,
-          productId,
+          productId
         }
-        try{
-          await axios.post(`/api/orders/${pendingOrder.id}/items`, orderItem);
-        }catch(err){
-          console.log("failed to add a product - " + productId);
+        try {
+          await axios.post(`/api/orders/${pendingOrder.id}/items`, orderItem)
+        } catch (err) {
+          console.log('failed to add a product - ' + productId)
         }
       }
-      let {data} = await axios.get(`/api/orders/${pendingOrder.id}`);
-      dispatch(getCartItems(data.orderItems));
+      let {data} = await axios.get(`/api/orders/${pendingOrder.id}`)
+      dispatch(getCartItems(data.orderItems))
     }
-  }catch(error){
-    console.error(error);
+  } catch (error) {
+    console.error(error)
   }
 }
 
 export const updateItem = (targetItem, quantity) => async dispatch => {
-  try{
+  try {
     const res = await axios.get('/auth/me')
-    const user = res.data;
+    const user = res.data
 
-    let orderItems;
-    if(!user){
+    let orderItems
+    if (!user) {
       // simply update item quantity in the local storage.
-      const orderItemsLS = JSON.parse(localStorage.getItem('order-items'));
-      orderItems = [];
-      if(orderItemsLS){
-        let i = 1;
-        for(let item of orderItemsLS){
-          if(item.productId === targetItem.productId){
-            item.quantity = quantity;
+      const orderItemsLS = JSON.parse(localStorage.getItem('order-items'))
+      orderItems = []
+      if (orderItemsLS) {
+        let i = 1
+        for (let item of orderItemsLS) {
+          if (item.productId === targetItem.productId) {
+            item.quantity = quantity
           }
 
           // adding product info to the orderItems to return to the React component
-          let orderItem = {...item};
-          let {data} = await axios.get(`/api/products/${item.productId}`);
-          orderItem.product = data;
-          orderItem.id = i++;
-          orderItems.push(orderItem);
+          let orderItem = {...item}
+          let {data} = await axios.get(`/api/products/${item.productId}`)
+          orderItem.product = data
+          orderItem.id = i++
+          orderItems.push(orderItem)
         }
 
-        localStorage.setItem('order-items', JSON.stringify(orderItemsLS));
+        localStorage.setItem('order-items', JSON.stringify(orderItemsLS))
       }
-    }else{
+    } else {
       /**
        *  update quantity in db.
        */
 
-       // retrieve the item from db by itemId.
-      const updatedItem = await axios.get(`/api/orders/${targetItem.orderId}/items/${targetItem.id}`);
+      // retrieve the item from db by itemId.
+      const updatedItem = await axios.get(
+        `/api/orders/${targetItem.orderId}/items/${targetItem.id}`
+      )
 
       // update the quantity
-      updatedItem.quantity = quantity;
+      updatedItem.quantity = quantity
 
       // invoke put method to update
-      await axios.put(`/api/orders/${targetItem.orderId}/items/${targetItem.id}`, updatedItem);
+      await axios.put(
+        `/api/orders/${targetItem.orderId}/items/${targetItem.id}`,
+        updatedItem
+      )
 
       // get the all items of the order.
-      const {data} = await axios.get(`/api/orders/${targetItem.orderId}`);
-      orderItems = data.orderItems;
+      const {data} = await axios.get(`/api/orders/${targetItem.orderId}`)
+      orderItems = data.orderItems
     }
 
-    console.log("orderItems", orderItems);
-    dispatch(getCartItems(orderItems));
-  }catch(err){
-    console.log(err);
+    console.log('orderItems', orderItems)
+    dispatch(getCartItems(orderItems))
+  } catch (err) {
+    console.log(err)
   }
 }
 
-export const deleteItem = (orderItem) => async dispatch => {
-  const {id, productId, orderId} = orderItem;
+export const deleteItem = orderItem => async dispatch => {
+  const {id, productId, orderId} = orderItem
 
-  try{
+  try {
     const res = await axios.get('/auth/me')
-    const user = res.data;
+    const user = res.data
 
-    let orderItems;
-    if(!user){
+    let orderItems
+    if (!user) {
       // simply update items in the local storage.
-      let orderItemsLS = JSON.parse(localStorage.getItem('order-items'));
-      if(orderItemsLS){
-        orderItemsLS = orderItemsLS.filter( (item) => {
-          return item.productId !== productId;
+      let orderItemsLS = JSON.parse(localStorage.getItem('order-items'))
+      if (orderItemsLS) {
+        orderItemsLS = orderItemsLS.filter(item => {
+          return item.productId !== productId
         })
       }
 
       // simply add a Product instance to each item.
-      orderItems = [];
-      if(orderItemsLS && orderItemsLS.length > 0){
-        let i = 1;
-        for(let item of orderItemsLS){
+      orderItems = []
+      if (orderItemsLS && orderItemsLS.length > 0) {
+        let i = 1
+        for (let item of orderItemsLS) {
           // adding product info to the orderItems to return to the React component
-          let orderItem = {...item};
-          let {data} = await axios.get(`/api/products/${item.productId}`);
-          orderItem.product = data;
-          orderItem.id = i++;
-          orderItems.push(orderItem);
+          let orderItem = {...item}
+          let {data} = await axios.get(`/api/products/${item.productId}`)
+          orderItem.product = data
+          orderItem.id = i++
+          orderItems.push(orderItem)
         }
-        localStorage.setItem('order-items', JSON.stringify(orderItemsLS));
-      }else{
-        localStorage.removeItem('order-items');
+        localStorage.setItem('order-items', JSON.stringify(orderItemsLS))
+      } else {
+        localStorage.removeItem('order-items')
       }
-    }else{
-      let orderRes = await axios.get(`/api/orders/${orderId}`);
-      orderItems = orderRes.data.orderItems;
+    } else {
+      let orderRes = await axios.get(`/api/orders/${orderId}`)
+      orderItems = orderRes.data.orderItems
 
-      if(orderItems){
-        let i = 0;
-        for(; i < orderItems.length; i++){
-          if(orderItems[i].productId === productId){
+      if (orderItems) {
+        let i = 0
+        for (; i < orderItems.length; i++) {
+          if (orderItems[i].productId === productId) {
             // delete item from db.
-            await axios.delete(`/api/orders/${orderId}/items/${id}`);
-            break;
+            await axios.delete(`/api/orders/${orderId}/items/${id}`)
+            break
           }
         }
       }
 
       // retrieve the actual items of this order again from DB.
-      let updatedOrderRes = await axios.get(`/api/orders/${orderId}`);
-      orderItems = updatedOrderRes.data.orderItems;
+      let updatedOrderRes = await axios.get(`/api/orders/${orderId}`)
+      orderItems = updatedOrderRes.data.orderItems
     }
 
-    dispatch(getCartItems(orderItems));
-  }catch(err){
-    console.log(err);
+    dispatch(getCartItems(orderItems))
+  } catch (err) {
+    console.log(err)
   }
 }
 
@@ -294,4 +307,4 @@ const cart = (state = initialCartState, action) => {
   }
 }
 
-export default cart;
+export default cart

@@ -31,23 +31,22 @@ describe('User routes', () => {
 
     xit('POST /api/users - avoiding a duplicate account creation', async () => {
       await request(app)
-      .post('/api/users')
-      .send({
-        email: codysEmail
-      })
-      .expect(403);
-
-    });
+        .post('/api/users')
+        .send({
+          email: codysEmail
+        })
+        .expect(403)
+    })
 
     xit('POST /api/users', async () => {
       const res = await request(app)
-      .post('/api/users')
-      .send({
-        email: "cody2@puppybook.com",
-        password: 'pwd123',
-      })
+        .post('/api/users')
+        .send({
+          email: 'cody2@puppybook.com',
+          password: 'pwd123'
+        })
 
-      expect(res.body.email).to.be.equal('cody2@puppybook.com');
-    });
+      expect(res.body.email).to.be.equal('cody2@puppybook.com')
+    })
   }) // end describe('/api/users')
 }) // end describe('User routes')

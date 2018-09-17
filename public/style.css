@@ -20,9 +20,9 @@ form div {
   display: inline-block;
 }
 
-.gallery{
+.gallery {
   display: grid;
-  justify-content: "center";
+  justify-content: 'center';
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   grid-gap: 30px 30px;
   margin-top: 15px;
@@ -33,16 +33,16 @@ form div {
   max-height: 125px;
 }
 
-#checkout-prompt{
+#checkout-prompt {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-#checkout-prompt > a{
+#checkout-prompt > a {
   margin-top: 30px;
 }
 
 .quantity-box {
-  width: 20px
+  width: 20px;
 }

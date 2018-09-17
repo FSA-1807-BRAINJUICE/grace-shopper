@@ -1,11 +1,11 @@
-import React, { Component } from 'react'
-import TextField from '@material-ui/core/TextField';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import { connect } from 'react-redux'
-import { Button } from '@material-ui/core';
+import React, {Component} from 'react'
+import TextField from '@material-ui/core/TextField'
+import PropTypes from 'prop-types'
+import {withStyles} from '@material-ui/core/styles'
+import {connect} from 'react-redux'
+import {Button} from '@material-ui/core'
 import history from '../history'
-import { updateOrdersDone } from '../store/orders';
+import {updateOrdersDone} from '../store/orders'
 
 const styles = theme => ({
   container: {
@@ -16,17 +16,15 @@ const styles = theme => ({
   textField: {
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
-    width: 400,
+    width: 400
   },
   menu: {
-    width: 200,
-  },
-});
-
-
+    width: 200
+  }
+})
 
 class CheckoutForm extends Component {
-  constructor(props){
+  constructor(props) {
     super(props)
     this.state = {
       name: '',
@@ -34,100 +32,96 @@ class CheckoutForm extends Component {
       city: '',
       region: '',
       postal: '',
-      phone: '',
+      phone: ''
     }
     this.handleSubmit = this.handleSubmit.bind(this)
   }
   handleChange = nameAttr => event => {
     this.setState({
       [nameAttr]: event.target.value
-    });
+    })
   }
-  handleSubmit(evt){
-    evt.preventDefault();
+  handleSubmit(evt) {
+    evt.preventDefault()
 
-    let addressInfo = this.state;
-    this.props.checkOut(addressInfo);
+    let addressInfo = this.state
+    this.props.checkOut(addressInfo)
   }
-  render(){
-    const { classes } = this.props;
+  render() {
+    const {classes} = this.props
     return (
       <form
         onSubmit={this.handleSubmit}
-        className = {classes.container}
+        className={classes.container}
         noValidate
-        autoComplete='off'>
-          <TextField
-              id="full-name"
-              label="Full name:"
-              className={classes.textField}
-              value={this.state.name}
-              onChange={this.handleChange('name')}
-              margin="normal"
-            />
-          <TextField
-              id="street-address"
-              label="Street address:"
-              className={classes.textField}
-              value={this.state.streetAddress}
-              onChange={this.handleChange('streetAddress')}
-              margin="normal"
-            />
-          <TextField
-              id="city"
-              label="City:"
-              className={classes.textField}
-              value={this.state.city}
-              onChange={this.handleChange('city')}
-              margin="normal"
-            />
-          <TextField
-              id="region"
-              label="State/Province/Region:"
-              className={classes.textField}
-              value={this.state.region}
-              onChange={this.handleChange('region')}
-              margin="normal"
-            />
-          <TextField
-              id="postal-code"
-              label="ZIP/Postal Code:"
-              className={classes.textField}
-              value={this.state.postal}
-              onChange={this.handleChange('postal')}
-              margin="normal"
-            />
-          <TextField
-              id="phone-number"
-              label="Phone number:"
-              className={classes.textField}
-              value={this.state.phone}
-              onChange={this.handleChange('phone')}
-              margin="normal"
-            />
-          <Button
-            variant='contained'
-            size='small'
-            color='primary'
-            type = 'submit'
-          >
-            Continue
-          </Button>
+        autoComplete="off"
+      >
+        <TextField
+          id="full-name"
+          label="Full name:"
+          className={classes.textField}
+          value={this.state.name}
+          onChange={this.handleChange('name')}
+          margin="normal"
+        />
+        <TextField
+          id="street-address"
+          label="Street address:"
+          className={classes.textField}
+          value={this.state.streetAddress}
+          onChange={this.handleChange('streetAddress')}
+          margin="normal"
+        />
+        <TextField
+          id="city"
+          label="City:"
+          className={classes.textField}
+          value={this.state.city}
+          onChange={this.handleChange('city')}
+          margin="normal"
+        />
+        <TextField
+          id="region"
+          label="State/Province/Region:"
+          className={classes.textField}
+          value={this.state.region}
+          onChange={this.handleChange('region')}
+          margin="normal"
+        />
+        <TextField
+          id="postal-code"
+          label="ZIP/Postal Code:"
+          className={classes.textField}
+          value={this.state.postal}
+          onChange={this.handleChange('postal')}
+          margin="normal"
+        />
+        <TextField
+          id="phone-number"
+          label="Phone number:"
+          className={classes.textField}
+          value={this.state.phone}
+          onChange={this.handleChange('phone')}
+          margin="normal"
+        />
+        <Button variant="contained" size="small" color="primary" type="submit">
+          Continue
+        </Button>
       </form>
     )
   }
 }
 
 CheckoutForm.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
+  classes: PropTypes.object.isRequired
+}
 
 // const mapState = state => ({
 //   user: state.user.user
 // })
 const mapDispatch = (dispatch, ownProps) => ({
-  async checkOut(addressInfo){
-    await dispatch(updateOrdersDone(addressInfo));
+  async checkOut(addressInfo) {
+    await dispatch(updateOrdersDone(addressInfo))
     history.push('/checkout-done')
   }
 })

@@ -3,12 +3,13 @@ const {Product} = require('../db/models')
 
 router.get('/:id', async (req, res, next) => {
   try {
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findById(req.params.id)
 
     if (!product) {
       res.status(404).send('No product found - ' + req.params.id);
       return;
     }
+
     res.json(product);
   } catch (err) {
     next(err)
@@ -17,8 +18,8 @@ router.get('/:id', async (req, res, next) => {
 
 router.get('/', async (req, res, next) => {
   try {
-    const products = await Product.findAll();
-    res.json(products);
+    const products = await Product.findAll()
+    res.json(products)
   } catch (err) {
     next(err)
   }
@@ -36,10 +37,10 @@ router.post('/', async (req, res, next) => {
       price: req.body.price,
       imgUrl: req.body.imgUrl,
       description: req.body.description
-    };
+    }
 
-    const product = await Product.create(productBody);
-    res.json(product);
+    const product = await Product.create(productBody)
+    res.json(product)
   } catch (err) {
     next(err)
   }
@@ -57,21 +58,21 @@ router.put('/:id', async (req, res, next) => {
       price: req.body.price,
       imgUrl: req.body.imgUrl,
       description: req.body.description
-    };
+    }
 
     const product = await Product.update(productBody, {
       where: {
         id: req.params.id
       },
       returning: true
-    });
+    })
 
     if (!product) {
       res.status(404).send('No product found - ' + req.params.id);
       return;
-    } else{
-      res.json(product);
     }
+
+    res.json(product);
   } catch (err) {
     next(err)
   }
