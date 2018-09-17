@@ -5,6 +5,7 @@ import {Link} from 'react-router-dom'
 import {logout, me} from '../store'
 import UserHome from './user-home'
 import { SSL_OP_NO_SESSION_RESUMPTION_ON_RENEGOTIATION } from 'constants';
+import CartIcon from './CartIcon'
 
 class Navbar extends Component {
 
@@ -36,6 +37,8 @@ class Navbar extends Component {
               <Link to="/signup">Sign Up</Link>
             </div>
           )}
+          <CartIcon />
+
         </nav>
         <hr />
       </div>

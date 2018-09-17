@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {me, logout} from '../store/user'
 import { Button } from '@material-ui/core';
-import { Redirect } from 'react-router-dom'
+import { Redirect, Link } from 'react-router-dom'
 /**
  * COMPONENT
  */
@@ -27,6 +27,16 @@ class UserHome extends Component {
           size = 'small'
           onClick={this.props.handleClick}>
             Logout
+        </Button>
+        </div>
+        <div>
+        <Button
+          variant = 'outlined'
+          color='primary'
+          size = 'small'
+          component = { Link } to="/orders">
+          {/* the link needs to go to the Order History Component */}
+            Order History
         </Button>
         </div>
       </div>

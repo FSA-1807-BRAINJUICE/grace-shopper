@@ -42,9 +42,11 @@ export const updateItemQuantity = (item, quantity) => ({
 /**
  * THUNK CREATORS
  */
-export const getCartThunk = (cartId) => async dispatch => {
+export const getCartThunk = (userId) => async dispatch => {
   try {
-    const {data} = await axios.get(`/api/orders/${cartId}`); //which route?
+    const {data} = await axios.get(`/api/users/${userId}/orders?status=pending`);
+    console.log("CART PENDING", data)
+    //which route? // route was broken so fixed this for CartIcon thunk
     dispatch(getCart(data));
   } catch (err) {
     console.error(err)
