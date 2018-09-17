@@ -62,19 +62,35 @@ router.put('/:orderId', async (req, res, next) => {
         res.status(403).send('Forbidden');
       }
     } else{
-      // res.status(403).send("No orders is saved in DB for logged-out users");
+      res.status(403).send("No orders is saved in DB for logged-out users");
     }
 
     // Note that order has 4 properties - orderNumber, orderStatus, and userId.
     // orderNumber, and userId shouldn't be updated.
-
     const updatedOrder = await Order.update({
       orderStatus: req.body.orderStatus
       }, {
         where: { id: orderId },
+        include: [{model: OrderItem}],
         returning: true,
         plain: true
       })
+
+    // if orderStatus === complete, i.e., completed a checkout, then update all the orderItems with the actual paid prices
+    if(req.body.orderStatus === 'complete'){
+      const orderItems = await OrderItem.findAll({
+        where: {orderId: orderId},
+        include: [{model: Product}]
+      });
+
+
+      for(let item of orderItems){
+        // TODO: batch update later!??
+        item.update({paidUnitPrice: item.product.price}, {
+          where: {id: item.id}
+        })
+      }
+    }
 
     res.status(202).json(updatedOrder[1]);
   } catch (err) { next(err) }
@@ -124,14 +140,16 @@ router.post('/:orderId/items', async (req, res, next) => {
 
     const newItemToAdd = {
       quantity: req.body.quantity,
-      // paidUnitPrice: product.price,
       orderId: order.id,
       productId: product.id
     };
 
-    const itemAdded = await OrderItem.create(newItemToAdd);
-    // console.log(itemAdded)
-    res.status(201).json(itemAdded)
+    try{
+      const itemAdded = await OrderItem.create(newItemToAdd);
+      res.status(201).json(itemAdded)
+    }catch(err){
+      console.log("DEV-WARNING: duplicate item found.");
+    }
   }
   catch (err) { next(err) }
 })
@@ -158,7 +176,6 @@ router.put('/:orderId/items/:itemId', async (req, res, next) => {
 
     const orderItemDetail = {
       quantity: req.body.quantity,
-      paidUnitPrice: product.price,
       orderId: order.id,
       productId: product.id
     }

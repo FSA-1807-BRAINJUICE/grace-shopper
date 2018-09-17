@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const {User, Order} = require('../db/models')
+const {User, Order, OrderItem} = require('../db/models')
 
 // /api/users
 router.get('/', async (req, res, next) => {
@@ -109,7 +109,9 @@ router.get('/:userId/orders', async (req, res, next) => {
 
     const orders = await Order.findAll({
       where: queryCondition,
+      include: [{model: OrderItem}]
     })
+
     res.json(orders);
   }catch(err){
     next(err);
