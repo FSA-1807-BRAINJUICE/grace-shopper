@@ -166,11 +166,14 @@ export const updateItem = (targetItem, quantity) => async dispatch => {
       // simply update item quantity in the local storage.
       orderItems = JSON.parse(localStorage.getItem('order-items'));
       if(orderItems){
+        let i = 1;
         for(let item of orderItems){
           if(item.productId === targetItem.productId){
             item.quantity = quantity;
             break;
           }
+          item.id = i;
+          i++;
         }
 
         localStorage.setItem('order-items', JSON.stringify(orderItems));
