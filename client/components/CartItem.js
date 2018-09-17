@@ -18,11 +18,10 @@ class CartItem extends Component {
     evt.preventDefault();
     // const newCartItem = [this.props.name, this.props.price, this.props.imgUrl,this.props.description, this.state.quantity];
     // this.props.addItemToCart(newCartItem)
-    this.props.updateQuantity(this.props.cartItem.product, this.state.quantity)
+    this.props.updateQuantity(this.props.cartItem, this.state.quantity)
   }
 
   render() {
-    console.log('cartItem',this.props.cartItem)
     const { name, price, imgUrl, description } = this.props.cartItem.product;
     return (
         <TableRow className='cart-item'>
