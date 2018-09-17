@@ -144,10 +144,10 @@ const mapState = state => ({
   completedOrder: state.orders.completedOrder
 })
 
-const mapDispatch = (dispatch, ownProps) => ({
+const mapDispatch = dispatch => ({
   async checkOut(addressInfo) {
     await dispatch(updateOrdersDone(addressInfo))
-    dispatch()
+    //TODO: dispatch clear cart action
   }
 })
 
