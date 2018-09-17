@@ -39,6 +39,7 @@ const Order = db.define('order', {
     type: Sequelize.STRING,
     allowNull: true
   }
-})
+  }
+)
 
 module.exports = Order

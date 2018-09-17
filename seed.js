@@ -79,97 +79,17 @@ const products = [
   }
 ]
 
-const orders = [
-  {
-    id: 1,
-    orderStatus: 'complete',
-    userId: 1
-  },
-  {
-    id: 2,
-    orderStatus: 'complete',
-    userId: 2
-  },
-  {
-    id: 3,
-    orderStatus: 'complete',
-    userId: 3
-  },
-  {
-    id: 4,
-    orderStatus: 'pending',
-    userId: 1
-  }
-]
-
-const orderItems = [
-  {
-    id: 1,
-    quantity: 1,
-    paidUnitPrice: 47,
-    orderId: 2,
-    productId: 1
-  },
-  {
-    id: 2,
-    quantity: 2,
-    paidUnitPrice: 6,
-    orderId: 2,
-    productId: 2
-  },
-  {
-    id: 3,
-    quantity: 1,
-    paidUnitPrice: 58,
-    orderId: 2,
-    productId: 3
-  },
-  {
-    id: 4,
-    quantity: 1,
-    paidUnitPrice: 44,
-    orderId: 1,
-    productId: 1
-  },
-  {
-    id: 5,
-    quantity: 1,
-    paidUnitPrice: 55,
-    orderId: 1,
-    productId: 3
-  },
-  {
-    id: 6,
-    quantity: 2,
-    paidUnitPrice: 76,
-    orderId: 1,
-    productId: 4
-  },
-  {
-    id: 7,
-    quantity: 3,
-    paidUnitPrice: null,
-    orderId: 4,
-    productId: 5
-  },
-  {
-    id: 8,
-    quantity: 1,
-    paidUnitPrice: null,
-    orderId: 4,
-    productId: 6
-  }
-]
-
-// 1. setUser / setProduct / setOrder
-// 2. createOrder = Order.bulkCreate ({ returning: true })
-// in case we later need to incorporate categories
-
 const seed = () =>
+<<<<<<< HEAD
   Promise.all(users.map(user => User.create(user)))
     .then(() => Promise.all(orders.map(order => Order.create(order))))
     .then(() => Promise.all(products.map(product => Product.create(product))))
     .then(() => Promise.all(orderItems.map(item => OrderItem.create(item))))
+=======
+  Promise.all(users.map(user => User.create(user))).then(() =>
+    Promise.all(products.map(product => Product.create(product)))
+  )
+>>>>>>> ab69804ebfd1ff21e8e4be8e54ae54915c7d1956
 
 const main = () => {
   console.log('syncing db..')
@@ -179,14 +99,24 @@ const main = () => {
       console.log('seeding database')
       return seed()
     })
+<<<<<<< HEAD
     .catch(err => {
       console.log('error while seeding')
       console.log(err.stack)
     })
+=======
+>>>>>>> ab69804ebfd1ff21e8e4be8e54ae54915c7d1956
     .then(() => {
       db.close()
       return null
     })
+<<<<<<< HEAD
+=======
+    .catch(err => {
+      console.log('error while seeding')
+      console.log(err.stack)
+    })
+>>>>>>> ab69804ebfd1ff21e8e4be8e54ae54915c7d1956
 }
 
 main()
