@@ -30,9 +30,10 @@ router.get('/:orderId', async (req, res, next) => {
 // POST /api/orders
 // Note that if there is a body coming in with an item to add, create a cart with the item in.
 router.post('/', async (req, res, next) => {
-  if(!req.user){
-    res.status(403).send('an order gets created only for a logged-in user');
-  }
+  // if(!req.user){
+  //   res.status(403).send('an order gets created only for a logged-in user');
+  // }
+
   // purely create a new Order instance.
   const orderToCreate = {}
     if (req.user) {
@@ -61,19 +62,21 @@ router.put('/:orderId', async (req, res, next) => {
         res.status(403).send('Forbidden');
       }
     } else{
-      res.status(403).send("No orders is saved in DB for logged-out users");
+      // res.status(403).send("No orders is saved in DB for logged-out users");
     }
 
     // Note that order has 4 properties - orderNumber, orderStatus, and userId.
     // orderNumber, and userId shouldn't be updated.
-    order.orderStatus = req.body.orderStatus;
 
-    const updatedOrder = await Order.update(order, {
-      where: { id: orderId },
-      returning: true
-    })
+    const updatedOrder = await Order.update({
+      orderStatus: req.body.orderStatus
+      }, {
+        where: { id: orderId },
+        returning: true,
+        plain: true
+      })
 
-    res.status(202).json(updatedOrder);
+    res.status(202).json(updatedOrder[1]);
   } catch (err) { next(err) }
 })
 

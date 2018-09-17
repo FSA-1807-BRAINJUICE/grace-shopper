@@ -5,9 +5,10 @@ import {composeWithDevTools} from 'redux-devtools-extension'
 import products from './products'
 import cart from './cart'
 import user from './user'
+import orders from './orders'
 
 //CG: call it products not products Reducer
-const rootReducer = combineReducers({products, user, cart})
+const rootReducer = combineReducers({products, user, cart, orders})
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({collapsed: true}))
 )

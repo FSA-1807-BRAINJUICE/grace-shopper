@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { getCartThunk } from '../store/cart'
-import CartItem from './CartItem'
+import { getOrdersThunk } from '../store/orders'
+import SingleOrder from './SingleOrder'
 
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -26,15 +26,12 @@ const styles = theme => ({
 });
 
 
-class Cart extends Component {
+class Orders extends Component {
   componentDidMount() {
-    this.props.getCart();
+    this.props.getOrders();
   }
   render() {
-    const cartItems = this.props.cartItems;
-    cartItems.sort((a,b) => {
-      return a.name > b.name
-    })
+    const orderList = this.props.orderList;
     const { classes } = this.props;
     return (
       <Paper className={classes.root}>
@@ -49,8 +46,8 @@ class Cart extends Component {
           </TableHead>
           <TableBody>
             {
-              cartItems.map(cartItem => {
-                return <CartItem cartItem={cartItem} key={cartItem.id} />
+              orderList.map(order => {
+                return <SingleOrder order={order} key={order.id} />
               })
             }
           </TableBody>
@@ -60,20 +57,20 @@ class Cart extends Component {
   }
 }
 
-Cart.propTypes = {
+Orders.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = state => {
   return {
-    cartItems: state.cart.cartItems
+    orderList: state.orders.orderList
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    getCart: () => dispatch(getCartThunk())
+    getOrders: () => dispatch(getOrdersThunk())
   }
 }
 
-export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(Cart))
+export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(Orders))

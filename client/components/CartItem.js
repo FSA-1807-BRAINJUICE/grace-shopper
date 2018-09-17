@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import {connect} from 'react-redux'
-import {addItemToCart} from '../store/cart'
+import {addItemToCart, updateItemQuantity} from '../store/cart'
 import {Link} from 'react-router-dom'
 
 import TableCell from '@material-ui/core/TableCell';
@@ -16,8 +16,9 @@ class CartItem extends Component {
   }
   handleSubmit(evt) {
     evt.preventDefault();
-    const newCartItem = [this.props.name, this.props.price, this.props.imgUrl,this.props.description, this.state.quantity];
-    this.props.addItemToCart(newCartItem)
+    // const newCartItem = [this.props.name, this.props.price, this.props.imgUrl,this.props.description, this.state.quantity];
+    // this.props.addItemToCart(newCartItem)
+    this.props.updateQuantity(this.props.cartItem, this.state.quantity)
   }
 
   render() {
@@ -28,7 +29,8 @@ class CartItem extends Component {
         <TableCell className='cart-item-element'>{name}</TableCell>
         <TableCell className='cart-item-element'>{price}</TableCell>
         <TableCell className='cart-item-element'>{description}</TableCell>
-        {/* <form id='orderItemQuantity' onSubmit={this.handleSubmit}>
+        <TableCell className='cart-item-element'>
+          <form id='orderItemQuantity' onSubmit={this.handleSubmit}>
         <select
         className='orderItemSelect'
         onChange={ (evt) => this.setState({quantity: evt.target.value})}
@@ -39,7 +41,8 @@ class CartItem extends Component {
           <option value='3'>3</option>
         </select>
         <button className='orderItemSelectButton' type='submit'>Select Quantity</button>
-        </form> */}
+        </form>
+        </TableCell>
       </TableRow>
     )
   }
@@ -47,7 +50,8 @@ class CartItem extends Component {
 
 const mapDispatchToProps = dispatch => {
   return {
-    addItemToCart: (item) => dispatch(addItemToCart(item))
+    addItemToCart: (item) => dispatch(addItemToCart(item)),
+    updateQuantity: (item, quantity) => dispatch(updateItemQuantity(item,quantity))
   }
 }
 
