@@ -28,8 +28,10 @@ class Cart extends Component {
   componentDidMount() {
     this.props.getCart()
   }
+
   render() {
     const cartItems = this.props.cartItems
+    console.log(cartItems);
     const parsedCartItems = Array.from(cartItems)
     parsedCartItems.sort((a, b) => {
       return a.product.name > b.product.name
