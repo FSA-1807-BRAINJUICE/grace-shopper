@@ -10,7 +10,7 @@ const CheckoutPrompt = ({user}) => {
       {!user.id && <Login />}
       <Button
         component={Link}
-        to="/checkout-form"
+        to="/checkout"
         variant="contained"
         color="primary"
         size="small"
