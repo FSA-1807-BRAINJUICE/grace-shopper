@@ -46,8 +46,9 @@ class Cart extends Component {
               <TableCell>Product Name</TableCell>
               <TableCell>Price</TableCell>
               <TableCell>Description</TableCell>
+              <TableCell />
               <TableCell>
-                <strong>Total Price: {cartTotalPrice} USD</strong>
+                <span style={{fontSize:"20px"}}><strong>Total Price: {cartTotalPrice} USD</strong></span>
               </TableCell>
             </TableRow>
           </TableHead>
