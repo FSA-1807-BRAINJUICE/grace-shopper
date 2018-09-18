@@ -17,7 +17,7 @@ class AllProducts extends Component {
            <ProductCard product={product} key={product.id} onClick={() => this.props.addToCart(product.id)}/>
            )
           )
-        })}
+        }
       </div>
     )
   }
