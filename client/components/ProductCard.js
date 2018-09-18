@@ -41,7 +41,7 @@ const ProductCard = props => {
         </CardActionArea>
       </Link>
       <CardActions>
-        <Button size="small" color="primary">
+        <Button size="small" color="primary" onClick={() => props.onClick()}>
           Add to Cart
         </Button>
       </CardActions>
