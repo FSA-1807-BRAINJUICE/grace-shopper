@@ -16,4 +16,3 @@ const SingleOrder = (props) => {
 }
 
 export default SingleOrder
-

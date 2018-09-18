@@ -20,9 +20,9 @@ form div {
   display: inline-block;
 }
 
-.gallery{
+.gallery {
   display: grid;
-  justify-content: "center";
+  justify-content: 'center';
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   grid-gap: 30px 30px;
   margin-top: 15px;
@@ -33,16 +33,51 @@ form div {
   max-height: 125px;
 }
 
-#checkout-prompt{
+#checkout-prompt {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-#checkout-prompt > a{
+#checkout-prompt > a {
   margin-top: 30px;
 }
 
 .quantity-box {
-  width: 20px
+  width: 20px;
+}
+
+.logo-image{
+  width: 40px;
+  margin-left: 20px;
+  display: inline-block;
+}
+
+.logo-style{
+  text-align: center;
+  vertical-align: center;
+}
+
+.logo-title{
+  font-weight: bold;
+  font-size: 45px;
+  position: relative;
+}
+
+.logo-link{
+  color: inherit;
+  text-decoration: none;
+}
+
+.nav-items{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+
+.logged-in-nav-items{
+  display: flex;
+  flex-direction: row;
+  align-content: space-evenly;
 }
