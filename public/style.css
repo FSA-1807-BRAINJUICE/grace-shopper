@@ -108,6 +108,8 @@ form div {
 
 .single-product-image > img {
   max-height: 584px;
+  height: 80vh;
+  width: auto;
 }
 
 .single-product-info-button {
