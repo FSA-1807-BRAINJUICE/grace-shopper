@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import {Link} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {getCartThunk} from '../store/cart'
 import CartItem from './CartItem'
@@ -33,33 +34,47 @@ class Cart extends Component {
     parsedCartItems.sort((a, b) => {
       return a.product.name > b.product.name
     })
-    const cartTotalPrice = parsedCartItems.reduce((a, b) => {
+
+    let cartTotalPrice = parsedCartItems.reduce((a, b) => {
       return a + b.product.price * b.quantity
     }, 0)
+    cartTotalPrice = cartTotalPrice.toFixed(2);
+
     const {classes} = this.props
     return (
-      <Paper className={classes.root}>
-        <Table className={classes.table}>
-          <TableHead>
-            <TableRow>
-              <TableCell>Image</TableCell>
-              <TableCell>Product Name</TableCell>
-              <TableCell>Price</TableCell>
-              <TableCell>Description</TableCell>
-              <TableCell />
-              <TableCell>
-                <span style={{fontSize:"20px"}}><strong>Total Price: {cartTotalPrice} USD</strong></span>
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {parsedCartItems.map(cartItem => {
-              return <CartItem cartItem={cartItem} key={cartItem.id} />
-            })}
-          </TableBody>
-        </Table>
-      </Paper>
-    )
+        <Paper className={classes.root}>
+          <Table className={classes.table}>
+            <TableHead>
+              <TableRow>
+                <TableCell>Image</TableCell>
+                <TableCell>Product Name</TableCell>
+                <TableCell>Unit Price</TableCell>
+                <TableCell>Quantity</TableCell>
+                <TableCell>
+                  <span style={{fontSize:"20px"}}><strong>Total Price: {cartTotalPrice} USD</strong></span>
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {
+                parsedCartItems && parsedCartItems.length > 0? parsedCartItems.map(cartItem => {
+                  return <CartItem cartItem={cartItem} key={cartItem.id} />
+                  }
+                )
+                :
+                (
+                <TableRow>
+                  <TableCell>
+                    <p>Nothing has been added to the cart. &nbsp;
+                    <Link to={`/products`}>Continue Shopping!</Link></p>
+                  </TableCell>
+                </TableRow>
+                )
+              }
+            </TableBody>
+          </Table>
+        </Paper>
+      )
   }
 }
 
