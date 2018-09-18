@@ -31,7 +31,7 @@ class OrderItems extends Component {
     this.props.getSingleOrder(this.props.match.params.orderId); //all orders
   }
   render() {
-    const singleOrder = this.props.singleOrder;
+    const singleOrder = this.props.orderItems;
     const { classes } = this.props;
     return (
       <Paper className={classes.root}>
