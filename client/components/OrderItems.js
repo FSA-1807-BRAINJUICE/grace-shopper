@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import SingleOrderItem from './SingleOrderItem'
-import {getSingleOrderThunk} from '../store/orders'
+import {SingleOrderItem} from './SingleOrderItem'
+import {getSingleOrder} from '../store/orders'
 
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -28,10 +28,11 @@ const styles = theme => ({
 
 class OrderItems extends Component {
   componentDidMount() {
-    this.props.getSingleOrder(this.props.match.params.orderId); //all orders
+    this.props.getSingleOrder(this.props.match.params.orderNumber);
   }
   render() {
-    const singleOrder = this.props.orderItems;
+    const singleOrderItems = this.props.singleOrder.orderItems;
+    console.log(this.props.singleOrder)
     const { classes } = this.props;
     return (
       <Paper className={classes.root}>
@@ -44,13 +45,18 @@ class OrderItems extends Component {
               <TableCell>Description</TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
+          {
+            singleOrderItems ? (
+            <TableBody>
             {
-              singleOrder.map(item => {
+              singleOrderItems.map(item => {
                 return <SingleOrderItem item={item} key={item.id} />
               })
             }
           </TableBody>
+           ) : (<p>not found</p>)
+           }
+
         </Table>
       </Paper>
     )
@@ -69,7 +75,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getSingleOrder: (id) => dispatch(getSingleOrderThunk(id))
+    getSingleOrder: (orderNumber) => dispatch(getSingleOrder(orderNumber))
   }
 }
 
