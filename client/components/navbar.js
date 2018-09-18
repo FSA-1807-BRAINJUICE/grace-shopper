@@ -23,25 +23,29 @@ class Navbar extends Component {
           </div>
           </div>
         </Link>
-        <nav>
-          {isLoggedIn ? (
-            <UserHome />
-          ) : (
-            // <div>
-            //   {/* The navbar will show these links after you log in */}
-            //   <h1>HIHIHIHHIHI</h1>
-            //   {/* <Route path="/home" component={UserHome} /> */}
-            //   {/* <Link to="/home">Home</Link>
-            //   <a href="#" onClick={handleClick}>
-            //     Logout
-            //   </a> */}
-            // </div>
-            <div>
-              {/* The navbar will show these links before you log in */}
-              <Link to="/login">Login</Link>
-              <Link to="/signup">Sign Up</Link>
-            </div>
-          )}
+        <nav className="nav-items">
+          {isLoggedIn ?
+            (
+              <UserHome/>
+            ) :
+            (
+              // <div>
+              //   {/* The navbar will show these links after you log in */}
+              //   <h1>HIHIHIHHIHI</h1>
+              //   {/* <Route path="/home" component={UserHome} /> */}
+              //   {/* <Link to="/home">Home</Link>
+              //   <a href="#" onClick={handleClick}>
+              //     Logout
+              //   </a> */}
+              // </div>
+              <div className="nav-items">
+                {/* The navbar will show these links before you log in */}
+                <Link to="/login">Login</Link>
+                <Link to="/signup">Sign Up</Link>
+              </div>
+              )
+          }
+
           <CartIcon />
         </nav>
         <hr />
