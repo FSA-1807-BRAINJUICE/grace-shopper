@@ -27,6 +27,7 @@ class Orders extends Component {
   componentDidMount() {
     this.props.getOrders(); //all orders
   }
+
   render() {
     const orderList = this.props.orderList
     const {classes} = this.props
