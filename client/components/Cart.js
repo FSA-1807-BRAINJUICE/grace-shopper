@@ -42,6 +42,9 @@ class Cart extends Component {
 
     const {classes} = this.props
     return (
+      <div>
+
+        <span style={{fontSize:"20px"}}><strong>Total Price: {cartTotalPrice} USD</strong></span>
         <Paper className={classes.root}>
           <Table className={classes.table}>
             <TableHead>
@@ -50,9 +53,6 @@ class Cart extends Component {
                 <TableCell>Product Name</TableCell>
                 <TableCell>Unit Price</TableCell>
                 <TableCell>Quantity</TableCell>
-                <TableCell>
-                  <span style={{fontSize:"20px"}}><strong>Total Price: {cartTotalPrice} USD</strong></span>
-                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -74,7 +74,8 @@ class Cart extends Component {
             </TableBody>
           </Table>
         </Paper>
-      )
+      </div>
+    )
   }
 }
 
