@@ -33,7 +33,6 @@ class CartIcon extends Component {
           <Button
             component={Link}
             to="/cart"
-            variant="outlined"
             color="primary"
           >
             <img src="shopping_cart.svg" />
