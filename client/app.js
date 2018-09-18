@@ -9,7 +9,9 @@ import SingleProduct from './components/SingleProduct'
 import CheckoutPrompt from './components/CheckoutPrompt'
 import Cart from './components/Cart'
 import Orders from './components/Orders'
-import CheckoutDone from './components/CheckoutDone'
+import CheckoutDone from './components/CheckoutDone';
+import OrderItems from './components/OrderItems'
+
 
 const App = () => {
   return (
@@ -22,6 +24,7 @@ const App = () => {
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
         <Route path="/cart" component={Cart} />
+        <Route path='/orders/:orderId' component={OrderItems}/>
         <Route path="/orders" component={Orders} />
         {/* <Route path="/home" component={UserHome} /> */}
         <Route path="/products/:productId" component={SingleProduct} />
