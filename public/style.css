@@ -84,3 +84,32 @@ form div {
   flex-direction: row;
   align-content: space-evenly;
 }
+
+.single-product {
+  display: flex;
+  justify-content: center;
+}
+
+.single-product-info {
+  flex: 1;
+  padding-bottom:15px;
+  padding-left: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.single-product-image {
+  flex: 1;
+  padding-right: 15px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.single-product-image > img {
+  max-height: 584px;
+}
+
+.single-product-info-button {
+  max-width: 200px;
+}
