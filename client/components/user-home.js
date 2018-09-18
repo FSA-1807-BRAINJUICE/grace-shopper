@@ -18,30 +18,26 @@ class UserHome extends Component {
       return <Redirect to="/products" />
     }
     return (
-      <div>
+      <div className="logged-in-nav-items">
         <h3>Welcome, {email}</h3>
-        <div>
-          <Button
-            variant="outlined"
-            color="primary"
-            size="small"
-            onClick={this.props.handleClick}
-          >
-            Logout
-          </Button>
-        </div>
-        <div>
-          <Button
-            variant="outlined"
-            color="primary"
-            size="small"
-            component={Link}
-            to="/orders"
-          >
-            {/* the link needs to go to the Order History Component */}
-            Order History
-          </Button>
-        </div>
+
+        <Button
+          color="primary"
+          size="small"
+          onClick={this.props.handleClick}
+        >
+          Logout
+        </Button>
+
+        <Button
+          color="primary"
+          size="small"
+          component={Link}
+          to="/orders"
+        >
+          {/* the link needs to go to the Order History Component */}
+          Order History
+        </Button>
       </div>
     )
   }

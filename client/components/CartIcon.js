@@ -8,9 +8,7 @@ import {Link} from 'react-router-dom'
 class CartIcon extends Component {
   async componentDidMount() {
     await this.props.getMe()
-    console.log('user', this.props.user)
     this.props.getCart(this.props.user.id)
-    // console.log('user2', this.props.user)
   }
 
   render() {
@@ -20,7 +18,6 @@ class CartIcon extends Component {
           <Button
             component={Link}
             to="/cart"
-            variant="outlined"
             color="primary"
           >
             <img src="shopping_cart.svg" />
@@ -34,7 +31,6 @@ class CartIcon extends Component {
           <Button
             component={Link}
             to="/cart"
-            variant="outlined"
             color="primary"
           >
             <img src="shopping_cart.svg" />
