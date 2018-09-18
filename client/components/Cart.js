@@ -3,6 +3,7 @@ import {Link} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {getCartThunk} from '../store/cart'
 import CartItem from './CartItem'
+import Button from '@material-ui/core/Button'
 
 import PropTypes from 'prop-types'
 import {withStyles} from '@material-ui/core/styles'
@@ -17,7 +18,8 @@ const styles = theme => ({
   root: {
     width: '100%',
     marginTop: theme.spacing.unit * 3,
-    overflowX: 'auto'
+    overflowX: 'auto',
+    textAlign: 'right',
   },
   table: {
     minWidth: 700
@@ -31,7 +33,6 @@ class Cart extends Component {
 
   render() {
     const cartItems = this.props.cartItems
-    console.log(cartItems);
     const parsedCartItems = Array.from(cartItems)
     parsedCartItems.sort((a, b) => {
       return a.product.name > b.product.name
@@ -75,6 +76,16 @@ class Cart extends Component {
               )}
             </TableBody>
           </Table>
+
+          <Button style={{textAlign: 'right'}}
+              component={Link}
+              to='/checkout'
+              size="small"
+              color="primary"
+              variant="contained"
+            >
+            Checkout
+          </Button>
         </Paper>
       </div>
     )
