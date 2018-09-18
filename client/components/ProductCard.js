@@ -26,22 +26,20 @@ const styles = {
 
 const ProductCard = props => {
   const {classes} = props
-  const {id, imgUrl, name, description} = props.product
+  const {id, imgUrl, name, price} = props.product
   return (
     <Card className={classes.card}>
       <Link to={`/products/${id}`}>
         <CardActionArea className={classes.fullWidth}>
           <CardMedia className={classes.media} image={imgUrl} title={name} />
           <CardContent>
-            <Typography gutterBottom variant="headline" component="h2">
-              {name}
-            </Typography>
-            <Typography component="p">{description}</Typography>
+            <Typography gutterBottom variant="headline" component="h2">{name}</Typography>
+            <Typography component="p">${price}</Typography>
           </CardContent>
         </CardActionArea>
       </Link>
       <CardActions>
-        <Button size="small" color="primary" onClick={() => props.onClick()}>
+        <Button size="small" color="primary" variant="contained" onClick={() => props.onClick()}>
           Add to Cart
         </Button>
       </CardActions>
