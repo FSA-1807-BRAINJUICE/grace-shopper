@@ -8,7 +8,8 @@ const initialOrdersState = {
 
 const GET_ORDERS = 'GET_ORDERS'
 const GET_SINGLE_ORDER = 'GET_SINGLE_ORDER'
-const SET_ORDER_DONE = 'SET_ORDER_DONE';
+const SET_ORDER_DONE = 'SET_ORDER_DONE'
+const CLEAR_ORDER = 'CLEAR_ORDER'
 
 export const setOrderDone = order => ({
   type: SET_ORDER_DONE,
@@ -25,7 +26,9 @@ export const getSingleOrder = orderNumber => ({
   orderNumber
 })
 
-
+export const clearOrder = () => ({
+  type: CLEAR_ORDER
+})
 
 export const updateOrdersDone = addressInfo => async dispatch => {
   try {
@@ -88,7 +91,6 @@ export const getOrdersThunk = () => async dispatch => {
   }
 }
 
-
 const orders = (state = initialOrdersState, action) => {
   switch (action.type) {
     case GET_ORDERS:
@@ -97,8 +99,8 @@ const orders = (state = initialOrdersState, action) => {
         orderList: action.orders
       }
     case GET_SINGLE_ORDER:
-      const targetOrder = state.orderList.filter((order)=>{
-        return order.orderNumber === action.orderNumber;
+      const targetOrder = state.orderList.filter(order => {
+        return order.orderNumber === action.orderNumber
       })
       return {
         ...state,
@@ -108,6 +110,11 @@ const orders = (state = initialOrdersState, action) => {
       return {
         ...state,
         completedOrder: action.order
+      }
+    case CLEAR_ORDER:
+      return {
+        ...state,
+        completedOrder: {}
       }
     default:
       return state

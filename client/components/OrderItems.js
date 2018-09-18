@@ -1,38 +1,41 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
+import React, {Component} from 'react'
+import {connect} from 'react-redux'
 import {SingleOrderItem} from './SingleOrderItem'
 import {getSingleOrder} from '../store/orders'
 
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-
-
+import PropTypes from 'prop-types'
+import {withStyles} from '@material-ui/core/styles'
+import Table from '@material-ui/core/Table'
+import TableBody from '@material-ui/core/TableBody'
+import TableCell from '@material-ui/core/TableCell'
+import TableHead from '@material-ui/core/TableHead'
+import TableRow from '@material-ui/core/TableRow'
+import Paper from '@material-ui/core/Paper'
 
 const styles = theme => ({
   root: {
     width: '100%',
     marginTop: theme.spacing.unit * 3,
-    overflowX: 'auto',
+    overflowX: 'auto'
   },
   table: {
-    minWidth: 700,
-  },
-});
-
+    minWidth: 700
+  }
+})
 
 class OrderItems extends Component {
   componentDidMount() {
-    this.props.getSingleOrder(this.props.match.params.orderNumber);
+    this.props.getSingleOrder(this.props.match.params.orderNumber)
   }
   render() {
+<<<<<<< HEAD
     const singleOrderItems = this.props.singleOrder.orderItems;
     const { classes } = this.props;
+=======
+    const singleOrderItems = this.props.singleOrder.orderItems
+    console.log(this.props.singleOrder)
+    const {classes} = this.props
+>>>>>>> e8a547efbe3fadc3f1f7d8fc32917e2edd0f4fad
     return (
       <Paper className={classes.root}>
         <Table className={classes.table}>
@@ -44,18 +47,15 @@ class OrderItems extends Component {
               <TableCell>Description</TableCell>
             </TableRow>
           </TableHead>
-          {
-            singleOrderItems ? (
+          {singleOrderItems ? (
             <TableBody>
-            {
-              singleOrderItems.map(item => {
+              {singleOrderItems.map(item => {
                 return <SingleOrderItem item={item} key={item.id} />
-              })
-            }
-          </TableBody>
-           ) : (<p>not found</p>)
-           }
-
+              })}
+            </TableBody>
+          ) : (
+            <p>not found</p>
+          )}
         </Table>
       </Paper>
     )
@@ -63,8 +63,8 @@ class OrderItems extends Component {
 }
 
 OrderItems.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
+  classes: PropTypes.object.isRequired
+}
 
 const mapStateToProps = state => {
   return {
@@ -74,10 +74,10 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getSingleOrder: (orderNumber) => dispatch(getSingleOrder(orderNumber))
+    getSingleOrder: orderNumber => dispatch(getSingleOrder(orderNumber))
   }
 }
 
-export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(OrderItems))
-
-
+export default withStyles(styles)(
+  connect(mapStateToProps, mapDispatchToProps)(OrderItems)
+)
