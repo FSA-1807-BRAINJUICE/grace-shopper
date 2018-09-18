@@ -112,7 +112,25 @@ export const addProductToCart = (productId, quantity = 1) => async dispatch => {
         localStorage.setItem('order-items', JSON.stringify(items))
       }
 
-      dispatch(getCartItems(JSON.parse(localStorage.getItem('order-items'))))
+      console.log(1);
+
+      // TODO: add a Product instance to each orderItem.
+      const localItems = JSON.parse(localStorage.getItem('order-items'));
+      let itemsWithProduct = [];
+      let i = 1;
+      for(let item of localItems){
+        console.log("lsItem", item);
+
+        let orderItem = {...item}
+
+        let {data} = await axios.get(`/api/products/${item.productId}`)
+        orderItem.product = data
+        orderItem.id = i++
+
+        itemsWithProduct.push(orderItem);
+      }
+
+      dispatch(getCartItems(itemsWithProduct));
     } else {
       // user logged-in
 
@@ -160,6 +178,7 @@ export const addProductToCart = (productId, quantity = 1) => async dispatch => {
         }
       }
       let {data} = await axios.get(`/api/orders/${pendingOrder.id}`)
+      console.log(2);
       dispatch(getCartItems(data.orderItems))
     }
   } catch (error) {
@@ -218,6 +237,7 @@ export const updateItem = (targetItem, quantity) => async dispatch => {
       orderItems = data.orderItems
     }
 
+    console.log(3);
     dispatch(getCartItems(orderItems))
   } catch (err) {
     console.log(err)
@@ -277,6 +297,7 @@ export const deleteItem = orderItem => async dispatch => {
       orderItems = updatedOrderRes.data.orderItems
     }
 
+    console.log(4)
     dispatch(getCartItems(orderItems))
   } catch (err) {
     console.log(err)
