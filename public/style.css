@@ -46,3 +46,25 @@ form div {
 .quantity-box {
   width: 20px;
 }
+
+.logo-image{
+  width: 40px;
+  margin-left: 20px;
+  display: inline-block;
+}
+
+.logo-style{
+  text-align: center;
+  vertical-align: center;
+}
+
+.logo-title{
+  font-weight: bold;
+  font-size: 45px;
+  position: relative;
+}
+
+.logo-link{
+  color: inherit;
+  text-decoration: none;
+}
