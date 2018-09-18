@@ -22,7 +22,7 @@ class SingleProduct extends Component {
           <h4>${price}</h4>
           <p>{description}</p>
           <Button
-            className = 'single-product-info-button'
+            className="single-product-info-button"
             size="small"
             color="primary"
             variant="contained"

@@ -131,7 +131,7 @@ async function mergePendingOrders(user) {
         const {data} = await axios.post('/api/orders', {
           userId: user.id
         })
-        pendingOrder = data;
+        pendingOrder = data
       }
 
       for (let itemLS of orderItemsFromLS) {

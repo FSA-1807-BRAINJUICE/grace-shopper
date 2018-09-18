@@ -113,20 +113,20 @@ export const addProductToCart = (productId, quantity = 1) => async dispatch => {
       }
 
       // TODO: add a Product instance to each orderItem.
-      const localItems = JSON.parse(localStorage.getItem('order-items'));
-      let itemsWithProduct = [];
-      let i = 1;
-      for(let item of localItems){
+      const localItems = JSON.parse(localStorage.getItem('order-items'))
+      let itemsWithProduct = []
+      let i = 1
+      for (let item of localItems) {
         let orderItem = {...item}
 
         let {data} = await axios.get(`/api/products/${item.productId}`)
         orderItem.product = data
         orderItem.id = i++
 
-        itemsWithProduct.push(orderItem);
+        itemsWithProduct.push(orderItem)
       }
 
-      dispatch(getCartItems(itemsWithProduct));
+      dispatch(getCartItems(itemsWithProduct))
     } else {
       // user logged-in
 

@@ -139,8 +139,8 @@ router.get('/:userId/orders', async (req, res, next) => {
       if (order.orderItems) {
         for (let item of order.orderItems) {
           // update product price and paidUnitPrice
-          item.product.price /= 100;
-          item.paidUnitPrice /= 100;
+          item.product.price /= 100
+          item.paidUnitPrice /= 100
         }
       }
     }

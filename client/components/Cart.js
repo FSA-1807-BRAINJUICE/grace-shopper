@@ -19,7 +19,7 @@ const styles = theme => ({
     width: '100%',
     marginTop: theme.spacing.unit * 3,
     overflowX: 'auto',
-    textAlign: 'right',
+    textAlign: 'right'
   },
   table: {
     minWidth: 700
@@ -77,13 +77,14 @@ class Cart extends Component {
             </TableBody>
           </Table>
 
-          <Button style={{textAlign: 'right'}}
-              component={Link}
-              to='/checkout'
-              size="small"
-              color="primary"
-              variant="contained"
-            >
+          <Button
+            style={{textAlign: 'right'}}
+            component={Link}
+            to="/checkout-prompt"
+            size="small"
+            color="primary"
+            variant="contained"
+          >
             Checkout
           </Button>
         </Paper>

@@ -25,7 +25,7 @@ const styles = theme => ({
 
 class Orders extends Component {
   componentDidMount() {
-    this.props.getOrders(); //all orders
+    this.props.getOrders() //all orders
   }
 
   render() {

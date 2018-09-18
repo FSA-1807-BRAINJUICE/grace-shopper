@@ -11,7 +11,6 @@ import Cart from './components/Cart'
 import Orders from './components/Orders'
 import OrderItems from './components/OrderItems'
 
-
 const App = () => {
   return (
     <React.Fragment>
@@ -22,7 +21,7 @@ const App = () => {
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
         <Route path="/cart" component={Cart} />
-        <Route path='/orders/:orderNumber' component={OrderItems}/>
+        <Route path="/orders/:orderNumber" component={OrderItems} />
         <Route path="/orders" component={Orders} />
         {/* <Route path="/home" component={UserHome} /> */}
         <Route path="/products/:productId" component={SingleProduct} />
