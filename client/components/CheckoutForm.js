@@ -4,9 +4,10 @@ import PropTypes from 'prop-types'
 import {withStyles} from '@material-ui/core/styles'
 import {connect} from 'react-redux'
 import {Button} from '@material-ui/core'
-import history from '../history'
 import {updateOrdersDone} from '../store/orders'
 import {clearCart} from '../store/cart'
+import {Login} from '../components/auth-form'
+import {Link} from 'react-router-dom'
 
 const styles = theme => ({
   container: {
@@ -28,45 +29,56 @@ class CheckoutForm extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      name: '',
-      streetAddress: '',
-      city: '',
-      region: '',
-      postal: '',
-      phone: '',
-      email: ''
+      addressInfo: {
+        name: '',
+        streetAddress: '',
+        city: '',
+        region: '',
+        postal: '',
+        phone: '',
+        email: ''
+      }
     }
     this.handleSubmit = this.handleSubmit.bind(this)
   }
+
   handleChange = nameAttr => event => {
     this.setState({
-      [nameAttr]: event.target.value
+      addressInfo: {
+        [nameAttr]: event.target.value
+      }
     })
   }
   handleSubmit(evt) {
     evt.preventDefault()
 
-    let addressInfo = this.state
+    const {addressInfo} = this.state
     this.props.checkOut(addressInfo)
+  }
+
+  renderComplete() {
+    const {orderNumber, email} = this.props.completedOrder
+    return (
+      <Fragment>
+        <h1 className="success">Thank you, your order has been placed.</h1>
+        <p>An email confirmation has been sent to you at {email}</p>
+        <p>
+          <strong>Order number: {orderNumber}</strong>
+        </p>
+      </Fragment>
+    )
   }
   render() {
     const {classes, completedOrder} = this.props
-    const {id, orderNumber, email} = completedOrder
-    if (completedOrder && id)
-      return (
-        <Fragment>
-          <h1 className="success">Thank you, your order has been placed.</h1>
-          <p>An email confirmation has been sent to you at {email}</p>
-          <p>
-            <strong>Order number: {orderNumber}</strong>
-          </p>
-        </Fragment>
-      )
-    return (
+    const {id} = completedOrder
+
+    return completedOrder && id ? (
+      this.renderComplete()
+    ) : (
       <form
         onSubmit={this.handleSubmit}
         className={classes.container}
-        // noValidate
+        noValidate
         autoComplete="off"
       >
         <TextField
@@ -74,7 +86,7 @@ class CheckoutForm extends Component {
           id="full-name"
           label="Full name:"
           className={classes.textField}
-          value={this.state.name}
+          value={this.state.addressInfo.name}
           onChange={this.handleChange('name')}
           margin="normal"
         />
@@ -83,7 +95,7 @@ class CheckoutForm extends Component {
           id="street-address"
           label="Street address:"
           className={classes.textField}
-          value={this.state.streetAddress}
+          value={this.state.addressInfo.streetAddress}
           onChange={this.handleChange('streetAddress')}
           margin="normal"
         />
@@ -92,7 +104,7 @@ class CheckoutForm extends Component {
           id="city"
           label="City:"
           className={classes.textField}
-          value={this.state.city}
+          value={this.state.addressInfo.city}
           onChange={this.handleChange('city')}
           margin="normal"
         />
@@ -101,7 +113,7 @@ class CheckoutForm extends Component {
           id="region"
           label="State/Province/Region:"
           className={classes.textField}
-          value={this.state.region}
+          value={this.state.addressInfo.region}
           onChange={this.handleChange('region')}
           margin="normal"
         />
@@ -110,7 +122,7 @@ class CheckoutForm extends Component {
           id="postal-code"
           label="ZIP/Postal Code:"
           className={classes.textField}
-          value={this.state.postal}
+          value={this.state.addressInfo.postal}
           onChange={this.handleChange('postal')}
           margin="normal"
         />
@@ -119,7 +131,7 @@ class CheckoutForm extends Component {
           id="phone-number"
           label="Phone number:"
           className={classes.textField}
-          value={this.state.phone}
+          value={this.state.addressInfo.phone}
           onChange={this.handleChange('phone')}
           margin="normal"
         />
@@ -129,7 +141,7 @@ class CheckoutForm extends Component {
           id="email"
           label="Email:"
           className={classes.textField}
-          value={this.state.email}
+          value={this.state.addressInfo.email}
           onChange={this.handleChange('email')}
           margin="normal"
         />
@@ -146,7 +158,8 @@ CheckoutForm.propTypes = {
 }
 
 const mapState = state => ({
-  completedOrder: state.orders.completedOrder
+  completedOrder: state.orders.completedOrder,
+  user: state.user.user
 })
 
 const mapDispatch = dispatch => ({
