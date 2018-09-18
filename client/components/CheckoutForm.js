@@ -37,10 +37,7 @@ class CheckoutForm extends Component {
     }
     this.handleSubmit = this.handleSubmit.bind(this)
   }
-  // componentDidMount(){
-  //   const { clearPreviousOrder } = this.props;
-  //   clearPreviousOrder();
-  // }
+
   handleChange = nameAttr => event => {
     this.setState({
       [nameAttr]: event.target.value
