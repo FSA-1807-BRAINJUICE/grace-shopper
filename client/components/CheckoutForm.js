@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import {withStyles} from '@material-ui/core/styles'
 import {connect} from 'react-redux'
 import {Button} from '@material-ui/core'
-import {updateOrdersDone} from '../store/orders'
+import {updateOrdersDone, clearOrder} from '../store/orders'
 import {clearCart} from '../store/cart'
 
 const styles = theme => ({
@@ -27,30 +27,26 @@ class CheckoutForm extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      addressInfo: {
-        name: '',
-        streetAddress: '',
-        city: '',
-        region: '',
-        postal: '',
-        phone: '',
-        email: ''
-      }
+      name: '',
+      streetAddress: '',
+      city: '',
+      region: '',
+      postal: '',
+      phone: '',
+      email: ''
     }
     this.handleSubmit = this.handleSubmit.bind(this)
   }
 
   handleChange = nameAttr => event => {
     this.setState({
-      addressInfo: {
-        [nameAttr]: event.target.value
-      }
+      [nameAttr]: event.target.value
     })
   }
   handleSubmit(evt) {
     evt.preventDefault()
+    const addressInfo = this.state
 
-    const {addressInfo} = this.state
     this.props.checkOut(addressInfo)
   }
 
@@ -76,7 +72,6 @@ class CheckoutForm extends Component {
       <form
         onSubmit={this.handleSubmit}
         className={classes.container}
-        noValidate
         autoComplete="off"
       >
         <TextField
@@ -84,7 +79,7 @@ class CheckoutForm extends Component {
           id="full-name"
           label="Full name:"
           className={classes.textField}
-          value={this.state.addressInfo.name}
+          value={this.state.name}
           onChange={this.handleChange('name')}
           margin="normal"
         />
@@ -93,7 +88,7 @@ class CheckoutForm extends Component {
           id="street-address"
           label="Street address:"
           className={classes.textField}
-          value={this.state.addressInfo.streetAddress}
+          value={this.state.streetAddress}
           onChange={this.handleChange('streetAddress')}
           margin="normal"
         />
@@ -102,7 +97,7 @@ class CheckoutForm extends Component {
           id="city"
           label="City:"
           className={classes.textField}
-          value={this.state.addressInfo.city}
+          value={this.state.city}
           onChange={this.handleChange('city')}
           margin="normal"
         />
@@ -111,7 +106,7 @@ class CheckoutForm extends Component {
           id="region"
           label="State/Province/Region:"
           className={classes.textField}
-          value={this.state.addressInfo.region}
+          value={this.state.region}
           onChange={this.handleChange('region')}
           margin="normal"
         />
@@ -120,7 +115,7 @@ class CheckoutForm extends Component {
           id="postal-code"
           label="ZIP/Postal Code:"
           className={classes.textField}
-          value={this.state.addressInfo.postal}
+          value={this.state.postal}
           onChange={this.handleChange('postal')}
           margin="normal"
         />
@@ -129,7 +124,7 @@ class CheckoutForm extends Component {
           id="phone-number"
           label="Phone number:"
           className={classes.textField}
-          value={this.state.addressInfo.phone}
+          value={this.state.phone}
           onChange={this.handleChange('phone')}
           margin="normal"
         />
@@ -139,7 +134,7 @@ class CheckoutForm extends Component {
           id="email"
           label="Email:"
           className={classes.textField}
-          value={this.state.addressInfo.email}
+          value={this.state.email}
           onChange={this.handleChange('email')}
           margin="normal"
         />
@@ -162,6 +157,7 @@ const mapState = state => ({
 
 const mapDispatch = dispatch => ({
   async checkOut(addressInfo) {
+    dispatch(clearOrder())
     await dispatch(updateOrdersDone(addressInfo))
     dispatch(clearCart())
   }
