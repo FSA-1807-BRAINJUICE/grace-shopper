@@ -58,7 +58,6 @@ class Navbar extends Component {
  * CONTAINER
  */
 const mapState = state => {
-  console.log('USER', state.user.user)
   return {
     isLoggedIn: Boolean(state.user.user && state.user.user.id)
   }
