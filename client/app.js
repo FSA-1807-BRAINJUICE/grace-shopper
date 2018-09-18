@@ -14,7 +14,7 @@ import OrderItems from './components/OrderItems'
 
 const App = () => {
   return (
-    <div>
+    <React.Fragment>
       <Navbar />
       {/* <Routes /> */}
       <Switch>
@@ -36,7 +36,7 @@ const App = () => {
         Checkout
       </Button> */}
       <Route path="/checkout-prompt" component={CheckoutPrompt} />
-    </div>
+    </React.Fragment>
   )
 }
 

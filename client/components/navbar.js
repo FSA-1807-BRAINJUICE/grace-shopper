@@ -5,6 +5,7 @@ import {Link} from 'react-router-dom'
 import {logout, me} from '../store'
 import UserHome from './user-home'
 import CartIcon from './CartIcon'
+import { AppBar } from '@material-ui/core';
 
 class Navbar extends Component {
   componentDidMount() {
@@ -14,7 +15,7 @@ class Navbar extends Component {
   render() {
     const {isLoggedIn} = this.props
     return (
-      <div>
+      <AppBar color = 'secondary' position='sticky'>
         <Link to="/products" className="logo-link">
           <div className="logo-style">
             <span className="logo-title">BRAINJUICE</span>
@@ -50,7 +51,7 @@ class Navbar extends Component {
           <CartIcon />
         </nav>
         <hr />
-      </div>
+      </AppBar>
     )
   }
 }

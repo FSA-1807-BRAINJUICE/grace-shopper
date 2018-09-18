@@ -23,9 +23,9 @@ form div {
 .gallery {
   display: grid;
   justify-content: 'center';
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   grid-gap: 30px 30px;
-  margin-top: 15px;
+  padding: 15px;
 }
 
 .cart-item-img > img {
@@ -52,6 +52,7 @@ form div {
 }
 
 .logo-image {
+  color: white;
   width: 40px;
   margin-left: 20px;
   display: inline-block;
@@ -114,4 +115,8 @@ form div {
 
 .single-product-info-button {
   max-width: 200px;
+}
+
+.nav-items {
+  color: white;
 }
