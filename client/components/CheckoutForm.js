@@ -6,8 +6,6 @@ import {connect} from 'react-redux'
 import {Button} from '@material-ui/core'
 import {updateOrdersDone} from '../store/orders'
 import {clearCart} from '../store/cart'
-import {Login} from '../components/auth-form'
-import {Link} from 'react-router-dom'
 
 const styles = theme => ({
   container: {

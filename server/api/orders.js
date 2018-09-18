@@ -40,6 +40,13 @@ router.get('/:orderId', async (req, res, next) => {
     return
   }
 
+  // convert product unit price to double
+  if (order.orderItems) {
+    for (let item of order.orderItems) {
+      item.product.price /= 100
+    }
+  }
+
   res.status(200).json(order)
 })
 

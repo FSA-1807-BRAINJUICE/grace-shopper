@@ -218,7 +218,6 @@ export const updateItem = (targetItem, quantity) => async dispatch => {
       orderItems = data.orderItems
     }
 
-    console.log('orderItems', orderItems)
     dispatch(getCartItems(orderItems))
   } catch (err) {
     console.log(err)

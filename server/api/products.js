@@ -10,6 +10,8 @@ router.get('/:id', async (req, res, next) => {
       return
     }
 
+    // convert int type to a double value.
+    product.price /= 100
     res.json(product)
   } catch (err) {
     next(err)
@@ -19,6 +21,12 @@ router.get('/:id', async (req, res, next) => {
 router.get('/', async (req, res, next) => {
   try {
     const products = await Product.findAll()
+
+    // convert the price type to double
+    products.map(product => {
+      product.price /= 100
+    })
+
     res.json(products)
   } catch (err) {
     next(err)

@@ -1,10 +1,10 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
+import Button from '@material-ui/core/Button'
 import {addItemToCart, updateItem, deleteItem} from '../store/cart'
 
 import TableCell from '@material-ui/core/TableCell'
 import TableRow from '@material-ui/core/TableRow'
-import {throws} from 'assert'
 
 class CartItem extends Component {
   constructor(props) {
@@ -28,7 +28,7 @@ class CartItem extends Component {
   }
 
   render() {
-    const {name, price, imgUrl, description} = this.props.cartItem.product
+    const {name, price, imgUrl} = this.props.cartItem.product
     //add accompany table cell in cart header?
     return (
       <TableRow className="cart-item">
@@ -37,29 +37,23 @@ class CartItem extends Component {
         </TableCell>
         <TableCell className="cart-item-element">{name}</TableCell>
         <TableCell className="cart-item-element">{price}</TableCell>
-        <TableCell className="cart-item-element">{description}</TableCell>
         <TableCell className="cart-item-element">
           <form id="orderItemQuantity" onSubmit={this.handleSubmit}>
             <input
               type="text"
               value={this.state.quantity}
               className="quantity-box"
-              style={{}}
               onChange={evt => this.setState({quantity: evt.target.value})}
             />
-            <button className="orderItemSelectButton" type="submit">
-              Change Qty.
-            </button>
+
+            <Button type="submit" size="small" onClick={this.handleSubmit}>
+              <img src="change_quantity.svg" alt="change" />
+            </Button>
+
+            <Button size="small" onClick={this.handleRemove}>
+              <img src="delete_item.svg" alt="delete" />
+            </Button>
           </form>
-        </TableCell>
-        <TableCell className="cart-item-remove">
-          <button
-            className="remvoe-order-item-button"
-            type="button"
-            onClick={this.handleRemove}
-          >
-            Remove Item
-          </button>
         </TableCell>
       </TableRow>
     )
