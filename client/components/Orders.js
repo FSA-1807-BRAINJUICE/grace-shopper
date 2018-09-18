@@ -25,8 +25,9 @@ const styles = theme => ({
 
 class Orders extends Component {
   componentDidMount() {
-    this.props.getOrders()
+    this.props.getOrders(); //all orders
   }
+
   render() {
     const orderList = this.props.orderList
     const {classes} = this.props
@@ -35,10 +36,10 @@ class Orders extends Component {
         <Table className={classes.table}>
           <TableHead>
             <TableRow>
-              <TableCell>Image</TableCell>
-              <TableCell>Product Name</TableCell>
-              <TableCell>Price</TableCell>
-              <TableCell>Description</TableCell>
+              <TableCell>Order Number</TableCell>
+              <TableCell>Order Date</TableCell>
+              <TableCell>Order Total Price</TableCell>
+              <TableCell>Order Items</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
