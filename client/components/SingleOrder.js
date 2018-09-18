@@ -10,7 +10,7 @@ const SingleOrder = (props) => {
       <TableCell className='cart-item-element'>{orderNumber}</TableCell>
       <TableCell className='cart-item-element'>{updatedAt}</TableCell>
       <TableCell className='cart-item-element'>Order Price</TableCell>
-      <TableCell className='cart-item-element'><Link to={`/orders/${props.order.id}`}>View Order Items</Link></TableCell>
+      <TableCell className='cart-item-element'><Link to={`/orders/${props.order.orderNumber}`}>View Order Items</Link></TableCell>
     </TableRow>
   )
 }

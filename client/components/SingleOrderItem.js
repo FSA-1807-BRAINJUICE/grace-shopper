@@ -4,7 +4,8 @@ import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 
 export const SingleOrderItem = (props) => {
-  const {imgUrl, name, price, description} = props.item;
+  console.log(props.item)
+  const {imgUrl, name, price, description} = props.item.product;
   return (
     <TableRow>
       <TableCell>{imgUrl}</TableCell>

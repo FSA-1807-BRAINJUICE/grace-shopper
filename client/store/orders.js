@@ -20,9 +20,9 @@ export const getOrders = orders => ({
   orders
 })
 
-export const getSingleOrder = order => ({
+export const getSingleOrder = orderNumber => ({
   type: GET_SINGLE_ORDER,
-  order
+  orderNumber
 })
 
 
@@ -85,17 +85,6 @@ export const getOrdersThunk = () => async dispatch => {
 }
 
 
-// export const getSingleOrderThunk = orderId => async dispatch => {
-//   try{
-//     const response = await axios.get(`/api/orders/${orderId}`);
-//     const parsedOrder = response.data;
-//     const action = getSingleOrder(parsedOrder);
-//     dispatch(action);
-//   } catch (err) {
-//     console.error(err)
-//   }
-// }
-
 const orders = (state = initialOrdersState, action) => {
   switch (action.type) {
     case GET_ORDERS:
@@ -104,9 +93,12 @@ const orders = (state = initialOrdersState, action) => {
         orderList: action.orders
       }
     case GET_SINGLE_ORDER:
+      console.log('action.orderNumber',action.orderNumber)
+      console.log(state.orderList)
       const targetOrder = state.orderList.filter((order)=>{
-        return order.id === action.order.id;
+        return order.orderNumber === action.orderNumber;
       })
+      console.log(targetOrder)
       return {
         ...state,
         singleOrder: targetOrder[0]
