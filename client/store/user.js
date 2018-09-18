@@ -128,9 +128,10 @@ async function mergePendingOrders(user) {
     if (orderItemsFromLS) {
       // if no pendingOrder, then create one to save all the local storage items into.
       if (!pendingOrder) {
-        pendingOrder = await axios.post('/api/orders', {
+        const {data} = await axios.post('/api/orders', {
           userId: user.id
         })
+        pendingOrder = data;
       }
 
       for (let itemLS of orderItemsFromLS) {

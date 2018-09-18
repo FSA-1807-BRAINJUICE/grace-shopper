@@ -21,30 +21,30 @@ router.get('/:orderId', async (req, res, next) => {
       ]
     })
     if (!order) {
-      res.status(404).send("Order not found - " + orderId);
-      return;
+      res.status(404).send('Order not found - ' + orderId)
+      return
     }
   } catch (err) {
     next(err)
   }
 
   // check user privilege
-  if(!req.user){
-    res.status(403).send('No orders saved in DB for logged-out user!');
-    return;
+  if (!req.user) {
+    res.status(403).send('No orders saved in DB for logged-out user!')
+    return
   }
 
   if (!req.user.isAdmin && req.user.id !== order.userId) {
     // a case of a logged-in user
-    res.status(403).send("Forbidden");
-    return;
+    res.status(403).send('Forbidden')
+    return
   }
 
   // convert product unit price to double
-  if(order.orderItems){
-   for(let item of order.orderItems){
-     item.product.price /= 100;
-   }
+  if (order.orderItems) {
+    for (let item of order.orderItems) {
+      item.product.price /= 100
+    }
   }
 
   res.status(200).json(order)
@@ -53,7 +53,7 @@ router.get('/:orderId', async (req, res, next) => {
 // POST /api/orders
 // Note that if there is a body coming in with an item to add, create a cart with the item in.
 router.post('/', async (req, res, next) => {
-  try{
+  try {
     // if(!req.user){
     //   res.status(403).send('an order gets created only for a logged-in user');
     // }
@@ -68,7 +68,7 @@ router.post('/', async (req, res, next) => {
     const order = await Order.create(orderToCreate)
 
     res.status(201).json(order)
-  }catch(err){
+  } catch (err) {
     next(err)
   }
 })
@@ -80,14 +80,16 @@ router.put('/:orderId', async (req, res, next) => {
     // check if there is an order with the given orderId
     const order = await Order.findById(orderId)
     if (!order) {
-      res.status(404).send("Order not found - " + orderId);
-      return;
+      res.status(404).send('Order not found - ' + orderId)
+      return
     }
 
-    if (req.user) { //known user
-      if (!req.user.admin && req.user.id !== order.userId) { //not an admin and a known user requested some other user's order
-        res.status(403).send('Forbidden');
-        return;
+    if (req.user) {
+      //known user
+      if (!req.user.admin && req.user.id !== order.userId) {
+        //not an admin and a known user requested some other user's order
+        res.status(403).send('Forbidden')
+        return
       }
     }
 
@@ -95,7 +97,14 @@ router.put('/:orderId', async (req, res, next) => {
     // orderNumber, and userId shouldn't be updated.
     const updatedOrder = await Order.update(
       {
-        orderStatus: req.body.orderStatus
+        orderStatus: req.body.orderStatus,
+        name: req.body.name,
+        streetAddress: req.body.streetAddress,
+        city: req.body.city,
+        region: req.body.region,
+        postal: req.body.postal,
+        phone: req.body.phone,
+        email: req.body.email
       },
       {
         where: {id: orderId},
@@ -122,10 +131,7 @@ router.put('/:orderId', async (req, res, next) => {
       })
 
       for (let item of orderItems) {
-        item.update(
-          {paidUnitPrice: item.product.price},
-          {where: {id: item.id}}
-        )
+        item.update({paidUnitPrice: item.product.price}, {where: {id: item.id}})
       }
     }
 
@@ -141,15 +147,15 @@ router.get('/:orderId/items/:itemId', async (req, res, next) => {
   try {
     const order = await Order.findById(orderId)
     if (!order) {
-      res.status(404).send('No order found - ' + orderId);
-      return;
+      res.status(404).send('No order found - ' + orderId)
+      return
     }
 
     if (req.user && (!req.user.admin && req.user.id !== order.userId)) {
       //known user
       //not an admin and a known user requested some other user's order
-        res.status(403).send('Forbidden to retrieve this order item');
-        return;
+      res.status(403).send('Forbidden to retrieve this order item')
+      return
     }
 
     const item = await OrderItem.findById(itemId)
@@ -167,21 +173,21 @@ router.post('/:orderId/items', async (req, res, next) => {
     // check if product and order exist, before creation.
     const product = await Product.findById(productId)
     if (!product) {
-      res.status(404).send('No product found - ' + productId);
-      return;
+      res.status(404).send('No product found - ' + productId)
+      return
     }
     const order = await Order.findById(orderId)
     if (!order) {
-      res.status(404).send('No order found - ' + orderId);
-      return;
+      res.status(404).send('No order found - ' + orderId)
+      return
     }
 
     // make sure the current user is allowed to create an item to this order.
     if (req.user && (!req.user.admin && req.user.id !== order.userId)) {
       //known user
       //not an admin and a known user requested some other user's order
-        res.status(403).send('update forbidden');
-        return;
+      res.status(403).send('update forbidden')
+      return
     }
 
     const newItemToAdd = {
@@ -190,10 +196,10 @@ router.post('/:orderId/items', async (req, res, next) => {
       productId: product.id
     }
 
-    const itemAdded = await OrderItem.create(newItemToAdd);
+    const itemAdded = await OrderItem.create(newItemToAdd)
     res.status(201).json(itemAdded)
-  }catch(err){
-    next(err);
+  } catch (err) {
+    next(err)
   }
 })
 
@@ -206,18 +212,19 @@ router.put('/:orderId/items/:itemId', async (req, res, next) => {
     const orderItem = await OrderItem.findById(itemId)
     const product = await Product.findById(orderItem.productId)
     if (!product || !order || !orderItem) {
-      res.status(404).send('No product, order item, or order found');
-      return;
+      res.status(404).send('No product, order item, or order found')
+      return
     }
 
-    if(!req.user){
-      res.status(403).send('No order is saved in DB for logged-out users.');
-      return;
+    if (!req.user) {
+      res.status(403).send('No order is saved in DB for logged-out users.')
+      return
     }
 
-    if (!req.user.admin && req.user.id !== order.userId) { //not an admin and a known user requested some other user's order
-      res.status(403).send('Forbidden');
-      return;
+    if (!req.user.admin && req.user.id !== order.userId) {
+      //not an admin and a known user requested some other user's order
+      res.status(403).send('Forbidden')
+      return
     }
 
     const orderItemDetail = {
@@ -243,26 +250,26 @@ router.delete('/:orderId/items/:itemId', async (req, res, next) => {
   try {
     const order = await Order.findById(requestedOrder)
     if (!order) {
-      res.status(404).send("Order Not Found");
-      return;
+      res.status(404).send('Order Not Found')
+      return
     }
 
     const item = await OrderItem.findById(requestedItem)
     if (!item) {
-      res.status(404).send('item not found');
-      return;
+      res.status(404).send('item not found')
+      return
     }
 
-    if(!req.user){
-      res.status(403).send("No orders is saved in DB for logged-out users");
-      return;
+    if (!req.user) {
+      res.status(403).send('No orders is saved in DB for logged-out users')
+      return
     }
 
-    if (!req.user.admin && req.user.id !== order.userId) { //not an admin and a known user requested some other user's order
-      res.status(403).send('update forbidden');
-      return;
+    if (!req.user.admin && req.user.id !== order.userId) {
+      //not an admin and a known user requested some other user's order
+      res.status(403).send('update forbidden')
+      return
     }
-
 
     await OrderItem.destroy({
       where: {id: requestedItem}

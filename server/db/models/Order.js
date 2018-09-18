@@ -14,31 +14,39 @@ const Order = db.define('order', {
   sessionId: {
     type: Sequelize.STRING,
     allowNull: true
+  },
+  name: {
+    type: Sequelize.STRING,
+    allowNull: true
+  },
+  streetAddress: {
+    type: Sequelize.STRING,
+    allowNull: true
+  },
+  city: {
+    type: Sequelize.STRING,
+    allowNull: true
+  },
+  region: {
+    type: Sequelize.STRING,
+    allowNull: true
+  },
+  postal: {
+    type: Sequelize.STRING,
+    allowNull: true
+  },
+  phone: {
+    type: Sequelize.STRING,
+    allowNull: true
+  },
+  email: {
+    type: Sequelize.STRING,
+    allowNull: true,
+    validate: {
+      isEmail: true,
+      notEmpty: false
+    }
   }
-  // name: {
-  //   type: Sequelize.STRING,
-  //   allowNull: true
-  // },
-  // streetAddress: {
-  //   type:Sequelize.STRING,
-  //   allowNull: true
-  // },
-  // city: {
-  //   type:Sequelize.STRING,
-  //   allowNull: true
-  // },
-  // region: {
-  //   type:Sequelize.STRING,
-  //   allowNull: true
-  // },
-  // postal: {
-  //   type: Sequelize.STRING,
-  //   allowNull: true
-  // },
-  // phone: {
-  //   type: Sequelize.STRING,
-  //   allowNull: true
-  // }
 })
 
 module.exports = Order

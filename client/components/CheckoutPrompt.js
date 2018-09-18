@@ -2,24 +2,27 @@ import React from 'react'
 import {Login} from '../components/auth-form'
 import {Link} from 'react-router-dom'
 import {Button} from '@material-ui/core'
-// import PropTypes from 'prop-types';
-// import { withStyles } from '@material-ui/core/styles';
+import {connect} from 'react-redux'
 
-const CheckoutPrompt = () => {
+const CheckoutPrompt = ({user}) => {
   return (
     <div id="checkout-prompt">
-      <Login />
+      {!user.id && <Login />}
       <Button
         component={Link}
-        to="/checkout-form"
+        to="/checkout"
         variant="contained"
         color="primary"
         size="small"
       >
-        Checkout as Guest
+        Continue{!user.id && ' as Guest'}
       </Button>
     </div>
   )
 }
 
-export default CheckoutPrompt
+const mapState = state => ({
+  user: state.user.user
+})
+
+export default connect(mapState)(CheckoutPrompt)

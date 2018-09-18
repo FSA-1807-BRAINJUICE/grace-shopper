@@ -21,20 +21,11 @@ class UserHome extends Component {
       <div className="logged-in-nav-items">
         <h3>Welcome, {email}</h3>
 
-        <Button
-          color="primary"
-          size="small"
-          onClick={this.props.handleClick}
-        >
+        <Button color="primary" size="small" onClick={this.props.handleClick}>
           Logout
         </Button>
 
-        <Button
-          color="primary"
-          size="small"
-          component={Link}
-          to="/orders"
-        >
+        <Button color="primary" size="small" component={Link} to="/orders">
           {/* the link needs to go to the Order History Component */}
           Order History
         </Button>

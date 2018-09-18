@@ -33,13 +33,20 @@ const ProductCard = props => {
         <CardActionArea className={classes.fullWidth}>
           <CardMedia className={classes.media} image={imgUrl} title={name} />
           <CardContent>
-            <Typography gutterBottom variant="headline" component="h2">{name}</Typography>
+            <Typography gutterBottom variant="headline" component="h2">
+              {name}
+            </Typography>
             <Typography component="p">${price}</Typography>
           </CardContent>
         </CardActionArea>
       </Link>
       <CardActions>
-        <Button size="small" color="primary" variant="contained" onClick={() => props.onClick()}>
+        <Button
+          size="small"
+          color="primary"
+          variant="contained"
+          onClick={() => props.onClick()}
+        >
           Add to Cart
         </Button>
       </CardActions>

@@ -15,11 +15,7 @@ class CartIcon extends Component {
     if (this.props.user && this.props.user.id) {
       return (
         <div>
-          <Button
-            component={Link}
-            to="/cart"
-            color="primary"
-          >
+          <Button component={Link} to="/cart" color="primary">
             <img src="shopping_cart.svg" />
             {this.props.cartItems.length}
           </Button>
@@ -28,11 +24,7 @@ class CartIcon extends Component {
     } else {
       return (
         <div>
-          <Button
-            component={Link}
-            to="/cart"
-            color="primary"
-          >
+          <Button component={Link} to="/cart" color="primary">
             <img src="shopping_cart.svg" />
             {this.props.cartItems.length}
           </Button>
