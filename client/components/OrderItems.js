@@ -28,14 +28,9 @@ class OrderItems extends Component {
     this.props.getSingleOrder(this.props.match.params.orderNumber)
   }
   render() {
-<<<<<<< HEAD
-    const singleOrderItems = this.props.singleOrder.orderItems;
-    const { classes } = this.props;
-=======
     const singleOrderItems = this.props.singleOrder.orderItems
     console.log(this.props.singleOrder)
     const {classes} = this.props
->>>>>>> e8a547efbe3fadc3f1f7d8fc32917e2edd0f4fad
     return (
       <Paper className={classes.root}>
         <Table className={classes.table}>
