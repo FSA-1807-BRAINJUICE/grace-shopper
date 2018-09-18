@@ -127,6 +127,15 @@ router.get('/:userId/orders', async (req, res, next) => {
       ]
     })
 
+     // convert product unit price to double
+    for(let order of orders){
+      if(order.orderItems){
+        for(let item of order.orderItems){
+          item.product.price /= 100;
+        }
+      }
+    }
+
     res.json(orders)
   } catch (err) {
     next(err)
