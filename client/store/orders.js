@@ -97,12 +97,9 @@ const orders = (state = initialOrdersState, action) => {
         orderList: action.orders
       }
     case GET_SINGLE_ORDER:
-      console.log('action.orderNumber',action.orderNumber)
-      console.log(state.orderList)
       const targetOrder = state.orderList.filter((order)=>{
         return order.orderNumber === action.orderNumber;
       })
-      console.log(targetOrder)
       return {
         ...state,
         singleOrder: targetOrder[0]
