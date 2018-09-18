@@ -141,7 +141,6 @@ async function mergePendingOrders(user) {
           for (let itemDB of pendingOrder.orderItems) {
             if (itemLS.proudctId === itemDB.productId) {
               // update the itemDB
-              console.log('quantities: ', itemDB.quantity, itemLS.quantity)
               itemDB.quantity += itemLS.quantity
               try {
                 await axios.put(
