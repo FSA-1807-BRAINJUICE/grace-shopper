@@ -70,10 +70,11 @@ export const updateOrdersDone = addressInfo => async dispatch => {
   }
 }
 
-export const getOrdersThunk = userId => async dispatch => {
+export const getOrdersThunk = () => async dispatch => {
+  const {data: user} = await axios.get('/auth/me')
   try {
     const response = await axios.get(
-      `/api/users/${userId}/orders?status=complete`
+      `/api/users/${user.id}/orders?status=complete`
     )
     const parsedOrders = response.data
     const action = getOrders(parsedOrders)
@@ -82,6 +83,7 @@ export const getOrdersThunk = userId => async dispatch => {
     console.error(err)
   }
 }
+
 
 // export const getSingleOrderThunk = orderId => async dispatch => {
 //   try{
