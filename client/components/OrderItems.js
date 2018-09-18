@@ -50,7 +50,6 @@ class OrderItems extends Component {
             <TableBody>
             {
               singleOrderItems.map(item => {
-                console.log(item)
                 return <SingleOrderItem item={item} key={item.id} />
               })
             }
