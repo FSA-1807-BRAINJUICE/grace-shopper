@@ -295,6 +295,12 @@ const cart = (state = initialCartState, action) => {
       return {...state, cartItems: action.cart.orderItems, cart: action.cart}
     case GET_CART_ITEMS:
       return {...state, cartItems: action.orderItems}
+    case CLEAR_CART:
+      return {
+        ...state,
+        cartItems: [],
+        cart: {}
+      }
     // case UPDATE_ITEM_QUANTITY:
     //   const targetItem = state.cartItems.find(function(item) {
     //     return item.id == action.item.id

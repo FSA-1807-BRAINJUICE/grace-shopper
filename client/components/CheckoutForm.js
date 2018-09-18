@@ -6,6 +6,7 @@ import {connect} from 'react-redux'
 import {Button} from '@material-ui/core'
 import history from '../history'
 import {updateOrdersDone} from '../store/orders'
+import {clearCart} from '../store/cart'
 
 const styles = theme => ({
   container: {
@@ -65,10 +66,11 @@ class CheckoutForm extends Component {
       <form
         onSubmit={this.handleSubmit}
         className={classes.container}
-        noValidate
+        // noValidate
         autoComplete="off"
       >
         <TextField
+          required={true}
           id="full-name"
           label="Full name:"
           className={classes.textField}
@@ -77,6 +79,7 @@ class CheckoutForm extends Component {
           margin="normal"
         />
         <TextField
+          required={true}
           id="street-address"
           label="Street address:"
           className={classes.textField}
@@ -85,6 +88,7 @@ class CheckoutForm extends Component {
           margin="normal"
         />
         <TextField
+          required={true}
           id="city"
           label="City:"
           className={classes.textField}
@@ -93,6 +97,7 @@ class CheckoutForm extends Component {
           margin="normal"
         />
         <TextField
+          required={true}
           id="region"
           label="State/Province/Region:"
           className={classes.textField}
@@ -101,6 +106,7 @@ class CheckoutForm extends Component {
           margin="normal"
         />
         <TextField
+          required={true}
           id="postal-code"
           label="ZIP/Postal Code:"
           className={classes.textField}
@@ -109,6 +115,7 @@ class CheckoutForm extends Component {
           margin="normal"
         />
         <TextField
+          required={true}
           id="phone-number"
           label="Phone number:"
           className={classes.textField}
@@ -117,6 +124,8 @@ class CheckoutForm extends Component {
           margin="normal"
         />
         <TextField
+          required={true}
+          type="email"
           id="email"
           label="Email:"
           className={classes.textField}
@@ -143,7 +152,7 @@ const mapState = state => ({
 const mapDispatch = dispatch => ({
   async checkOut(addressInfo) {
     await dispatch(updateOrdersDone(addressInfo))
-    //TODO: dispatch clear cart action
+    dispatch(clearCart())
   }
 })
 
