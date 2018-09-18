@@ -51,7 +51,7 @@ class CartItem extends Component {
             </Button>
 
             <Button size="small" onClick={this.handleRemove}>
-              <img  src="delete_item.svg" alt="delete"/>
+              <img src="delete_item.svg" alt="delete" />
             </Button>
           </form>
         </TableCell>

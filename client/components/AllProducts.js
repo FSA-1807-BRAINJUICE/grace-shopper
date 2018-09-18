@@ -9,15 +9,16 @@ class AllProducts extends Component {
     this.props.getAllProducts()
   }
   render() {
-    const products = this.props.products;
+    const products = this.props.products
     return (
       <div className="all-products gallery">
-        {
-          products.map(product => (
-           <ProductCard product={product} key={product.id} onClick={() => this.props.addToCart(product.id)}/>
-           )
-          )
-        }
+        {products.map(product => (
+          <ProductCard
+            product={product}
+            key={product.id}
+            onClick={() => this.props.addToCart(product.id)}
+          />
+        ))}
       </div>
     )
   }
@@ -29,11 +30,9 @@ const mapStateToProps = state => {
   }
 }
 
-const mapDispatchToProps = dispatch => (
-  {
-    getAllProducts: () => dispatch(getAllProductsThunk()),
-    addToCart: (productId) => dispatch(addProductToCart(productId)),
-  }
-)
+const mapDispatchToProps = dispatch => ({
+  getAllProducts: () => dispatch(getAllProductsThunk()),
+  addToCart: productId => dispatch(addProductToCart(productId))
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(AllProducts)

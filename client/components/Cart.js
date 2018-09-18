@@ -38,13 +38,14 @@ class Cart extends Component {
     let cartTotalPrice = parsedCartItems.reduce((a, b) => {
       return a + b.product.price * b.quantity
     }, 0)
-    cartTotalPrice = cartTotalPrice.toFixed(2);
+    cartTotalPrice = cartTotalPrice.toFixed(2)
 
     const {classes} = this.props
     return (
       <div>
-
-        <span style={{fontSize:"20px"}}><strong>Total Price: {cartTotalPrice} USD</strong></span>
+        <span style={{fontSize: '20px'}}>
+          <strong>Total Price: {cartTotalPrice} USD</strong>
+        </span>
         <Paper className={classes.root}>
           <Table className={classes.table}>
             <TableHead>
@@ -56,21 +57,20 @@ class Cart extends Component {
               </TableRow>
             </TableHead>
             <TableBody>
-              {
-                parsedCartItems && parsedCartItems.length > 0? parsedCartItems.map(cartItem => {
+              {parsedCartItems && parsedCartItems.length > 0 ? (
+                parsedCartItems.map(cartItem => {
                   return <CartItem cartItem={cartItem} key={cartItem.id} />
-                  }
-                )
-                :
-                (
+                })
+              ) : (
                 <TableRow>
                   <TableCell>
-                    <p>Nothing has been added to the cart. &nbsp;
-                    <Link to={`/products`}>Continue Shopping!</Link></p>
+                    <p>
+                      Nothing has been added to the cart. &nbsp;
+                      <Link to={`/products`}>Continue Shopping!</Link>
+                    </p>
                   </TableCell>
                 </TableRow>
-                )
-              }
+              )}
             </TableBody>
           </Table>
         </Paper>

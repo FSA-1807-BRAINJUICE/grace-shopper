@@ -7,7 +7,7 @@ const GET_CART = 'GET_CART'
 const GET_CART_ITEMS = 'GET_CART_ITEMS'
 const ADD_ITEM_TO_CART = 'ADD_ITEM_TO_CART'
 const UPDATE_ITEM_QUANTITY = 'UPDATE_ITEM_QUANTITY'
-
+const CLEAR_CART = 'CLEAR_CART'
 /**
  * INITIAL STATE
  */
@@ -27,6 +27,10 @@ export const getCart = cart => ({
 export const addItemToCart = item => ({
   type: ADD_ITEM_TO_CART,
   item
+})
+
+export const clearCart = () => ({
+  type: CLEAR_CART
 })
 
 export const getCartItems = orderItems => ({
@@ -290,6 +294,12 @@ const cart = (state = initialCartState, action) => {
       return {...state, cartItems: action.cart.orderItems, cart: action.cart}
     case GET_CART_ITEMS:
       return {...state, cartItems: action.orderItems}
+    case CLEAR_CART:
+      return {
+        ...state,
+        cartItems: [],
+        cart: {}
+      }
     // case UPDATE_ITEM_QUANTITY:
     //   const targetItem = state.cartItems.find(function(item) {
     //     return item.id == action.item.id
