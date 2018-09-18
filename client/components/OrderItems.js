@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { getOrdersThunk } from '../store/orders'
-import SingleOrder from './SingleOrder'
+import SingleOrderItem from './SingleOrderItem'
+import {getSingleOrderThunk} from '../store/orders'
 
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -26,28 +26,28 @@ const styles = theme => ({
 });
 
 
-class Orders extends Component {
+class OrderItems extends Component {
   componentDidMount() {
-    this.props.getOrders(); //all orders
+    this.props.getSingleOrder(this.props.match.params.orderId); //all orders
   }
   render() {
-    const orderList = this.props.orderList;
+    const singleOrder = this.props.singleOrder;
     const { classes } = this.props;
     return (
       <Paper className={classes.root}>
         <Table className={classes.table}>
           <TableHead>
             <TableRow>
-              <TableCell>Order Number</TableCell>
-              <TableCell>Order Date</TableCell>
-              <TableCell>Order Total Price</TableCell>
-              <TableCell>Order Items</TableCell>
+              <TableCell>Image</TableCell>
+              <TableCell>Product Name</TableCell>
+              <TableCell>Price</TableCell>
+              <TableCell>Description</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {
-              orderList.map(order => {
-                return <SingleOrder order={order} key={order.id} />
+              singleOrder.map(item => {
+                return <SingleOrderItem item={item} key={item.id} />
               })
             }
           </TableBody>
@@ -57,20 +57,22 @@ class Orders extends Component {
   }
 }
 
-Orders.propTypes = {
+OrderItems.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = state => {
   return {
-    orderList: state.orders.orderList
+    singleOrder: state.orders.singleOrder
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    getOrders: () => dispatch(getOrdersThunk())
+    getSingleOrder: (id) => dispatch(getSingleOrderThunk(id))
   }
 }
 
-export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(Orders))
+export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(OrderItems))
+
+

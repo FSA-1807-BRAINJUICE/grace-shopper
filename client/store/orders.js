@@ -2,11 +2,12 @@ import axios from 'axios'
 
 const initialOrdersState = {
   orderList: [],
-  completedOrder: {}
+  completedOrder: {},
+  singleOrder: {}
 }
 
 const GET_ORDERS = 'GET_ORDERS'
-
+const GET_SINGLE_ORDER = 'GET_SINGLE_ORDER'
 const SET_ORDER_DONE = 'SET_ORDER_DONE';
 
 export const setOrderDone = order => ({
@@ -18,6 +19,13 @@ export const getOrders = orders => ({
   type: GET_ORDERS,
   orders
 })
+
+export const getSingleOrder = order => ({
+  type: GET_SINGLE_ORDER,
+  order
+})
+
+
 
 export const updateOrdersDone = addressInfo => async dispatch => {
   try{
@@ -69,12 +77,31 @@ export const getOrdersThunk = userId => async dispatch => {
   }
 }
 
+// export const getSingleOrderThunk = orderId => async dispatch => {
+//   try{
+//     const response = await axios.get(`/api/orders/${orderId}`);
+//     const parsedOrder = response.data;
+//     const action = getSingleOrder(parsedOrder);
+//     dispatch(action);
+//   } catch (err) {
+//     console.error(err)
+//   }
+// }
+
 const orders = (state = initialOrdersState, action) => {
   switch (action.type) {
     case GET_ORDERS:
       return {
         ...state,
         orderList: action.orders
+      }
+    case GET_SINGLE_ORDER:
+      const targetOrder = state.orderList.filter((order)=>{
+        return order.id === action.order.id;
+      })
+      return {
+        ...state,
+        singleOrder: targetOrder[0]
       }
     case SET_ORDER_DONE:
       return {
