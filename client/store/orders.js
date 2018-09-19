@@ -40,10 +40,14 @@ export const updateOrdersDone = addressInfo => async dispatch => {
 
       //create orderItems
       orderItems.forEach(async item => {
-        await axios.post(`/api/orders/${newOrder.id}/items`, {
-          quantity: item.quantity,
-          productId: item.productId
-        })
+        try{
+          await axios.post(`/api/orders/${newOrder.id}/items`, {
+            quantity: item.quantity,
+            productId: item.productId
+          })
+        }catch(err){
+          console.log(err);
+        }
       })
 
       //update order with address and complete status
@@ -78,8 +82,8 @@ export const updateOrdersDone = addressInfo => async dispatch => {
 }
 
 export const getOrdersThunk = () => async dispatch => {
-  const {data: user} = await axios.get('/auth/me')
   try {
+    const {data: user} = await axios.get('/auth/me')
     const response = await axios.get(
       `/api/users/${user.id}/orders?status=complete`
     )

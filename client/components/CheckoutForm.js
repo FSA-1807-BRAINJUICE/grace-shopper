@@ -157,9 +157,13 @@ const mapState = state => ({
 
 const mapDispatch = dispatch => ({
   async checkOut(addressInfo) {
-    dispatch(clearOrder())
-    await dispatch(updateOrdersDone(addressInfo))
-    dispatch(clearCart())
+    try{
+      dispatch(clearOrder())
+      await dispatch(updateOrdersDone(addressInfo))
+      dispatch(clearCart())
+    }catch(err){
+      console.log(err);
+    }
   }
 })
 

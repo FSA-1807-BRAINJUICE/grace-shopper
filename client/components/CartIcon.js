@@ -7,8 +7,12 @@ import {Link} from 'react-router-dom'
 
 class CartIcon extends Component {
   async componentDidMount() {
-    await this.props.getMe()
-    this.props.getCart(this.props.user.id)
+    try{
+      await this.props.getMe()
+      this.props.getCart(this.props.user.id)
+    }catch(err){
+      console.log(err);
+    }
   }
 
   render() {
@@ -42,7 +46,11 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   getMe: () => dispatch(me()),
   getCart: async id => {
-    await dispatch(getCartThunk(id))
+    try{
+      await dispatch(getCartThunk(id))
+    }catch(err){
+      console.log(err);
+    }
   }
 })
 
