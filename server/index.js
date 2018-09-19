@@ -109,10 +109,10 @@ const syncDb = () => db.sync()
 
 async function bootApp() {
   try{
-  await sessionStore.sync()
-  await syncDb()
-  await createApp()
-  await startListening()
+    await sessionStore.sync()
+    await syncDb()
+    await createApp()
+    await startListening()
   }catch(err){
     console.log(err);
   }
