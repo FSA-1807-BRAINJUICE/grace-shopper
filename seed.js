@@ -82,6 +82,9 @@ const products = [
 const seed = () =>
   Promise.all(users.map(user => User.create(user))).then(() =>
     Promise.all(products.map(product => Product.create(product)))
+    .catch(reason => {
+      console.log(reason)
+    })
   ).catch(reason => {
     console.log(reason)
   });
