@@ -79,23 +79,21 @@ const products = [
   }
 ]
 
-const seed = () =>
-  Promise.all(users.map(user => User.create(user))).then(() =>
-    Promise.all(products.map(product => Product.create(product)))
-    .catch(reason => {
-      console.log(reason)
-    })
-  ).catch(reason => {
-    console.log(reason)
-  });
-
 const main = () => {
   console.log('syncing db..')
   db
     .sync({force: true})
     .then(() => {
       console.log('seeding database')
-      return seed()
+      return Promise.all(users.map(user => User.create(user)))
+      .then(() =>
+        Promise.all(products.map(product => Product.create(product)))
+        .catch(reason => {
+          console.log(reason)
+        })
+      ).catch(reason => {
+        console.log(reason)
+      });
     })
     .then(() => {
       db.close()
