@@ -1,5 +1,5 @@
 const db = require('./server/db')
-const {User, Order, OrderItem, Product} = require('./server/db/models')
+const {User, Product} = require('./server/db/models')
 
 const users = [
   {
@@ -45,37 +45,51 @@ const products = [
     id: 1,
     name: 'lemon',
     price: 44,
-    description: 'lemon pills'
+    description: 'lemon pills',
+    imgUrl: "https://d2gg9evh47fn9z.cloudfront.net/800px_COLOURBOX3449424.jpg"
+
   },
   {
     id: 2,
     name: 'apple',
     price: 3,
-    description: 'apple pills'
+    description: 'apple pills',
+    imgUrl: 'https://st2.depositphotos.com/3515029/6763/i/950/depositphotos_67639283-stock-photo-impaired-immunity-apple-with-pills.jpg'
   },
   {
     id: 3,
     name: 'yams',
     price: 55,
-    description: 'yams pills'
+    description: 'yams pills',
+    imgUrl: 'https://yayyayskitchen.files.wordpress.com/2017/02/scrubbedyams2873_sc.jpg?w=840&h=630'
   },
   {
     id: 4,
     name: 'potato',
     price: 76,
-    description: 'potato pills'
+    description: 'potato pills',
+    imgUrl: 'https://static.pulse.com.gh/img/incoming/origs6915704/2250484523-w980-h640/potato-peels-for-hair-graying.jpg'
   },
   {
     id: 5,
     name: 'orange',
     price: 32,
-    description: 'orange pills'
+    description: 'orange pills',
+    imgUrl: 'http://soappotions.com/wp-content/uploads/2017/10/orange.jpg'
   },
   {
     id: 6,
     name: 'dog food',
     price: 56,
-    description: 'dog food'
+    description: 'dog food',
+    imgUrl: 'http://dogsaholic.com/wp-content/uploads/2015/04/Dog-supplement-pills.jpg'
+  },
+  {
+    id: 7,
+    name: 'Rhodiola',
+    price: 45,
+    description: 'Rhodiola rosea is a supplement derived from the herb Rhodiola rosea, which is often used in Chinese medicine to promote well-being and healthy brain function.',
+    imgUrl: 'https://www.healthline.com/assets/0x1528/hlcmsresource/images/AN_images/rhodiola-rosea-1296x728.jpg'
   }
 ]
 
