@@ -5,7 +5,7 @@ import {Router} from 'react-router-dom'
 import history from './history'
 import store from './store'
 import App from './app'
-// import amber from '@material-ui/core'
+
 import {MuiThemeProvider, createMuiTheme} from '@material-ui/core/styles'
 
 // establishes socket connection
