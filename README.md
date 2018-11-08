@@ -10,7 +10,7 @@ User stories:
 - [x] Can checkout as guest / user
 - [x] View order history (fixed prices)
 
-Stack:
+Technologies used:
 - React
 - Redux
 - PostgreSQL
