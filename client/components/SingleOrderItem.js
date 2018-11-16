@@ -7,13 +7,13 @@ export const SingleOrderItem = props => {
   const {imgUrl, name, description} = props.item.product
   const price = props.item.paidUnitPrice
   return (
-    <TableRow>
-      <TableCell>
-        <img src={imgUrl} />
+    <TableRow className="cart-item">
+      <TableCell className="cart-item-img">
+        <img className='order-item-img' src={imgUrl} />
       </TableCell>
-      <TableCell>{name}</TableCell>
-      <TableCell>{price}</TableCell>
-      <TableCell>{description}</TableCell>
+      <TableCell className="cart-item-element">{name}</TableCell>
+      <TableCell className="cart-item-element">{price}</TableCell>
+      <TableCell className="cart-item-element">{description}</TableCell>
     </TableRow>
   )
 }

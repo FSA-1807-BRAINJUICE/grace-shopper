@@ -20,7 +20,7 @@ const styles = theme => ({
   },
   table: {
     minWidth: 700
-  }
+  },
 })
 
 class OrderItems extends Component {
@@ -35,11 +35,11 @@ class OrderItems extends Component {
       <Paper className={classes.root}>
         <Table className={classes.table}>
           <TableHead>
-            <TableRow>
-              <TableCell>Image</TableCell>
-              <TableCell>Product Name</TableCell>
-              <TableCell>Price</TableCell>
-              <TableCell>Description</TableCell>
+            <TableRow className="cart-item">
+              <TableCell className="cart-item-img">Image</TableCell>
+              <TableCell className="cart-item-element">Product Name</TableCell>
+              <TableCell className="cart-item-element">Price</TableCell>
+              <TableCell className="cart-item-element">Description</TableCell>
             </TableRow>
           </TableHead>
           {singleOrderItems ? (
